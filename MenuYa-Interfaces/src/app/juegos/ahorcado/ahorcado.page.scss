@@ -1,0 +1,131 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+/* Contenedor principal */
+.ahorcado-container {
+  --pad: clamp(12px, 3vw, 24px);
+  background: #000;
+  border: 3px solid #f44336;
+  box-shadow: 0 0 20px #ff4081;
+  padding: calc(var(--pad) + env(safe-area-inset-top)) var(--pad)
+           calc(var(--pad) + env(safe-area-inset-bottom));
+  border-radius: 12px;
+  position: relative;
+  color: #fff;
+  width: min(100%, 960px);     /* se estira hasta 960 y luego centra */
+  margin: 12px auto;
+}
+
+/* Título */
+.arcade-title {
+  font-size: clamp(1.4rem, 3.8vw, 2.25rem);
+  color: #f44336;
+  text-shadow: 0 0 8px rgba(244, 67, 54, 0.8);
+  margin: 8px 0 12px;
+  text-align: center;
+}
+
+/* Palabra */
+.palabra-oculta {
+  font-size: clamp(1.1rem, 4.2vw, 1.8rem);
+  letter-spacing: clamp(0.15rem, 1.2vw, 0.5rem);
+  font-weight: 700;
+  margin: 8px 0 16px;
+  word-break: break-word;
+  text-align: center;
+}
+
+/* Teclado de letras: GRID responsive */
+.letras {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(clamp(34px, 8.5vw, 52px), 1fr));
+  gap: clamp(4px, 1.5vw, 10px);
+  align-items: center;
+  justify-items: center;
+  margin: clamp(6px, 2vw, 14px) auto;
+  width: min(100%, 760px);
+}
+
+.letra-btn {
+  width: 100%;
+  height: clamp(34px, 8.5vw, 48px);
+  font-size: clamp(0.8rem, 2.8vw, 1rem);
+  --background: #f3c221;
+  --color: #440000;
+  --border-color: #440000;
+  --border-width: 2px;
+  --border-radius: 8px;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.letra-btn:disabled {
+  opacity: .55;
+}
+
+/* Muñeco ASCII: que no salte ni desborde */
+.munieco {
+  color: #fff;
+  font-size: clamp(0.95rem, 3.2vw, 1.15rem);
+  line-height: 1.35;
+  min-height: clamp(96px, 22vw, 140px);
+  margin: 8px 0 12px;
+  white-space: pre;
+  text-align: center;
+}
+
+/* Mensaje final */
+.mensaje {
+  color: #f44336;
+  font-weight: 700;
+  margin-bottom: clamp(6px, 1.8vw, 10px);
+  text-align: center;
+  font-size: clamp(1rem, 3.4vw, 1.3rem);
+}
+
+/* Info superior (vidas / pista) con fallback cuando no hay espacio */
+.top-info {
+  position: absolute;
+  inset-inline-end: clamp(8px, 2.5vw, 16px);
+  top: clamp(6px, 2vw, 12px);
+  text-align: right;
+  font-size: clamp(0.85rem, 2.8vw, 1.05rem);
+  display: grid;
+  gap: 2px;
+
+  .pista { color: #fdd835; font-weight: 700; }
+  .vidas { color: #03a9f4; font-weight: 700; }
+}
+
+/* Botones inferiores */
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(6px, 2vw, 12px);
+  justify-content: center;
+}
+
+/* Pequeños (teléfonos chicos) */
+@media (max-width: 420px) {
+  .top-info {
+    position: static;         /* baja arriba del título para que no tape nada */
+    text-align: center;
+    margin-bottom: 6px;
+  }
+}
+
+/* Landscape muy bajo (ej. teléfonos apaisados) */
+@media (max-height: 420px) and (orientation: landscape) {
+  .ahorcado-container { padding: clamp(8px, 2vw, 14px); }
+  .letras { gap: clamp(3px, 1vw, 6px); }
+  .munieco { min-height: 0; margin: 4px 0; }
+}
+
+/* Accesibilidad / motion */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

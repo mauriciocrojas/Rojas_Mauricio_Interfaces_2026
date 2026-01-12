@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="reserva-toolbar">
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="goHome()" aria-label="Ir al inicio">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Reserva de mesa</ion-title>
+    <ion-buttons slot="end" class="reserva-toolbar-ghost">
+      <ion-button fill="clear" aria-hidden="true" disabled>
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="false" class="safe-top reserva-content">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="reserva-form">
+    <ion-list lines="full" class="form-list">
+      <ion-item class="datetime-item">
+        <ion-label position="stacked">Fecha seleccionada</ion-label>
+        <ion-datetime formControlName="fecha" presentation="date" [min]="minDate" locale="es-ES"></ion-datetime>
+      </ion-item>
+      <ion-note color="danger" *ngIf="submitted && form.controls['fecha'].invalid">Seleccione una fecha válida.</ion-note>
+
+      <ion-item>
+        <ion-label position="stacked">Horario</ion-label>
+        <ion-select formControlName="horario" interface="popover" placeholder="Seleccionar horario">
+          <ion-select-option *ngFor="let h of horarios" [value]="h.value">{{ h.label }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-note color="danger" *ngIf="submitted && form.controls['horario'].invalid">Seleccione un horario.</ion-note>
+
+      <ion-item>
+        <ion-label position="stacked">Cantidad de comensales</ion-label>
+        <ion-input formControlName="comensales" type="number" inputmode="numeric" min="1" max="10" placeholder="Ej: 2"></ion-input>
+      </ion-item>
+      <ion-note color="danger" *ngIf="submitted && form.controls['comensales'].invalid">
+        Ingrese un número entre 1 y 10.
+      </ion-note>
+    </ion-list>
+
+    <div class="actions">
+      <ion-button expand="block" type="submit" [disabled]="form.invalid">Reservar</ion-button>
+    </div>
+  </form>
+  </ion-content>

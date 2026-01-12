@@ -1,0 +1,46 @@
+/* ==========================================================================
+   Variables globales - Tema MenuYa
+   ========================================================================== */
+
+:root {
+  /* ===== Colores base ===== */
+  --menudya-primary: #E73F2D; /* tomate */
+  --menudya-accent:  #FFCB2B; /* mostaza */
+  --menudya-ink:     #1B1B1F; /* texto principal */
+  --menudya-surface: #FFF7F2; /* fondo cálido */
+  --menudya-glass:   rgba(255, 255, 255, .72);
+
+  /* ===== Mapear a Ionic ===== */
+  --ion-color-primary: var(--menudya-primary);
+  --ion-color-primary-rgb: 231, 63, 45;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255,255,255;
+  --ion-color-primary-shade: #cb3827;
+  --ion-color-primary-tint:  #eb5544;
+
+  --ion-color-secondary: var(--menudya-accent);
+  --ion-color-secondary-rgb: 255, 203, 43;
+  --ion-color-secondary-contrast: #1B1B1F;
+  --ion-color-secondary-contrast-rgb: 27,27,31;
+  --ion-color-secondary-shade: #e0b427;
+  --ion-color-secondary-tint:  #ffd145;
+
+  /* ===== Colores de texto y fondo ===== */
+  --ion-background-color: var(--menudya-surface);
+  --ion-text-color: var(--menudya-ink);
+
+  /* ===== Otros ===== */
+  --ion-border-color: rgba(0, 0, 0, .08);
+  --ion-box-shadow-color: rgba(0, 0, 0, .1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --menudya-glass: rgba(20, 20, 24, .55);
+
+    --ion-background-color: #111315;
+    --ion-text-color: #ECECEC;
+    --ion-border-color: rgba(255, 255, 255, .08);
+    --ion-box-shadow-color: rgba(0, 0, 0, .3);
+  }
+}

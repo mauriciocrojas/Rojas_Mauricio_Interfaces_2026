@@ -1,0 +1,268 @@
+:host {
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --soft-shadow: 0 16px 26px rgba(15, 23, 42, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --glass-bg: rgba(20, 22, 30, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --soft-shadow: 0 14px 24px rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* Header transparente con botón home flotante (igual a clientes-pendientes) */
+ion-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: transparent;
+  --background: transparent;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.home-btn {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 8px) + 8px);
+  left: 14px;
+  z-index: 40;
+  --background: transparent;
+  --box-shadow: none;
+  --padding-start: 0;
+  --padding-end: 0;
+  --border-radius: 999px;
+  min-height: 32px;
+  color: white;
+  pointer-events: auto;
+}
+
+/* Fondo y layout general */
+ion-content.pedidos-pendientes-content {
+  --background: var(--ion-background-color);
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.pedidos-wrapper {
+  width: min(960px, 100%);
+  padding: 38px clamp(14px, 5vw, 32px) 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: center;
+}
+
+/* Título / subtítulo (match clientes-pendientes) */
+.section-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 35%);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--ion-color-primary);
+  }
+
+  .support-copy {
+    margin: 0;
+    font-size: 14px;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+  }
+}
+
+.pedidos-grid {
+  row-gap: 16px;
+}
+
+/* Card de pedido con estilo glass, similar a cliente-card */
+.pedido-card {
+  height: 100%;
+  border-radius: 18px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--soft-shadow);
+  backdrop-filter: blur(18px);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 32px rgba(15, 23, 42, 0.18);
+  }
+
+  ion-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  ion-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ion-text-color);
+  }
+
+  ion-card-subtitle {
+    font-size: 0.85rem;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 40%);
+  }
+}
+
+/* Header interno de la card: mesa + badge */
+.pedido-header-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.mesa-info {
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  .pedido-id {
+    margin: 0;
+    font-size: 0.8rem;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 40%);
+  }
+}
+
+/* Badge de estado */
+.estado-badge {
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+
+  &.en_preparacion {
+    background: color-mix(in oklab, var(--ion-color-warning), white 40%);
+    color: #4b3a03;
+  }
+
+  &.pendiente {
+    background: color-mix(in oklab, var(--ion-color-tertiary), white 40%);
+    color: #2c1647;
+  }
+
+  &.listo {
+    background: color-mix(in oklab, var(--ion-color-success), white 30%);
+    color: #02411c;
+  }
+}
+
+/* Lista de items */
+.items-list {
+  background: transparent;
+  margin: 0 0 0.9rem;
+  padding: 0;
+}
+
+.item-row {
+  --background: transparent;
+  --inner-padding-end: 0;
+  --inner-padding-start: 0;
+  --min-height: unset;
+  padding: 0.35rem 0;
+
+  ion-label h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+  }
+}
+
+/* Botón "Entregar pedido" */
+.pedido-btn {
+  --border-radius: 999px;
+  min-height: 38px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --box-shadow: 0 12px 18px rgba(15, 23, 42, 0.18);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 22px rgba(15, 23, 42, 0.2);
+  }
+}
+
+/* Empty state con glass */
+.empty-state-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+  border-radius: 18px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--soft-shadow);
+  backdrop-filter: blur(18px);
+  color: var(--ion-text-color);
+  width: min(420px, 90%);
+  margin: 40px auto 24px;
+
+  ion-icon {
+    font-size: 2.6rem;
+    color: var(--ion-color-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  h2 {
+    margin: 0 0 4px;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+  }
+}
+
+/* Ajustes responsive */
+@media (min-width: 768px) {
+  .pedidos-wrapper {
+    padding-top: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pedido-card {
+    padding-inline: 2px;
+  }
+
+  .pedidos-wrapper {
+    padding-top: 32px;
+  }
+}

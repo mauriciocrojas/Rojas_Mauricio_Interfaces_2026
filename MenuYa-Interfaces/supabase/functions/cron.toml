@@ -1,0 +1,8 @@
+# supabase/functions/cron.toml
+
+[[jobs]]
+name = "actualizar-mesas-cada-minuto"
+# ⚠️ Reemplazá <PROJECT-REF> por el id de tu proyecto (el que ves en la URL de la API)
+external_url = "https://vjthgijqloomeatknoxz.supabase.co/functions/v1/actualizar-mesas"
+schedule = "* * * * *"
+

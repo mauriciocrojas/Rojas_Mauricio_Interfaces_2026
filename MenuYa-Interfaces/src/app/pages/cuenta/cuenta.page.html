@@ -1,0 +1,132 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Cuenta</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding cuenta">
+  <ng-container *ngIf="!cargando; else skel">
+    <ion-card *ngIf="cuenta; else sinCuenta" class="cuenta-card">
+      <ion-card-header>
+        <ion-card-title>
+          <ng-container *ngIf="!esDelivery; else tituloDelivery">
+            Mesa {{ mesaNumero }}
+          </ng-container>
+          <ng-template #tituloDelivery>
+            Pedido a domicilio
+          </ng-template>
+
+          <ion-badge *ngIf="d_descuento > 0" color="success" class="badge-desc">
+            ¡Tenés descuentos!
+          </ion-badge>
+        </ion-card-title>
+        <ion-card-subtitle>Estado de la cuenta: {{ cuenta.estado }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <h2 class="titulo">Detalle</h2>
+
+        <ion-list>
+          <ion-item *ngFor="let it of cuenta.pedidos">
+            <ion-label>
+              <div class="fila">
+                <strong class="nombre">{{ normalizarNombreProducto(it.nombre) }}</strong>
+                <span class="cant">x{{ it.cantidad }}</span>
+              </div>
+              <div class="subfila">
+                <span>Unitario: {{ it.precio_unitario | currency }}</span>
+                <span>Importe: {{ it.importe | currency }}</span>
+              </div>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <div class="totales">
+          <div class="row" *ngIf="d_descuento === 0">
+            <span>Subtotal</span>
+            <strong>{{ d_subtotal | currency }}</strong>
+          </div>
+
+          <div class="row" *ngIf="d_descuento > 0">
+            <span>Subtotal</span>
+            <div class="valores-con-descuento">
+              <span class="tachado">{{ d_subtotal | currency }}</span>
+              <strong class="nuevo">{{ d_base | currency }}</strong>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="d_descuento > 0">
+            <span>Descuento juegos</span>
+            <strong class="negativo">- {{ d_descuento | currency }}</strong>
+          </div>
+
+          <div class="row" *ngIf="d_propinaPct > 0">
+            <span>
+              Propina ({{ d_propinaPct }}%)
+            </span>
+            <strong>{{ d_propinaMonto | currency }}</strong>
+          </div>
+        </div>
+
+        <div class="total-grande">
+          TOTAL: <span>{{ d_total | currency:'ARS':'symbol':'1.2-2' }}</span>
+        </div>
+
+        <div class="acciones">
+          <!-- ✅ Texto según tipo de pedido -->
+          <ion-text color="success" *ngIf="cuentaEstaConfirmada">
+            <ng-container *ngIf="!esDelivery; else txtConfirmDelivery">
+              Pago confirmado por el mozo.
+            </ng-container>
+            <ng-template #txtConfirmDelivery>
+              Pago confirmado por el repartidor.
+            </ng-template>
+          </ion-text>
+
+          <ion-button
+            expand="block"
+            color="medium"
+            (click)="scanearQRpropina()
+"
+            [disabled]="!puedeDarPropinaBtn">
+            <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+            Dar propina
+          </ion-button>
+
+          <ion-button
+            expand="block"
+            color="tertiary"
+            (click)="pagar()"
+            [disabled]="!puedePagarBtn">
+            <ion-icon slot="start" name="card-outline"></ion-icon>
+            Pagar
+          </ion-button>
+
+          <!-- ✅ Texto de espera según tipo de pedido -->
+          <ion-text color="medium" *ngIf="cuenta?.estado === 'pago_pendiente'">
+            <ng-container *ngIf="!esDelivery; else txtPendDelivery">
+              Esperando confirmación del mozo…
+            </ng-container>
+            <ng-template #txtPendDelivery>
+              Esperando confirmación del repartidor…
+            </ng-template>
+          </ion-text>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+    <ng-template #sinCuenta>
+      <ion-text color="medium">No hay cuenta activa.</ion-text>
+    </ng-template>
+  </ng-container>
+
+  <ng-template #skel>
+    <ion-skeleton-text animated style="height:20px;width:80%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="height:20px;width:60%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="height:20px;width:70%"></ion-skeleton-text>
+  </ng-template>
+</ion-content>

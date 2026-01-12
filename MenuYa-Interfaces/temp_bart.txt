@@ -1,0 +1,5 @@
+
+              <ion-item button detail="true" *ngIf="role === 'bartender'" (click)="goToAgregarBebida()">
+                <ion-icon slot="start" name="beer-outline" aria-hidden="true"></ion-icon>
+                ➡️ Agregar bebida
+              </ion-item>

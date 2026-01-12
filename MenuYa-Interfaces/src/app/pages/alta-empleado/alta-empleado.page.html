@@ -1,0 +1,316 @@
+<ion-content class="registro safe-top">
+  <!-- Botón Home flotante -->
+  <ion-button
+    fill="clear"
+    class="home-btn"
+    (click)="goHome()"
+    aria-label="Ir al inicio"
+  >
+    <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+  </ion-button>
+
+  <div class="registro__container">
+    <!-- TOP -->
+    <div class="registro__top">
+      <h1 class="title">Alta de empleado</h1>
+      <p class="subtitle">
+        Completá los datos del personal
+      </p>
+    </div>
+
+    <!-- FORM -->
+    <form
+      class="registro__form"
+      [formGroup]="empleadoForm"
+      (ngSubmit)="onSubmit()"
+      novalidate
+    >
+      <!-- NOMBRES -->
+      <ng-container *ngIf="empleadoForm.get('nombres') as nombresCtrl">
+        <ion-item
+          lines="none"
+          class="field"
+          [class.invalid]="nombresCtrl.invalid && (nombresCtrl.dirty || nombresCtrl.touched)"
+        >
+          <ion-label position="floating" for="nombres">Nombres</ion-label>
+          <ion-input
+            id="nombres"
+            type="text"
+            formControlName="nombres"
+            aria-label="Nombres del empleado"
+            aria-describedby="nombres-error"
+          ></ion-input>
+        </ion-item>
+        <ion-note
+          id="nombres-error"
+          color="danger"
+          class="error"
+          *ngIf="nombresCtrl.invalid && (nombresCtrl.dirty || nombresCtrl.touched)"
+        >
+          <ng-container *ngIf="nombresCtrl.errors?.['required']">
+            El nombre es obligatorio.
+          </ng-container>
+          <ng-container *ngIf="nombresCtrl.errors?.['pattern']">
+            Solo se permiten letras y espacios.
+          </ng-container>
+        </ion-note>
+      </ng-container>
+
+      <!-- APELLIDOS -->
+      <ng-container *ngIf="empleadoForm.get('apellidos') as apellidosCtrl">
+        <ion-item
+          lines="none"
+          class="field"
+          [class.invalid]="apellidosCtrl.invalid && (apellidosCtrl.dirty || apellidosCtrl.touched)"
+        >
+          <ion-label position="floating" for="apellidos">Apellidos</ion-label>
+          <ion-input
+            id="apellidos"
+            type="text"
+            formControlName="apellidos"
+            aria-label="Apellidos del empleado"
+            aria-describedby="apellidos-error"
+          ></ion-input>
+        </ion-item>
+        <ion-note
+          id="apellidos-error"
+          color="danger"
+          class="error"
+          *ngIf="apellidosCtrl.invalid && (apellidosCtrl.dirty || apellidosCtrl.touched)"
+        >
+          <ng-container *ngIf="apellidosCtrl.errors?.['required']">
+            El apellido es obligatorio.
+          </ng-container>
+          <ng-container *ngIf="apellidosCtrl.errors?.['pattern']">
+            Solo se permiten letras y espacios.
+          </ng-container>
+        </ion-note>
+      </ng-container>
+
+      <!-- DNI -->
+      <ng-container *ngIf="empleadoForm.get('dni') as dniCtrl">
+        <ion-item
+          lines="none"
+          class="field"
+          [class.invalid]="dniCtrl.invalid && (dniCtrl.dirty || dniCtrl.touched)"
+        >
+          <ion-label position="floating" for="dni">DNI</ion-label>
+          <ion-input
+            id="dni"
+            type="number"
+            formControlName="dni"
+            inputmode="numeric"
+            aria-label="DNI del empleado"
+            aria-describedby="dni-error"
+          ></ion-input>
+        </ion-item>
+        <ion-note
+          id="dni-error"
+          color="danger"
+          class="error"
+          *ngIf="dniCtrl.invalid && (dniCtrl.dirty || dniCtrl.touched)"
+        >
+          <ng-container *ngIf="dniCtrl.errors?.['required']">
+            El DNI es obligatorio.
+          </ng-container>
+          <ng-container *ngIf="dniCtrl.errors?.['pattern']">
+            Debe tener entre 7 y 8 dígitos.
+          </ng-container>
+        </ion-note>
+      </ng-container>
+
+      <!-- CUIL -->
+      <ng-container *ngIf="empleadoForm.get('cuil') as cuilCtrl">
+        <ion-item
+          lines="none"
+          class="field"
+          [class.invalid]="cuilCtrl.invalid && (cuilCtrl.dirty || cuilCtrl.touched)"
+        >
+          <ion-label position="floating" for="cuil">CUIL</ion-label>
+          <ion-input
+            id="cuil"
+            type="number"
+            formControlName="cuil"
+            inputmode="numeric"
+            aria-label="CUIL del empleado"
+            aria-describedby="cuil-error"
+          ></ion-input>
+        </ion-item>
+        <ion-note
+          id="cuil-error"
+          color="danger"
+          class="error"
+          *ngIf="cuilCtrl.invalid && (cuilCtrl.dirty || cuilCtrl.touched)"
+        >
+          <ng-container *ngIf="cuilCtrl.errors?.['required']">
+            El CUIL es obligatorio.
+          </ng-container>
+          <ng-container *ngIf="cuilCtrl.errors?.['pattern']">
+            Debe tener 11 dígitos.
+          </ng-container>
+        </ion-note>
+      </ng-container>
+
+      <!-- EMAIL -->
+      <ng-container *ngIf="empleadoForm.get('email') as emailCtrl">
+        <ion-item
+          lines="none"
+          class="field"
+          [class.invalid]="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)"
+        >
+          <ion-label position="floating" for="email">Correo electrónico</ion-label>
+          <ion-input
+            id="email"
+            type="email"
+            formControlName="email"
+            aria-label="Correo electrónico del empleado"
+            aria-describedby="email-error"
+          ></ion-input>
+        </ion-item>
+        <ion-note
+          id="email-error"
+          color="danger"
+          class="error"
+          *ngIf="emailCtrl.invalid && (emailCtrl.dirty || emailCtrl.touched)"
+        >
+          <ng-container *ngIf="emailCtrl.errors?.['required']">
+            El correo es obligatorio.
+          </ng-container>
+          <ng-container *ngIf="emailCtrl.errors?.['email']">
+            Formato de correo inválido.
+          </ng-container>
+        </ion-note>
+      </ng-container>
+
+      <!-- PASSWORD -->
+      <ng-container *ngIf="empleadoForm.get('password') as passCtrl">
+        <ion-item
+          lines="none"
+          class="field"
+          [class.invalid]="passCtrl.invalid && (passCtrl.dirty || passCtrl.touched)"
+        >
+          <ion-label position="floating" for="password">Contraseña</ion-label>
+          <ion-input
+            id="password"
+            type="password"
+            formControlName="password"
+            aria-label="Contraseña del empleado"
+            aria-describedby="password-error"
+          ></ion-input>
+        </ion-item>
+        <ion-note
+          id="password-error"
+          color="danger"
+          class="error"
+          *ngIf="passCtrl.invalid && (passCtrl.dirty || passCtrl.touched)"
+        >
+          <ng-container *ngIf="passCtrl.errors?.['required']">
+            La contraseña es obligatoria.
+          </ng-container>
+          <ng-container *ngIf="passCtrl.errors?.['minlength']">
+            Debe tener al menos 6 caracteres.
+          </ng-container>
+        </ion-note>
+      </ng-container>
+
+      <!-- ROL -->
+      <ng-container *ngIf="empleadoForm.get('rol') as rolCtrl">
+        <ion-item
+          lines="none"
+          class="field field--select"
+          [class.invalid]="rolCtrl.invalid && (rolCtrl.dirty || rolCtrl.touched)"
+        >
+          <div class="field-inline">
+            <span class="field-inline__label">
+              <ion-icon name="people-outline" class="field-inline__icon"></ion-icon>
+              Rol
+            </span>
+            <div class="field-inline__control">
+              <ion-select
+                id="rol"
+                interface="popover"
+                formControlName="rol"
+                placeholder="Seleccioná un rol"
+                aria-label="Rol del empleado"
+                aria-describedby="rol-error"
+              >
+                <ion-select-option
+                  *ngFor="let r of roles"
+                  [value]="r"
+                >
+                  {{ r === 'delivery' ? 'repartidor' : r }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </div>
+        </ion-item>
+        <ion-note
+          id="rol-error"
+          color="danger"
+          class="error"
+          *ngIf="rolCtrl.invalid && (rolCtrl.dirty || rolCtrl.touched)"
+        >
+          El rol es obligatorio.
+        </ion-note>
+      </ng-container>
+
+      <!-- FOTO EMPLEADO -->
+      <section class="field foto-field">
+        <div class="foto-field__header">
+          <span class="foto-field__title">Foto del empleado</span>
+          <p class="foto-field__subtitle">
+            Tomá una foto clara para el registro
+          </p>
+        </div>
+
+        <ion-button
+          type="button"
+          expand="block"
+          color="tertiary"
+          class="btn-foto"
+          (click)="tomarFoto()"
+        >
+          <ion-icon slot="start" name="camera-outline"></ion-icon>
+          Tomar foto
+        </ion-button>
+
+        <div class="foto-field__preview" *ngIf="fotoEmpleado">
+          <img [src]="fotoEmpleado" alt="Foto empleado" />
+        </div>
+
+        <ion-note
+          color="danger"
+          class="error"
+          *ngIf="!fotoEmpleado && empleadoForm.touched"
+        >
+          La foto es obligatoria.
+        </ion-note>
+      </section>
+
+      <!-- QR DNI -->
+      <ion-button
+        type="button"
+        expand="block"
+        color="medium"
+        class="btn-qr"
+        (click)="leerQR()"
+      >
+        <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+        Escanear DNI
+      </ion-button>
+
+      <!-- ACCIONES -->
+      <div class="actions">
+        <ion-button
+          type="submit"
+          expand="block"
+          color="success"
+          class="guardar"
+          [disabled]="empleadoForm.invalid || !fotoEmpleado"
+        >
+          Registrar empleado
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

@@ -1,0 +1,20 @@
+.map-wrap { margin: 12px 0; }
+.mapa {
+  height: 45vh;        /* base */
+  border-radius: 16px;
+  overflow: hidden;
+  width: 100%;
+  min-height: 260px;   /* asegura un mínimo usable */
+}
+
+/* pantallas muy altas (teléfonos “largos”) */
+@media (min-height: 800px) {
+  .mapa { height: 55vh; }
+}
+
+/* landscape o pantallas bajas: bajá el alto para que no tape el botón */
+@media (max-height: 580px) {
+  .mapa { height: 35vh; }
+}
+
+.hint { margin: 12px 0 20px; font-size: 0.95rem; }

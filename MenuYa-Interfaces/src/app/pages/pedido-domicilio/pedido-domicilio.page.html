@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goHome()" aria-label="Ir al inicio">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Pedir comida a domicilio</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item lines="full">
+    <ion-label position="stacked">Dirección (opcional si marcás en el mapa)</ion-label>
+    <ion-input
+      [(ngModel)]="direccionTexto"
+      placeholder="Calle, número, localidad"
+      (ionInput)="debouncedBuscar()"
+      clearInput
+    ></ion-input>
+    <ion-button slot="end" fill="clear" (click)="buscarAhora()" aria-label="Buscar dirección">
+      Buscar
+    </ion-button>
+  </ion-item>
+
+  <!-- Sugerencias -->
+  <ion-list *ngIf="sugerencias.length">
+    <ion-item button detail="false" *ngFor="let s of sugerencias" (click)="seleccionarSugerencia(s)">
+      <ion-label>
+        <h3>{{ s.display_name }}</h3>
+        <p *ngIf="s.address?.city || s.address?.town || s.address?.village">
+          {{ s.address?.city || s.address?.town || s.address?.village }}
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="map-wrap">
+    <div id="mapa" class="mapa" aria-label="Mapa para seleccionar destino"></div>
+  </div>
+
+  <ion-text color="medium">
+    <p class="hint">Tocá en el mapa para colocar el marcador o arrastralo para ajustar.</p>
+  </ion-text>
+
+  <ion-button expand="block" color="primary" (click)="continuarAlMenu()">
+    Seleccionar tus productos
+  </ion-button>
+</ion-content>

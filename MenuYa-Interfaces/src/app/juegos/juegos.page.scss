@@ -1,0 +1,233 @@
+:host {
+  height: 100%;
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-bg-strong: rgba(255, 255, 255, 0.18);
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --glass-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+/* ion-content ocupando todo */
+ion-content {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --padding-start: 0;
+  --padding-end: 0;
+
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Layout principal */
+.page {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===========================
+   HEADER GLASS OSCURO + COMPACTO
+   =========================== */
+
+.games-header {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Toolbar más compacto y oscuro */
+.glass-toolbar {
+  --background: transparent;
+  --min-height: 52px;        /* 👈 ajustá acá si lo querés más alto o más bajo */
+  padding-inline: 8px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(10, 10, 18, 0.9),
+      rgba(5, 5, 10, 0.95)
+    );
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Título claro y compacto */
+.games-title {
+  color: #f5f5f5;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+}
+
+/* Botón home adaptado al header oscuro */
+.home-btn {
+  --background: transparent;
+  --box-shadow: none;
+  --padding-start: 4px;
+  --padding-end: 4px;
+  --border-radius: 999px;
+
+  border-radius: 999px;
+}
+
+.home-btn ion-icon {
+  font-size: 1.2rem;
+  color: #ffffff;
+}
+
+/* ===========================
+   SWIPER + BOTONES GLASS
+   =========================== */
+
+.game-swiper {
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 10px 0 6px;
+}
+
+.game-swiper swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* bullets glass */
+.game-swiper .swiper-pagination-bullet {
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+}
+
+.game-swiper .swiper-pagination-bullet-active {
+  background: var(--ion-color-primary);
+}
+
+/* BOTÓN DE JUEGO ESTILO GLASS */
+.game-button {
+  position: relative;
+  width: 88vw;
+  max-width: 420px;
+  min-height: 82px;
+  padding: 16px 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+
+  border-radius: 22px;
+  border: 1px solid var(--glass-border);
+  box-sizing: border-box;
+
+  background: radial-gradient(circle at top left,
+      rgba(255, 255, 255, 0.24),
+      rgba(255, 255, 255, 0.06) 45%,
+      rgba(0, 0, 0, 0.4) 100%);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: var(--glass-shadow);
+
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* highlight suave en la parte superior del botón */
+.game-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.26),
+    transparent 45%,
+    transparent
+  );
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Borde interno leve para dar sensación de profundidad */
+.game-button::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Icono con “pastilla” glass aparte */
+.game-button ion-icon {
+  position: relative;
+  z-index: 1;
+  font-size: 1.8rem;
+  padding: 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+/* Texto del botón */
+.game-button__text {
+  position: relative;
+  z-index: 1;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.55);
+}
+
+/* Feedback táctil */
+.game-button:active {
+  transform: scale(0.97);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.32);
+}
+
+/* Hover (web) */
+@media (hover: hover) {
+  .game-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.38);
+  }
+}
+
+/* ===========================
+   Área del juego
+   =========================== */
+
+.game-wrap {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.game-wrap canvas,
+.game-wrap .game-board {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Responsive fino */
+@media (max-width: 420px) {
+  .game-button {
+    width: 92vw;
+    min-height: 74px;
+    padding: 14px 16px;
+  }
+
+  .game-button__text {
+    font-size: 1.05rem;
+  }
+}

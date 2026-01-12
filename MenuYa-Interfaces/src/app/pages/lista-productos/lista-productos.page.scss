@@ -1,0 +1,679 @@
+:host {
+  --glass-surface: linear-gradient(120deg,
+        color-mix(in oklab, var(--ion-color-primary), transparent 90%),
+        color-mix(in oklab, var(--ion-background-color, #fff), transparent 15%));
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --glass-highlight: rgba(255, 255, 255, 0.68);
+  --glass-shadow: 0 28px 42px rgba(10, 12, 24, 0.28);
+  --glass-blur: blur(18px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --glass-surface: linear-gradient(120deg,
+        color-mix(in oklab, var(--ion-color-primary), transparent 90%),
+        color-mix(in oklab, var(--ion-background-color, #fff), transparent 15%));
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --glass-highlight: rgba(255, 255, 255, 0.18);
+    --glass-shadow: 0 28px 46px rgba(0, 0, 0, 0.55);
+  }
+}
+
+ion-header {
+  background: transparent;
+  box-shadow: none;
+  border: none;
+}
+
+ion-toolbar.glass-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  width: min(960px, calc(100% - 32px));
+  margin: 12px auto 6px;
+  border-radius: 22px;
+  padding-inline: 10px;
+  background: color-mix(in oklab, var(--glass-surface), transparent 25%);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  box-shadow: var(--glass-shadow);
+  color: var(--ion-text-color);
+  position: relative; /* 👈 necesario para posicionar el título */
+}
+
+/* Mantiene tipografía del título */
+ion-toolbar.glass-toolbar ion-title {
+  font-weight: 800;
+  font-size: clamp(20px, 5vw, 26px);
+  letter-spacing: -0.01em;
+}
+
+
+/* Centrado absoluto del título */
+ion-toolbar.glass-toolbar .toolbar-title {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
+  text-align: center;
+  pointer-events: none; // 👈 así no bloquea los botones de los costados
+}
+
+/* Mantiene tipografía del título */
+ion-toolbar.glass-toolbar ion-button {
+  --background: transparent;
+  --box-shadow: none;
+  --color: inherit;
+}
+
+.chat-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  --background: transparent;
+  --box-shadow: none;
+}
+
+.chat-icon {
+  width: 65px;
+  height: 65px;
+  display: block;
+}
+
+.motion-toggle-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 12px 0 16px;
+}
+
+.motion-toggle-btn {
+  --padding-start: 22px;
+  --padding-end: 22px;
+  --border-radius: 999px;
+  --color: var(--ion-text-color);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.motion-toggle-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.motion-toggle-btn:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+
+.motion-toggle-btn:active::after {
+  opacity: 0.55;
+}
+
+ion-content.registro {
+  --background: var(--ion-background-color);
+}
+
+.layout-shell {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding-top: 12px;
+  padding-bottom: clamp(40px, 12vh, 90px);
+}
+
+.glass-panel {
+  position: relative;
+  border-radius: 22px;
+  background: color-mix(in oklab, var(--glass-surface), transparent 6%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+}
+
+ion-card.glass-panel {
+  --background: transparent;
+}
+
+/* Mantiene estética general del tema y aplica detalles del mock */
+
+.summary-banner {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: clamp(16px, 4vw, 20px);
+  margin: 12px 12px 0 12px;
+  position: relative;
+  overflow: hidden;
+  color: var(--ion-text-color);
+}
+
+.summary-banner::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), transparent 70%);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.summary-main {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-areas:
+    'label amount'
+    'sub   amount';
+  gap: 4px 12px;
+  align-items: center;
+  z-index: 1;
+}
+
+.summary-title {
+  grid-area: label;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  font-size: 13px;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.summary-amount {
+  grid-area: amount;
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 800;
+}
+
+.summary-sub {
+  grid-area: sub;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.summary-ok {
+  position: relative;
+  z-index: 1;
+  width: 56px;
+  height: 56px;
+  border: 1px solid color-mix(in oklab, var(--ion-color-success, #2dd36f), transparent 40%);
+  border-radius: 18px;
+  background: linear-gradient(135deg, #34e980 0%, #2dd36f 70%, #2fb457 100%);
+  display: grid;
+  place-items: center;
+  color: #06150c;
+  box-shadow: 0 6px 12px rgba(255, 203, 43, 0.38);
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.summary-ok ion-icon {
+  font-size: 28px;
+}
+
+.summary-ok:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.summary-ok:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+}
+
+.summary-ok:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: grayscale(0.15);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.qr-card {
+  margin-top: 20px;
+}
+
+.qr-card::part(native) {
+  background: transparent;
+}
+
+.qr-box {
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  color: var(--ion-text-color);
+}
+
+.qr-box ion-icon {
+  font-size: 42px;
+  opacity: 0.95;
+}
+
+/* Wrapper del producto + flechas laterales (versión vieja, por si algo la usa aún) */
+.product-wrapper {
+  position: relative;
+  margin-top: 12px;
+}
+
+/* Ajustamos la card para que el wrapper maneje el margin */
+.product-wrapper .product-card {
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  margin: 0;
+}
+
+/* Flechas grandes a los costados del producto (versión vieja) */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  border: 1px solid var(--glass-border);
+  background: color-mix(in oklab, var(--glass-surface), transparent 18%);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--glass-shadow);
+  cursor: pointer;
+  z-index: 10;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.nav-arrow ion-icon {
+  font-size: 32px;
+}
+
+.nav-arrow--left {
+  left: 8px;
+}
+
+.nav-arrow--right {
+  right: 8px;
+}
+
+.nav-arrow:active {
+  transform: translateY(-50%) scale(0.96);
+}
+
+.nav-arrow:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 2px;
+}
+
+/* En pantallas muy chicas, las hacemos un poco más compactas */
+@media (max-width: 480px) {
+  .nav-arrow {
+    width: 56px;
+    height: 56px;
+  }
+
+  .nav-arrow ion-icon {
+    font-size: 28px;
+  }
+}
+
+/* Si querés que no tapen tanto el contenido de la imagen, bajamos un toque */
+@media (max-width: 360px) {
+  .nav-arrow {
+    top: 55%;
+  }
+}
+
+/* === IMAGEN / CARRUSEL === */
+
+.image-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.35) 100%);
+  pointer-events: none;
+}
+
+.image-wrap swiper-container,
+.image-wrap swiper-slide,
+.image-placeholder {
+  height: clamp(210px, 36vh, 280px);
+}
+
+.image-wrap swiper-container {
+  display: block;
+  width: 100%;
+}
+
+.image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product-swiper {
+  --swiper-pagination-color: rgba(255, 255, 255, 0.95);
+  --swiper-pagination-bullet-inactive-color: rgba(255, 255, 255, 0.4);
+  --swiper-navigation-color: rgba(255, 255, 255, 0.9);
+}
+
+.image-placeholder {
+  display: grid;
+  place-items: center;
+  background: color-mix(in oklab, var(--glass-surface), transparent 40%);
+  color: color-mix(in oklab, var(--ion-text-color), transparent 35%);
+}
+
+.image-placeholder ion-icon {
+  font-size: 48px;
+}
+
+/* === CONTENIDO DE LA CARD === */
+
+.content {
+  padding: clamp(16px, 4vw, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Nombre del producto en blanco */
+.name {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff; // 👈 blanco
+}
+
+.price {
+  font-weight: 700;
+  font-size: 20px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--glass-highlight), transparent 40%);
+  color: var(--ion-text-color);
+}
+
+/* Descripción en blanco (con la opacidad que ya tenías) */
+.desc {
+  margin-top: 6px;
+  opacity: 0.85;
+  line-height: 1.4;
+  color: #ffffff; // 👈 blanco
+}
+.divider {
+  border: 0;
+  border-top: 1px solid color-mix(in oklab, var(--glass-highlight), transparent 55%);
+  margin: 6px 0 2px;
+}
+
+.controls {
+  display: grid;
+  grid-template-columns: auto auto auto 1fr;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid color-mix(in oklab, var(--glass-highlight), transparent 60%);
+  background: color-mix(in oklab, var(--glass-surface), transparent 65%);
+}
+
+.qty {
+  min-width: 32px;
+  text-align: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.add-btn {
+  margin-left: auto;
+  --border-radius: 999px;
+  --padding-start: 22px;
+  --padding-end: 22px;
+  --background: linear-gradient(135deg, var(--ion-color-primary, #e73f2d), color-mix(in oklab, var(--ion-color-primary, #e73f2d), black 12%));
+  --background-activated: linear-gradient(135deg, color-mix(in oklab, var(--ion-color-primary, #e73f2d), black 6%), color-mix(in oklab, var(--ion-color-primary, #e73f2d), black 18%));
+  --ripple-color: color-mix(in oklab, var(--ion-color-primary, #e73f2d), white 18%);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.empty-card {
+  border-radius: 14px;
+}
+
+.empty-state {
+  margin-top: 32px;
+  padding: 28px 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--ion-text-color);
+}
+
+.empty-state ion-icon {
+  font-size: 48px;
+  opacity: 0.85;
+}
+
+.empty-state p {
+  margin: 0;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+/* === WRAPPERS NUEVOS (flechas afuera) === */
+
+.product-wrapper-outer {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  margin-top: 28px;
+  /* Dejamos espacio a los costados para las flechas */
+  padding: 0 clamp(36px, 6vw, 64px);
+  width: 100%;
+  box-sizing: border-box;
+  isolation: isolate;
+}
+
+.product-wrapper-outer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: clamp(280px, 70%, 680px);
+  height: clamp(200px, 32vh, 380px);
+  transform: translateX(-50%);
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.2), transparent 70%);
+  filter: blur(10px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* La card queda centrada y un poco más angosta para que se vean bien las flechas */
+.product-wrapper-inner {
+  flex: 1 1 auto;
+  max-width: 640px;
+}
+
+/* === FLECHAS EXTERNAS === */
+
+.nav-arrow-outer {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 15;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid var(--glass-border);
+  background: color-mix(in oklab, var(--glass-surface), transparent 18%);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--glass-shadow);
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.nav-arrow-outer ion-icon {
+  font-size: 34px;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.nav-arrow-outer:active {
+  transform: translateY(-50%) scale(0.95);
+}
+
+.nav-arrow-outer:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.6);
+  outline-offset: 2px;
+}
+
+/* Izquierda/derecha: ahora dentro del ancho útil (no se van del celu) */
+.nav-arrow-outer--left {
+  left: 8px;
+}
+
+.nav-arrow-outer--right {
+  right: 8px;
+}
+
+/* === MOBILE / ALTAS PANTALLAS ESTRECHAS === */
+
+@media (max-width: 600px) {
+  .summary-banner {
+    margin: 8px 8px 0 8px;
+    border-radius: 16px;
+  }
+
+  .summary-amount {
+    font-size: 24px;
+  }
+
+  .summary-ok {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-wrapper-outer {
+    padding: 0 clamp(22px, 8vw, 40px);
+  }
+
+  .product-wrapper-inner {
+    max-width: 100%;
+  }
+
+  .nav-arrow-outer {
+    width: 52px;
+    height: 52px;
+  }
+
+  .nav-arrow-outer ion-icon {
+    font-size: 28px;
+  }
+
+  .nav-arrow-outer--left {
+    left: 4px;
+  }
+
+  .nav-arrow-outer--right {
+    right: 4px;
+  }
+
+  /* Bajamos un poco altura de imagen y tamaños para que entren bien los botones */
+  .image-wrap swiper-container,
+  .image-wrap swiper-slide,
+  .image-placeholder {
+    height: 190px;
+  }
+
+  .content {
+    padding: 12px;
+  }
+
+  .name {
+    font-size: 18px;
+  }
+
+  .price {
+    font-size: 20px;
+  }
+
+  /* En móviles el botón va a ancho completo en una fila aparte
+     para que siempre se vea completo el "Agregar al pedido" */
+  .controls {
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto;
+    gap: 6px 8px;
+  }
+
+  .add-btn {
+    grid-column: 1 / -1;
+    width: 100%;
+    margin-left: 0;
+    justify-self: stretch;
+  }
+}
+
+/* Pantallas MUY bajas: comprimimos aún más la imagen para que no tape los controles */
+@media (max-height: 700px) {
+  .image-wrap swiper-container,
+  .image-wrap swiper-slide,
+  .image-placeholder {
+    height: 170px;
+  }
+
+  .content {
+    padding-bottom: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .product-wrapper-outer {
+    padding: 0 22px;
+  }
+}
+
+/* === CARD === */
+
+.product-card {
+  --background: transparent;
+  border-radius: 26px;
+  overflow: hidden;
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 34px 50px rgba(5, 7, 15, 0.32);
+}

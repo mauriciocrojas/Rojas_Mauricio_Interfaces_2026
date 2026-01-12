@@ -1,0 +1,58 @@
+<ion-header class="games-header">
+  <ion-toolbar class="glass-toolbar">
+    <ion-buttons slot="start">
+      <ion-button routerLink="/home" aria-label="Ir al inicio" class="home-btn">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title class="games-title">
+      Juegos
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="page">
+    <!-- Carrusel de juegos con Swiper -->
+    <swiper-container
+      class="game-swiper"
+      slides-per-view="1"
+      centered-slides="true"
+      space-between="16"
+      pagination="true"
+    >
+      <swiper-slide>
+        <button class="game-button" (click)="selectGame('ahorcado')">
+          <ion-icon name="accessibility-outline"></ion-icon>
+          <span class="game-button__text">Ahorcado</span>
+        </button>
+      </swiper-slide>
+
+      <swiper-slide>
+        <button class="game-button" (click)="selectGame('mayor-menor')">
+          <ion-icon name="swap-vertical-outline"></ion-icon>
+          <span class="game-button__text">Mayor o Menor</span>
+        </button>
+      </swiper-slide>
+
+      <swiper-slide>
+        <button class="game-button" (click)="selectGame('escape-galactico')">
+          <ion-icon name="planet-outline"></ion-icon>
+          <span class="game-button__text">Escape Galáctico</span>
+        </button>
+      </swiper-slide>
+
+      <swiper-slide>
+        <button class="game-button" (click)="selectGame('entrega-ya')">
+          <ion-icon name="restaurant-outline"></ion-icon>
+          <span class="game-button__text">Entrega Ya</span>
+        </button>
+      </swiper-slide>
+    </swiper-container>
+
+    <div class="game-wrap">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</ion-content>

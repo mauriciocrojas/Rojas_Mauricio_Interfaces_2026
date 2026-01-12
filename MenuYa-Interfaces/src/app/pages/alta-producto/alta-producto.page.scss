@@ -1,0 +1,260 @@
+:host {
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --soft-shadow: 0 16px 26px rgba(15, 23, 42, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --glass-bg: rgba(20, 22, 30, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --soft-shadow: 0 14px 24px rgba(0, 0, 0, 0.55);
+  }
+}
+
+
+/* Layout en línea para "Categoría  Bebida" */
+.field-inline {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* separa label y valor */
+  gap: 6px;
+}
+
+.field-inline__label {
+  font-size: 12px;
+  white-space: nowrap;            /* evita que "Categoría" baje de línea */
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.field-inline__control {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;                 /* que no se expanda a todo el ancho */
+}
+
+.field-inline__control ion-select {
+  width: auto;                    /* que tome solo lo que necesita */
+  min-width: 0;
+  --padding-start: 0;
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+  font-size: 14px;
+}
+ion-content.registro {
+  --background: var(--ion-background-color);
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+h1.title {
+    margin: 0;
+    font-size: clamp(30px, 6vw, 40px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--ion-color-primary);
+}
+
+/* ============= HOME FLOTANTE ============= */
+
+.home-btn {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 8px) + 8px);
+  left: 14px;
+  z-index: 20;
+  --background: transparent;
+  --box-shadow: none;
+  --padding-start: 0;
+  --padding-end: 0;
+  --border-radius: 999px;
+  min-height: 32px;
+  color:white;
+}
+
+/* ============= CONTENEDOR MÁS PEGADO ARRIBA ============= */
+
+.registro__container {
+  width: min(400px, 100%);
+  padding: 40px 14px 22px; /* 40 para dejar espacio bajo la casita */
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* ============= TITULO REDUCIDO ============= */
+
+.title {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(20px, 5.4vw, 26px);
+  letter-spacing: -0.01em;
+  color: var(--ion-color-primary);
+}
+
+/* ============= FORM COMPACTO ============= */
+
+.registro__form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ============= CAMPOS GLASS COMPACTOS ============= */
+
+.field {
+  --inner-padding-top: 5px;
+  --inner-padding-bottom: 5px;
+  --padding-start: 10px;
+  border-radius: 12px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--soft-shadow);
+  transition: 0.2s ease;
+}
+
+.field.invalid {
+  border-color: color-mix(in oklab, var(--ion-color-danger), transparent 35%);
+  box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--ion-color-danger), transparent 55%);
+}
+
+.registro__form ion-label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.registro__form ion-input::part(native)::placeholder,
+.registro__form ion-textarea::part(native)::placeholder {
+  font-size: 10px;
+}
+
+/* Descripción más baja: menor espacio para escribir por defecto */
+.field--textarea ion-textarea {
+  --min-height: 70px;        /* antes mucho más grande */
+  --padding-top: 4px;
+  --padding-bottom: 4px;
+}
+
+/* ============= SELECT INLINE ============= */
+
+.field-inline__label {
+  font-size: 12px;
+}
+
+.field-inline__icon {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* ============= NOTAS DE ERROR ============= */
+
+.error {
+  margin-top: 1px;
+  margin-left: 2px;
+  font-size: 10px;
+  text-align: left;
+}
+
+/* ============= IMÁGENES MÁS COMPACTAS ============= */
+
+.fotos-field {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fotos-field__title {
+  font-size: 12px;
+}
+
+.fotos-field__subtitle {
+  font-size: 10px;
+  margin: 0;
+}
+
+.fotos-field__chip {
+  font-size: 10px;
+}
+
+/* Thumbnails chicos */
+
+.preview-thumb__img {
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 400px) {
+  .preview-thumb__img {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* ============= BOTÓN COMPACTO ============= */
+
+.actions {
+  margin-top: 4px;
+}
+
+.guardar {
+  --border-radius: 999px;
+  --background: linear-gradient(
+    135deg,
+    var(--ion-color-primary),
+    color-mix(in oklab, var(--ion-color-primary), black 8%)
+  );
+  --box-shadow: 0 12px 18px color-mix(in oklab, var(--ion-color-primary), transparent 78%);
+  min-height: 38px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ============= LISTADO (si lo usás) ============= */
+
+.productos-list {
+  padding-bottom: calc(env(safe-area-inset-bottom, 10px) + 52px);
+}
+
+.productos-list .thumbs img {
+  width: 48px;
+  height: 48px;
+}
+
+/* ============= RESPONSIVE ============= */
+
+@media (max-width: 420px) {
+  .registro__container {
+    padding: 38px 10px 20px;
+  }
+
+  .title {
+    font-size: 22px;
+  }
+}
+
+@media (max-height: 640px) {
+  .registro__container {
+    gap: 8px;
+  }
+
+  .field {
+    --inner-padding-top: 4px;
+    --inner-padding-bottom: 4px;
+  }
+
+  .guardar {
+    min-height: 34px;
+  }
+}

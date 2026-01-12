@@ -1,0 +1,114 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.juego-container {
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  background: #000;
+  color: #fdd835;
+  padding: 1.25rem 1rem 2rem;
+  border-radius: 16px;
+  max-width: 560px;
+  margin: 1rem auto 2rem;
+  border: 2px solid #f44336;
+  box-shadow: 0 0 15px #f44336;
+}
+
+/* ----------- Títulos / cartas ----------- */
+.arcade-title {
+  font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+  margin: 0 0 1rem;
+  color: #f44336;
+  text-shadow: 0 0 8px rgba(244, 67, 54, 0.8);
+}
+
+.carta {
+  margin: 1rem 0 1.25rem;
+}
+.carta-display {
+  font-size: clamp(1.6rem, 4.5vw, 2.2rem);
+  background: #3800bb;
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  border-radius: 10px;
+  display: inline-block;
+  box-shadow: 0 0 7.5px #3800bb;
+  margin-top: 0.35rem;
+}
+
+/* ----------- Botones de apuesta ----------- */
+.botones-apuesta {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+  margin-top: .25rem;
+}
+.mm-btn {
+  --background: #f3c221;
+  --color: #440000;
+  --border-radius: 10px;
+  --border-color: #440000;
+  --border-width: 2px; /* igual que en ahorcado */
+  font-weight: 800;
+  letter-spacing: .2px;
+}
+.mm-btn::part(native) {
+  transition: transform .2s ease, filter .2s ease;
+  padding: 0.6rem 1.1rem;
+}
+.mm-btn:hover::part(native) {
+  transform: scale(1.04);
+  filter: brightness(1.05);
+}
+.mm-btn[disabled] { opacity: .6; }
+
+/* ----------- Mensaje / puntaje ----------- */
+p { font-size: .95rem; margin: .6rem 0; }
+.mensaje { min-height: 1.8rem; }
+.mensaje-rojo { color: #ff5252; }
+.puntaje strong { font-size: 1.1rem; }
+
+/* ----------- Acciones inferiores ----------- */
+.acciones {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: clamp(6px, 2vw, 12px); /* mismo gap que ahorcado */
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Botón tipo "arcade outline" (reiniciar) */
+.ghost-btn {
+  --border-color: #ffffff;
+  --border-width: 2px;
+  --color: #ffffff;
+  --background: transparent;
+  --border-radius: 10px;
+}
+.ghost-btn::part(native) { padding: 0.65rem 1.2rem; }
+
+/* Botón "volver al inicio" (gris sólido) */
+.back-home-btn {
+  --background: trans;
+  --color: #ffffff;
+  --border-radius: 10px;
+  --box-shadow: none;
+}
+.back-home-btn::part(native) { padding: 0.65rem 1.2rem; }
+.back-home-btn:hover::part(native) { filter: brightness(1.05); }
+
+/* ----------- Responsive ----------- */
+@media (max-width: 480px) {
+  .juego-container { margin: .5rem .5rem 1.25rem; }
+}
+
+/* Botones inferiores */
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(6px, 2vw, 12px);
+  justify-content: center;
+}

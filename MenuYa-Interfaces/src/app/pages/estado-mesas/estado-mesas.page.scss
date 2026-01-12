@@ -1,0 +1,201 @@
+:host {
+  --card-radius: 18px;
+  --glass-bg: color-mix(in oklab, var(--ion-card-background, #0c0c0f), transparent 10%);
+  --glass-border: color-mix(in oklab, var(--ion-color-primary), transparent 75%);
+  --glass-shadow: 0 20px 38px rgba(0, 0, 0, 0.2);
+}
+
+ion-header {
+  backdrop-filter: saturate(140%) blur(10px);
+  border-bottom: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 80%);
+}
+
+ion-toolbar {
+  --background: linear-gradient(135deg,
+      color-mix(in oklab, var(--ion-color-primary), transparent 88%),
+      color-mix(in oklab, var(--ion-background-color, #050507), transparent 4%));
+  --color: var(--ion-text-color, #fff);
+  --border-width: 0;
+
+  padding-inline: clamp(12px, 4vw, 28px);
+
+  /* 👇 antes tenías align-items: flex-start */
+  display: flex;
+  align-items: center;   /* CENTRADO VERTICAL */
+  padding-top: 8px;
+  padding-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+ion-title {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+  width: 100%;
+  margin-top: 18px;
+  margin-left: 10px;
+}
+
+ion-buttons ion-button {
+  --background: color-mix(in oklab, var(--ion-color-primary), transparent 85%);
+  --border-radius: 16px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --color: var(--ion-text-color);
+
+  /* 👇 margen externo a los costados */
+  margin-inline: 6px;
+}
+
+/* Si querés solo separar el de la izquierda del borde: */
+ion-toolbar ion-buttons[slot="start"] ion-button {
+  margin-left: 8px;
+  margin-top: 16px;
+}
+
+/* (Opcional) y el de la derecha también */
+ion-toolbar ion-buttons[slot="end"] ion-button {
+  margin-right: 8px;
+}
+
+.mesas-grid {
+  padding: clamp(14px, 4vw, 28px);
+  row-gap: 18px;
+}
+
+.mesa-card {
+  border-radius: var(--card-radius);
+  background:
+    radial-gradient(circle at 120% -15%, rgba(255, 255, 255, 0.18), transparent 40%),
+    linear-gradient(160deg,
+      color-mix(in oklab, var(--ion-color-primary), transparent 90%),
+      color-mix(in oklab, var(--ion-background-color, #050505), transparent 0%));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  position: relative;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 26px 46px rgba(0, 0, 0, 0.25);
+  }
+
+  &.estado-disponible {
+    border-color: color-mix(in oklab, var(--ion-color-success), transparent 35%);
+    box-shadow: 0 18px 32px color-mix(in oklab, var(--ion-color-success), transparent 78%);
+  }
+
+  &.estado-confirmar {
+    border-color: color-mix(in oklab, var(--ion-color-warning), transparent 35%);
+    box-shadow: 0 18px 32px color-mix(in oklab, var(--ion-color-warning), transparent 78%);
+  }
+
+  &.estado-ocupada {
+    border-color: color-mix(in oklab, var(--ion-color-danger), transparent 35%);
+    box-shadow: 0 18px 32px color-mix(in oklab, var(--ion-color-danger), transparent 78%);
+  }
+
+  &.estado-pendiente {
+    border-color: color-mix(in oklab, var(--ion-color-tertiary), transparent 35%);
+  }
+}
+
+ion-card-header {
+  padding: 18px clamp(14px, 4vw, 22px) 10px;
+}
+
+.mesa-card-header .header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+ion-card-title {
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: 0.03em;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 5%);
+}
+
+ion-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 90px;
+  padding: 10px clamp(12px, 4vw, 18px) 18px;
+}
+
+.qr-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.qr-image {
+  width: 200px;
+  height: 200px;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.tomar-pedido-btn {
+  margin-left: 12px;
+  margin-right: 12px;
+  --padding-start: 18px;
+  --padding-end: 18px;
+  --border-radius: 16px;
+}
+
+.estado-badge {
+  padding: 10px 16px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--ion-color-medium);
+  padding: 32px 0 48px;
+
+  ion-icon {
+    font-size: 48px;
+    margin-bottom: 8px;
+    color: var(--ion-color-medium);
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  ion-toolbar {
+    --background: color-mix(in oklab, var(--ion-background-color, #050505), transparent 0%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .mesas-grid {
+    padding-inline: clamp(12px, 6vw, 26px);
+  }
+
+  .mesa-card {
+    border-radius: 16px;
+  }
+
+  .tomar-pedido-btn {
+    margin-inline: 0;
+    width: 100%;
+  }
+}

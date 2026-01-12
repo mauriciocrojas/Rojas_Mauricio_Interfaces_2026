@@ -1,0 +1,150 @@
+<ion-header>
+  <ion-toolbar class="glass-toolbar">
+    <ion-buttons slot="start">
+      <ion-button class="home-button" (click)="goHome()">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <!-- Si después querés volver a mostrar el título -->
+    <ion-title class="toolbar-title">Menú</ion-title>
+
+    <ion-buttons slot="end">
+      <ng-container *ngIf="!modoDelivery">
+        <!-- <ion-label class="chat-label">Chat</ion-label> -->
+        <ion-button (click)="goToChat()" class="chat-button">
+          <img
+            src="assets/chatmozo.svg"
+            alt="Consultar al mozo"
+            class="chat-icon"
+          />
+        </ion-button>
+      </ng-container>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <!-- Banner de importe total -->
+  <div class="summary-banner glass-panel ion-padding">
+    <div class="summary-main">
+      <div class="summary-title">IMPORTE TOTAL:</div>
+      <div class="summary-amount">{{ formatearMoneda(importeTotal) }}</div>
+      <div class="summary-sub">DEMORA: {{ tiempoTotal }} {{ minutosLabel(tiempoTotal) }}</div>
+    </div>
+    <button
+      type="button"
+      class="summary-ok"
+      (click)="confirmarPedidoConSweetAlert()"
+      [disabled]="!pedido.length"
+      aria-label="Confirmar pedido"
+      title="Confirmar pedido"
+    >
+      <ion-icon name="checkmark" aria-hidden="true"></ion-icon>
+    </button>
+  </div>
+</ion-header>
+
+<ion-content class="registro safe-top">
+  <div class="ion-padding-horizontal ion-padding-bottom layout-shell">
+    <ng-container *ngIf="productos?.length; else vacio">
+
+      <div class="motion-toggle-wrapper">
+        <ion-button class="motion-toggle-btn" (click)="toggleMovimiento()" aria-label="Activar movimiento">
+          {{ movimientoActivo ? 'Desactivar movimiento' : 'Activar movimiento' }}
+        </ion-button>
+      </div>
+
+      <!-- Mostrar solo el producto actual -->
+      <ng-container *ngIf="productos[currentProductIndex] as p">
+
+        <div class="product-wrapper-outer">
+
+          <!-- Flecha izquierda afuera -->
+          <button
+            type="button"
+            class="nav-arrow-outer nav-arrow-outer--left"
+            (click)="productoAnterior()"
+            aria-label="Producto anterior"
+          >
+            <ion-icon name="chevron-back-outline"></ion-icon>
+          </button>
+
+          <div class="product-wrapper-inner">
+            <ion-card #tarjetaProducto class="product-card glass-panel">
+              <div class="image-wrap" *ngIf="p.urls_imagenes?.length; else sinImagen">
+                <swiper-container
+                  #carrusel
+                  class="product-swiper"
+                  pagination="true"
+                  navigation="true"
+                  loop="true"
+                  space-between="8"
+                >
+                  <swiper-slide *ngFor="let url of p.urls_imagenes; let i = index">
+                    <img
+                      [src]="url"
+                      [alt]="prettyNombre(p.nombre) + ' ' + (i + 1)"
+                      loading="lazy"
+                    />
+                  </swiper-slide>
+                </swiper-container>
+              </div>
+
+              <ng-template #sinImagen>
+                <div class="image-placeholder">
+                  <ion-icon name="image-outline"></ion-icon>
+                </div>
+              </ng-template>
+
+              <div class="content">
+                <div class="title-row">
+                  <h2 class="name">{{ prettyNombre(p.nombre) }}</h2>
+                  <div class="price">{{ formatearMoneda(p.precio) }}</div>
+                </div>
+
+                <div class="desc">{{ p.descripcion }}</div>
+
+                <hr class="divider" />
+
+                <div class="controls">
+                  <ion-button fill="clear" shape="round" (click)="decrementar(p)" aria-label="Restar">
+                    <ion-icon name="remove-circle-outline"></ion-icon>
+                  </ion-button>
+
+                  <div class="qty">{{ cantidadDe(p) }}</div>
+
+                  <ion-button fill="clear" shape="round" (click)="incrementar(p)" aria-label="Sumar">
+                    <ion-icon name="add-circle-outline"></ion-icon>
+                  </ion-button>
+
+                  <ion-button class="add-btn" color="secondary" (click)="agregarAlPedido(p)">
+                    Agregar al pedido
+                  </ion-button>
+                </div>
+              </div>
+            </ion-card>
+          </div>
+
+          <!-- Flecha derecha afuera -->
+          <button
+            type="button"
+            class="nav-arrow-outer nav-arrow-outer--right"
+            (click)="siguienteProducto()"
+            aria-label="Siguiente producto"
+          >
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </button>
+
+        </div>
+      </ng-container>
+
+    </ng-container>
+
+    <ng-template #vacio>
+      <div class="empty-state glass-panel">
+        <ion-icon name="cart-outline"></ion-icon>
+        <p>No hay productos disponibles en este momento.</p>
+      </div>
+    </ng-template>
+
+  </div>
+</ion-content>

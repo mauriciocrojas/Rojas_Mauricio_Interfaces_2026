@@ -1,0 +1,108 @@
+<ion-header [translucent]="true">
+  <!-- Botón Home flotante -->
+  <ion-button
+    fill="clear"
+    class="home-btn"
+    (click)="goHome()"
+    aria-label="Ir al inicio"
+  >
+    <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+  </ion-button>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="pedidos-pendientes-content safe-top">
+  <section
+    class="pedidos-wrapper"
+    *ngIf="pedidosPendientes?.length; else noPedidos"
+  >
+    <div class="section-heading">
+      <p class="eyebrow">
+        {{ role === 'cocinero' ? 'Pedidos de cocina' : 'Pedidos de barra' }}
+      </p>
+      <h1>Gestiona pedidos pendientes</h1>
+      <p class="support-copy">
+        {{ role === 'cocinero'
+          ? 'Revisa y marca como listos los pedidos de cocina.'
+          : 'Administra y entrega los pedidos de bebidas.' }}
+      </p>
+    </div>
+
+    <ion-grid>
+      <ion-row class="pedidos-grid">
+        <ion-col
+          size="12"
+          size-md="6"
+          *ngFor="let pedido of pedidosPendientes"
+        >
+          <ion-card class="pedido-card">
+            <ion-card-header>
+              <div class="pedido-header-main">
+                <div class="mesa-info">
+                  <ion-card-title>
+                    {{
+                      pedido.numero_mesa === 9999
+                        ? 'A domicilio'
+                        : 'Mesa ' + pedido.numero_mesa
+                    }}
+                  </ion-card-title>
+                  <!-- <p class="pedido-id">#{{ pedido.id }}</p> -->
+                </div>
+
+                <ion-badge class="estado-badge" [ngClass]="pedido.estado">
+                  {{
+                    pedido.estado === 'en_preparacion'
+                      ? 'Preparando'
+                      : 'Entregar pedido'
+                  }}
+                </ion-badge>
+              </div>
+
+              <ion-card-subtitle>
+                Fecha: {{ pedido.created_at | date: 'short' }}
+              </ion-card-subtitle>
+            </ion-card-header>
+
+            <ion-card-content>
+              <ion-list lines="none" class="items-list">
+                <ion-item
+                  class="item-row"
+                  detail="false"
+                  *ngFor="let item of pedido.itemsFiltrados"
+                >
+                  <ion-label>
+                    <h3>
+                      {{ prettyNombre(item.nombre) }} x {{ item.cantidad }}
+                    </h3>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+
+              <ion-button
+                expand="block"
+                color="success"
+                class="pedido-btn"
+                (click)="marcarListo(pedido)"
+                *ngIf="pedido.estado !== 'listo'"
+              >
+                Entregar pedido
+              </ion-button>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </section>
+
+  <ng-template #noPedidos>
+    <div class="empty-state-container">
+      <div class="empty-state">
+        <ion-icon
+          name="restaurant-outline"
+          aria-hidden="true"
+        ></ion-icon>
+        <h2>Sin pedidos pendientes</h2>
+        <p>No hay pedidos pendientes por el momento.</p>
+      </div>
+    </div>
+  </ng-template>
+</ion-content>

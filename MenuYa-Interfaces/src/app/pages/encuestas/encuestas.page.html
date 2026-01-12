@@ -1,0 +1,246 @@
+<ion-header [translucent]="true">
+  <!-- Boton Home flotante -->
+  <ion-button
+    fill="clear"
+    class="home-btn"
+    (click)="goHome()"
+    aria-label="Ir al inicio"
+  >
+    <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+  </ion-button>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="section-heading">
+    <h1>Encuesta</h1>
+  </div>
+  <ion-refresher slot="fixed" (ionRefresh)="cargarResultados($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <ion-segment [(ngModel)]="segment" mode="md" style="margin: 12px">
+    <ion-segment-button value="form" [disabled]="yaRespondio || enEspera || soloResultados">
+      <ion-label>Responder</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="resultados">
+      <ion-label>Resultados</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div *ngIf="segment === 'form'" style="padding: 12px">
+    <ion-card class="survey-card">
+      <ion-card-header>
+        <ion-card-title>Tu experiencia completa</ion-card-title>
+        <ion-card-subtitle>Una respuesta por estadia</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <form [formGroup]="form" (ngSubmit)="enviar()">
+          <div class="questions-grid">
+            <section class="question-card">
+              <div class="question-head">
+                <ion-icon name="people-circle-outline" aria-hidden="true"></ion-icon>
+                <div>
+                  <h2>Servicio</h2>
+                  <p>Selecciona como sentiste la atencion del equipo.</p>
+                </div>
+              </div>
+              <ion-radio-group formControlName="servicio">
+                <ion-list lines="none">
+                  <ion-item
+                    class="radio-option"
+                    *ngFor="let option of satisfactionScale"
+                    [attr.aria-label]="'Servicio ' + option.label">
+                    <ion-radio
+                      slot="start"
+                      [value]="option.value">
+                    </ion-radio>
+                    <ion-label>
+                      {{ option.value }} - {{ option.label }}
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-radio-group>
+            </section>
+
+            <section class="question-card">
+              <div class="question-head">
+                <ion-icon name="restaurant-outline" aria-hidden="true"></ion-icon>
+                <div>
+                  <h2>Comida</h2>
+                  <p>Contanos que te parecio el sabor y la presentacion.</p>
+                </div>
+              </div>
+              <ion-item lines="none" class="select-wrapper">
+                <ion-label position="stacked">Calificacion</ion-label>
+                <ion-select
+                  placeholder="Elegi una opcion"
+                  formControlName="comida"
+                  interface="popover">
+                  <ion-select-option
+                    *ngFor="let option of satisfactionScale"
+                    [value]="option.value">
+                    {{ option.value }} - {{ option.label }}
+                  </ion-select-option>
+                </ion-select>
+              </ion-item>
+            </section>
+
+            <section class="question-card">
+              <div class="question-head">
+                <ion-icon name="cash-outline" aria-hidden="true"></ion-icon>
+                <div>
+                  <h2>Precio / Calidad</h2>
+                  <p>Elegi la opcion que mejor describa la relacion.</p>
+                </div>
+              </div>
+              <ion-list lines="none" class="checklist" role="listbox">
+                <ion-item
+                  button
+                  detail="false"
+                  *ngFor="let option of satisfactionScale"
+                  (click)="setPrecioCalidad(option.value)"
+                  [attr.aria-checked]="form.get('precio_calidad')?.value === option.value"
+                  class="checklist-item">
+                  <ion-checkbox
+                    slot="start"
+                    mode="md"
+                    [checked]="form.get('precio_calidad')?.value === option.value"
+                    (ionChange)="setPrecioCalidad(option.value)">
+                  </ion-checkbox>
+                  <ion-label>
+                    <h3>{{ option.helper }}</h3>
+                  </ion-label>
+                </ion-item>
+              </ion-list>
+            </section>
+
+            <section class="question-card experience-card">
+              <div class="question-head">
+                <ion-icon name="sparkles-outline" aria-hidden="true"></ion-icon>
+                <div>
+                  <h2>Experiencia</h2>
+                  <p>Desliza para ubicar como te sentiste en general.</p>
+                </div>
+              </div>
+              <ion-range
+                class="experience-range"
+                min="1"
+                max="5"
+                step="1"
+                snaps="true"
+                ticks="false"
+                pin="true"
+                formControlName="experiencia">
+                <ion-icon slot="start" name="sad-outline" aria-hidden="true"></ion-icon>
+                <ion-icon slot="end" name="happy-outline" aria-hidden="true"></ion-icon>
+              </ion-range>
+            </section>
+          </div>
+
+          <ion-item>
+            <ion-textarea label="Comentario (opcional)" labelPlacement="stacked" formControlName="comentario" autoGrow="true"></ion-textarea>
+          </ion-item>
+
+          <ion-button expand="block" type="submit" style="margin-top: 12px"
+            [disabled]="!form.valid || isLoading || !canSubmit || yaRespondio || enEspera || soloResultados">
+            Enviar
+          </ion-button>
+
+          <ion-note *ngIf="enEspera" color="warning">
+            Estas en la lista de espera. Podes ver resultados, no responder aun.
+          </ion-note>
+          <ion-note *ngIf="soloResultados && !enEspera" color="medium">
+            Completa tu pedido para habilitar la encuesta.
+          </ion-note>
+          <ion-note *ngIf="!canSubmit && !soloResultados" color="medium">
+            Debes tener una mesa asignada para responder.
+          </ion-note>
+          <ion-note *ngIf="yaRespondio" color="success">
+            Ya respondiste por esta estadia (hoy).
+          </ion-note>
+        </form>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <div *ngIf="segment === 'resultados'" style="padding: 12px" class="resultados">
+    <ion-card class="summary-card">
+      <ion-card-header>
+        <ion-card-title>Resumen general</ion-card-title>
+        <ion-card-subtitle>Total encuestas: {{ estadisticas?.totalEncuestas || 0 }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ng-container *ngIf="estadisticas as es; else noResultados">
+        <ion-card-content>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span>Servicio</span>
+              <strong>{{ es.servicio.promedio | number:'1.1-1' }}</strong>
+              <small>{{ es.servicio.total || 0 }} votos</small>
+            </div>
+            <div class="summary-item">
+              <span>Comida</span>
+              <strong>{{ es.comida.promedio | number:'1.1-1' }}</strong>
+              <small>{{ es.comida.total || 0 }} votos</small>
+            </div>
+            <div class="summary-item">
+              <span>Precio/Calidad</span>
+              <strong>{{ es.precio_calidad.promedio | number:'1.1-1' }}</strong>
+              <small>{{ es.precio_calidad.total || 0 }} votos</small>
+            </div>
+            <div class="summary-item">
+              <span>Experiencia</span>
+              <strong>{{ es.experiencia.promedio | number:'1.1-1' }}</strong>
+              <small>{{ es.experiencia.total || 0 }} votos</small>
+            </div>
+          </div>
+        </ion-card-content>
+      </ng-container>
+      <ng-template #noResultados>
+        <ion-card-content>
+          <div class="empty-state">
+            <ion-icon name="analytics-outline"></ion-icon>
+            <p>Todavia no hay respuestas registradas.</p>
+          </div>
+        </ion-card-content>
+      </ng-template>
+    </ion-card>
+
+    <ng-container *ngIf="estadisticas as es">
+      <div class="charts-carousel">
+        <swiper-container
+          class="charts-swiper"
+          navigation="true"
+          pagination="true"
+          loop="true"
+          slides-per-view="1"
+          space-between="16"
+          centered-slides="true"
+        >
+          <swiper-slide *ngFor="let slide of chartSlides" class="chart-slide">
+            <ion-card class="chart-card">
+              <ion-card-header>
+                <ion-card-title>{{ slide.title }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <div class="chart-wrapper">
+                  <canvas
+                    baseChart
+                    [type]="slide.chartType"
+                    [options]="slide.chartOptions"
+                    [data]="slide.chartData">
+                  </canvas>
+                </div>
+                <div class="chart-meta">
+                  <span>Promedio: <strong>{{ es[slide.key]?.promedio | number:'1.1-1' }}</strong></span>
+                  <span>Votos: <strong>{{ es[slide.key]?.total || 0 }}</strong></span>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </swiper-slide>
+        </swiper-container>
+      </div>
+    </ng-container>
+  </div>
+</ion-content>

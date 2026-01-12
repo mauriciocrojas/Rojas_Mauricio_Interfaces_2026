@@ -1,0 +1,2121 @@
+/* src/app/home/home.page.scss */
+:host {
+  --hero-gradient-start: var(--ion-color-primary);
+  --hero-gradient-end: color-mix(in oklab, var(--ion-color-primary) 60%, transparent);
+  --card-glass-bg: rgba(255, 255, 255, 0.6);
+  --card-glass-border: rgba(255, 255, 255, 0.35);
+  --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --card-glass-bg: rgba(16, 16, 20, 0.5);
+    --card-glass-border: rgba(255, 255, 255, 0.07);
+    --hero-gradient-end: color-mix(in oklab, var(--ion-color-primary) 35%, transparent);
+  }
+}
+
+.home {
+  --padding-top: max(16px, env(safe-area-inset-top));
+  --padding-bottom: max(20px, env(safe-area-inset-bottom));
+  padding-top: var(--padding-top);
+  padding-bottom: var(--padding-bottom);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+
+  .home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    padding: 16px clamp(16px, 4vw, 28px);
+    margin: 0 10px;
+    margin-bottom: 16px;
+    border-radius: 20px;
+    background: color-mix(in oklab, var(--ion-color-primary) 18%, var(--ion-background-color, #fff));
+    border: 1px solid color-mix(in oklab, var(--ion-color-primary) 45%, transparent);
+    box-shadow: var(--shadow-soft);
+    color: var(--ion-color-primary-contrast);
+
+    &__info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 48px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    &__icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: color-mix(in oklab, var(--ion-color-primary-contrast) 20%, transparent);
+
+      ion-icon {
+        font-size: 26px;
+        color: inherit;
+      }
+    }
+
+    &__role {
+      margin: 0;
+      font-size: clamp(18px, 4.5vw, 22px);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    &__logout {
+      --color: currentColor;
+      --padding-start: 0;
+      --padding-end: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      color: var(--ion-color-primary-contrast);
+      border: 1px solid color-mix(in oklab, currentColor 35%, transparent);
+      backdrop-filter: blur(6px);
+
+      ion-icon {
+        font-size: 24px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      flex-direction: row;
+      align-items: center;
+
+      &__info {
+        flex: 1;
+      }
+    }
+  }
+
+  .actions-card {
+    margin: 0 10px 18px;
+    padding: 20px clamp(16px, 4vw, 28px);
+    border-radius: 20px;
+    border: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 55%);
+    background:
+      linear-gradient(120deg,
+        color-mix(in oklab, var(--ion-color-primary), transparent 90%),
+        color-mix(in oklab, var(--ion-background-color, #fff), transparent 15%));
+    box-shadow: var(--shadow-soft);
+
+    h2 {
+      margin: 0 0 12px;
+      font-size: clamp(16px, 4vw, 20px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: color-mix(in oklab, var(--ion-text-color), transparent 20%);
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    ion-button {
+      width: 100%;
+      min-height: 60px;
+      --border-radius: 22px;
+      font-weight: 600;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+
+      ion-icon {
+        font-size: 22px;
+      }
+    }
+  }
+
+  .grid {
+    padding-inline: clamp(16px, 4.5vw, 28px);
+  }
+
+  .mozo-panel {
+    margin: 18px 10px 28px;
+    padding: clamp(18px, 4vw, 26px);
+    border-radius: 22px;
+    border: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 70%);
+    background:
+      linear-gradient(125deg,
+        color-mix(in oklab, var(--ion-color-primary), transparent 90%),
+        color-mix(in oklab, var(--ion-background-color, #fff), transparent 10%));
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .mozo-panel__actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+
+    ion-button {
+      --border-radius: 18px;
+      min-height: 56px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+  }
+
+  .mozo-panel__list {
+    margin: 0;
+    border-radius: 20px;
+    border: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 70%);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    background: color-mix(in oklab, var(--ion-card-background, #fff), transparent 4%);
+
+    ion-card-header {
+      border-bottom: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 80%);
+      padding: 16px clamp(14px, 3vw, 24px);
+    }
+
+    ion-card-content {
+      padding: clamp(14px, 3vw, 24px);
+    }
+  }
+
+  .mozo-panel__list-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    ion-icon {
+      font-size: 26px;
+      color: var(--ion-color-primary);
+      padding: 10px;
+      border-radius: 18px;
+      background: color-mix(in oklab, var(--ion-color-primary), transparent 85%);
+    }
+
+    ion-card-title {
+      margin: 0;
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    ion-card-subtitle {
+      margin-top: 4px;
+      font-size: 0.9rem;
+      color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+    }
+  }
+
+  .mozo-panel__item {
+    --background: transparent;
+    --inner-padding-start: 0;
+    --inner-padding-end: 0;
+    --min-height: 84px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 85%);
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+
+    ion-label {
+      h2 {
+        margin: 0 0 6px;
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      p {
+        margin: 2px 0;
+        color: color-mix(in oklab, var(--ion-color-medium), transparent 10%);
+        font-size: 0.92rem;
+      }
+    }
+
+    ion-button {
+      --border-radius: 999px;
+      min-width: 130px;
+      font-weight: 700;
+    }
+  }
+
+  .welcome-card {
+    margin-top: 16px;
+    backdrop-filter: saturate(120%) blur(8px);
+    background: var(--card-glass-bg);
+    border: 1px solid var(--card-glass-border);
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    transform: translateZ(0);
+
+    ion-card-header {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      grid-template-areas:
+        "avatar title"
+        "avatar subtitle";
+      align-items: center;
+      gap: 10px 14px;
+      padding-bottom: 4px;
+    }
+
+    ion-card-title {
+      grid-area: title;
+      font-size: clamp(18px, 4.5vw, 22px);
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    ion-card-subtitle {
+      grid-area: subtitle;
+      opacity: 0.8;
+      font-size: clamp(12px, 3.5vw, 14px);
+    }
+
+    .avatar-wrap {
+      grid-area: avatar;
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      background: color-mix(in oklab, var(--ion-color-primary), transparent 70%);
+      border: 1px solid color-mix(in oklab, var(--ion-color-primary), white 75%);
+      ion-icon {
+        font-size: 24px;
+        color: var(--ion-color-primary);
+      }
+    }
+
+    .avatar-wrap.hero-avatar {
+      width: clamp(100px, 22vw, 150px);
+      height: clamp(100px, 22vw, 150px);
+      border-radius: 999px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      position: relative;
+      isolation: isolate;
+
+      &::after {
+        content: "";
+        position: absolute;
+        inset: -24px;
+        border-radius: inherit;
+        background: radial-gradient(circle, rgba(255, 214, 120, 0.55), transparent 65%);
+        filter: blur(6px);
+        z-index: 0;
+      }
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 8px 18px rgba(255, 205, 120, 0.5));
+        z-index: 1;
+      }
+    }
+
+    ion-card-content {
+      padding-top: 8px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .actions {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr;
+    }
+
+    &.role-hero-card {
+      ion-card-header {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "avatar"
+          "title"
+          "subtitle";
+        justify-items: center;
+        text-align: center;
+        gap: 10px;
+      }
+
+      ion-card-title,
+      ion-card-subtitle {
+        text-align: center;
+        width: 100%;
+      }
+
+      .avatar-wrap {
+        margin-bottom: 6px;
+      }
+    }
+  }
+
+  .stack {
+    display: grid;
+    gap: 8px;
+  }
+
+  .fade-in {
+    animation: fade 350ms ease-out both;
+  }
+
+  .bottom-spacer {
+    height: env(safe-area-inset-bottom);
+  }
+}
+
+@keyframes fade {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Pequeñas mejoras de accesibilidad táctil */
+ion-button {
+  --border-radius: 999px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  min-height: 44px; // target táctil mínimo
+
+  &[color="primary"]:not([fill="clear"]):not([fill="outline"]) {
+    --background: linear-gradient(135deg, var(--ion-color-primary), color-mix(in oklab, var(--ion-color-primary), black 8%));
+    --box-shadow: 0 18px 32px color-mix(in oklab, var(--ion-color-primary), transparent 78%);
+  }
+}
+
+
+/* ====== Lista y tarjeta ====== */
+.pending-list {
+  display: grid;
+  gap: 12px;
+  padding-inline: 0; /* ion-list ya maneja padding, evitamos dobles */
+}
+
+.pending-item {
+  --inner-padding-end: 12px;
+  align-items: flex-start; /* que el contenido arranque arriba */
+}
+
+/* Avatar consistente */
+.pending-avatar {
+  --border-radius: 12px;
+  width: 48px;
+  height: 48px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* Contenedor principal: apila nombre, meta y acciones (mobile first) */
+.pending-main {
+  display: grid;
+  grid-template-areas:
+    "name"
+    "meta"
+    "actions";
+  gap: 6px 12px;
+  width: 100%;
+  min-width: 0; /* permite que los hijos hagan wrap correctamente */
+}
+
+/* Texto con control de cortes elegantes (SIN perder info) */
+.pending-name {
+  grid-area: name;
+  font-size: clamp(14px, 3.6vw, 16px);
+  line-height: 1.25;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.pending-meta {
+  grid-area: meta;
+  color: var(--ion-color-medium);
+  font-size: clamp(12px, 3.2vw, 14px);
+  line-height: 1.35;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+
+  .email {
+    word-break: break-all;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* Acciones: debajo en mobile, en fila y con wrap si hace falta */
+.pending-actions {
+  grid-area: actions;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+}
+
+.pending-actions ion-button {
+  flex: 1 1 180px;
+}
+
+/* Pantallas MUY chicas: botones uno debajo del otro (full width) */
+@media (max-width: 360px) {
+  .pending-actions ion-button {
+    flex-basis: 100%;
+  }
+}
+
+/* Ajustes responsivos adicionales para móviles angostos */
+@media (max-width: 420px) {
+  .home .hero {
+    padding-left: max(24px, 7vw);
+    padding-right: max(16px, 5vw);
+  }
+
+  .home .grid {
+    padding-inline: max(18px, 6vw);
+  }
+}
+
+/* A partir de tablets/anchos medios: acciones a la derecha */
+@media (min-width: 640px) {
+  .pending-main {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "name actions"
+      "meta actions";
+    align-items: center;
+  }
+
+  .pending-actions {
+    width: auto;
+    justify-self: end;
+    min-width: 260px;
+  }
+}
+
+/* Opcional: mejora visual del header del card */
+.avatar-wrap {
+  width: 36px;
+  height: 36px;
+  display: inline-grid;
+  place-items: center;
+  background: var(--ion-color-step-150, #1f1f1f);
+  border-radius: 10px;
+  margin-bottom: 6px;
+
+  ion-icon {
+    font-size: 18px;
+  }
+}
+
+
+/* --------- Chips del estado anónimo --------- */
+ion-chip.ml-1 { margin-left: 6px; }
+ion-chip { --background: color-mix(in oklab, var(--ion-color-medium), white 86%); }
+
+/* --------- Grid spacing --------- */
+.grid { padding: 8px 6px 20px; }
+.bottom-spacer { height: 24px; }
+
+/* --------- Skeleton stack --------- */
+.stack { display: grid; gap: 8px; }
+
+/* --------- Panel maître --------- */
+.mesa-asignacion {
+  backdrop-filter: saturate(120%) blur(8px);
+  background: var(--card-glass-bg);
+  border: 1px solid var(--card-glass-border);
+  border-radius: 18px;
+  box-shadow: var(--shadow-soft);
+  padding: 16px;
+  display: grid;
+  gap: 16px;
+  max-width: 580px;
+  margin: 0 auto;
+
+  ion-item {
+    --background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 6px 12px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+
+    ion-label {
+      font-weight: 600;
+      font-size: clamp(14px, 3.5vw, 16px);
+      color: var(--ion-color-dark);
+    }
+
+    ion-select-option {
+      color: var(--ion-color-dark);
+    }
+  }
+
+  ion-button {
+    --border-radius: 999px;
+    min-height: 43px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.15);
+    }
+  }
+}
+
+.maitre-panel {
+  margin: 26px 10px 30px;
+  border-radius: 24px;
+  background: var(--card-glass-bg);
+  border: 1px solid var(--card-glass-border);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: saturate(115%) blur(10px);
+  overflow: hidden;
+
+  ion-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px clamp(18px, 4vw, 30px);
+    background: linear-gradient(135deg,
+      color-mix(in oklab, var(--ion-color-primary), transparent 82%),
+      color-mix(in oklab, var(--ion-background-color, #fff), transparent 8%));
+    border-bottom: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 75%);
+  }
+
+  ion-card-title {
+    font-size: clamp(20px, 4vw, 24px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  ion-card-subtitle {
+    margin-top: 2px;
+    font-size: 0.95rem;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 20%);
+  }
+
+  .avatar-wrap {
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+    background: color-mix(in oklab, var(--ion-color-primary), transparent 65%);
+    border: 1px solid color-mix(in oklab, var(--ion-color-primary), white 60%);
+    ion-icon {
+      font-size: 28px;
+      color: var(--ion-color-primary);
+    }
+  }
+
+  ion-card-content {
+    padding: clamp(18px, 4vw, 28px);
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  ion-text {
+    display: inline-flex;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: color-mix(in oklab, var(--ion-color-medium), transparent 88%);
+    color: var(--ion-color-medium);
+  }
+
+  ion-button {
+    --border-radius: 18px;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  ion-button[color="primary"] {
+    --background: linear-gradient(135deg, var(--ion-color-primary), color-mix(in oklab, var(--ion-color-primary), black 8%));
+    --box-shadow: 0 18px 32px color-mix(in oklab, var(--ion-color-primary), transparent 80%);
+  }
+
+  ion-button[fill="outline"] {
+    --border-color: color-mix(in oklab, var(--ion-text-color), transparent 60%);
+    --color: color-mix(in oklab, var(--ion-text-color), var(--ion-color-primary) 25%);
+    --background-hover: color-mix(in oklab, var(--ion-color-primary), transparent 92%);
+  }
+}
+
+.maitre-panel__grid {
+  padding: 0;
+}
+
+.maitre-panel__col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 16px;
+  border-radius: 18px;
+  background: color-mix(in oklab, var(--ion-background-color, #fff), transparent 12%);
+  border: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 80%);
+  min-height: 100%;
+  box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.maitre-panel__col h2 {
+  margin: 0;
+  font-size: clamp(15px, 3.6vw, 18px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 10%);
+}
+
+.maitre-panel__col ion-item {
+  --background: rgba(255, 255, 255, 0.65);
+  --inner-padding-start: 14px;
+  --inner-padding-end: 14px;
+  --inner-padding-top: 12px;
+  --inner-padding-bottom: 12px;
+  --border-radius: 16px;
+  --highlight-height: 0;
+  margin-top: 4px;
+  border: none;
+}
+
+@media (prefers-color-scheme: dark) {
+  .maitre-panel__col ion-item {
+    --background: rgba(16, 18, 24, 0.8);
+  }
+}
+
+.maitre-panel__col ion-label[position="stacked"] {
+  font-size: 0.82rem;
+  letter-spacing: 0.08em;
+  color: color-mix(in oklab, var(--ion-color-medium), transparent 5%);
+}
+
+.maitre-panel__col ion-select {
+  --padding-start: 0;
+  --padding-end: 0;
+  --placeholder-color: color-mix(in oklab, var(--ion-text-color), transparent 40%);
+  color: var(--ion-text-color);
+  font-weight: 600;
+  
+}
+
+.maitre-panel__col ion-select::part(text) {
+  font-size: 1rem;
+}
+
+.maitre-panel__col span {
+  color: color-mix(in oklab, var(--ion-color-medium), transparent 10%);
+  font-size: 0.85rem;
+}
+
+@media (min-width: 768px) {
+  .maitre-panel__col {
+    padding: 20px 22px;
+  }
+
+  .maitre-panel ion-card-content {
+    gap: 22px;
+  }
+
+  .maitre-panel ion-button {
+    max-width: 420px;
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .maitre-panel {
+    margin-inline: -2px;
+  }
+
+  .maitre-panel__col {
+    padding: 14px 12px;
+    margin-bottom: 10px;
+  }
+
+  .maitre-panel ion-button {
+    width: 100%;
+  }
+}
+
+/* Responsivo para móviles angostos */
+@media (max-width: 360px) {
+  .mesa-asignacion {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  ion-button {
+    font-size: 14px;
+    min-height: 40px;
+  }
+
+  ion-item {
+    padding: 4px 8px;
+  }
+}
+
+/* ================== Separadores de sección (Local vs Delivery) ================== */
+.section-sep {
+  --item-background: var(--card-glass-bg);
+  --inner-padding-top: 10px;
+  --inner-padding-bottom: 10px;
+  --inner-padding-start: 12px;
+  --inner-padding-end: 12px;
+  margin: 6px 0 10px;
+  border-radius: 14px;
+  border: 1px solid var(--card-glass-border);
+  box-shadow: var(--shadow-soft);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    border-radius: 14px 0 0 14px;
+    background: var(--sep-accent, var(--ion-color-medium));
+  }
+
+  ion-icon[slot="start"] {
+    font-size: 22px;
+    margin-right: 6px;
+    color: var(--sep-accent, var(--ion-color-medium));
+  }
+
+  ion-label h2 {
+    margin: 0 0 2px 0;
+    font-weight: 800;
+    letter-spacing: .02em;
+    font-size: clamp(12px, 3.4vw, 13px);
+    color: var(--ion-color-medium);
+  }
+
+  ion-label p {
+    margin: 0;
+    font-size: clamp(13px, 3.6vw, 15px);
+    color: var(--ion-color-dark);
+    opacity: .88;
+  }
+
+  ion-badge {
+    font-weight: 700;
+    border-radius: 999px;
+  }
+}
+
+.section-sep--local {
+  --sep-accent: color-mix(in oklab, var(--ion-color-success), transparent 0%);
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--ion-color-success), transparent 92%),
+      transparent 65%);
+}
+
+.section-sep--delivery {
+  --sep-accent: color-mix(in oklab, var(--ion-color-primary), transparent 0%);
+  background:
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--ion-color-primary), transparent 92%),
+      transparent 65%);
+}
+
+/* Dark mode fine-tune */
+@media (prefers-color-scheme: dark) {
+  .section-sep {
+    ion-label h2 { color: color-mix(in oklab, var(--ion-color-medium), white 12%); }
+    ion-label p  { color: color-mix(in oklab, var(--ion-color-light), white 8%); }
+  }
+}
+/* === Centrar el H1 de la hero en móviles (sin tocar HTML) === */
+@media (max-width: 640px) {
+  .home .hero__text { text-align: center; }
+  .home .hero__title {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.estado-pedido-wrapper {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+/* Card contenedora del botón + texto con estilo glass */
+.estado-pedido-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  padding: 14px 18px;
+  border-radius: 18px;
+
+  /* 🔥 Fondo rojo translúcido + efecto glass */
+  background: rgba(255, 45, 45, 0.021);          /* rojo suave y transparente */
+  border: 1px solid rgba(255, 70, 70, 0.35);    /* borde rojo más definido */
+  backdrop-filter: blur(18px);
+
+  /* Sombra delicada para levantar el card */
+  box-shadow: 0 12px 28px rgba(255, 0, 0, 0.18);
+
+  max-width: 260px;
+  width: 100%;
+
+  /* Transición suave al hacer hover/tap (opcional) */
+  transition: transform 0.15s ease, box-shadow 0.2s ease;
+
+  &:hover,
+  &:active {
+    transform: scale(1.02);
+    box-shadow: 0 14px 34px rgba(255, 0, 0, 0.28);
+  }
+}
+
+/* Botón redondo solo con imagen, amarillo */
+.btn-scan-qr_new {
+  --border-radius: 999px;
+  --padding-start: 0;
+  --padding-end: 0;
+
+  /* Amarillo tipo highlight, sin irse a naranja */
+  --background: radial-gradient(circle at 30% 0%,
+      #fff9c4 0%,
+      #ffeb3b 45%,
+      #fdd835 100%);
+  --box-shadow: 0 10px 22px rgba(255, 235, 59, 0.45);
+  --ripple-color: rgba(255, 255, 255, 0.5);
+
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  max-width: 32vw;
+  max-height: 32vw;
+
+  ion-label {
+    display: none;
+  }
+
+  ion-icon {
+    font-size: 32px;
+    color: #1b1b1b; // por si usás icono ionic
+  }
+
+  .qr-icon {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+    display: block;
+  }
+}
+
+/* Botón redondo solo con imagen, amarillo suave */
+.btn-scan-qr_new {
+  --border-radius: 999px;
+  --padding-start: 0;
+  --padding-end: 0;
+
+  /* Amarillo más suave, menos brillo, degradado sutil */
+  --background: radial-gradient(circle at 40% 0%,
+      #fff7b0 0%,
+      #ffe066 45%,
+      #ffcf39 100%);
+
+  /* Sombra más suave (menos glow) */
+  --box-shadow: 0 6px 14px rgba(255, 213, 0, 0.28);
+  --ripple-color: rgba(255, 255, 255, 0.35);
+
+  width: 72px;
+  height: 72px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  max-width: 32vw;
+  max-height: 32vw;
+
+  ion-label {
+    display: none;
+  }
+
+  ion-icon {
+    font-size: 32px;
+    color: #1b1b1b;
+  }
+
+  .qr-icon {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    display: block;
+  }
+}
+
+/* Ajustes mobile */
+@media (max-width: 380px) {
+  .btn-scan-qr_new {
+    width: 64px;
+    height: 64px;
+
+    .qr-icon {
+      width: 28px;
+      height: 28px;
+    }
+  }
+}
+
+/* === Títulos de sección (PEDIDOS A DOMICILIO / EN EL LOCAL) === */
+.section-sep ion-label h1 {
+  display: block;
+  width: 100%;
+  margin: 2px auto 2px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 900;
+  line-height: 1.15;
+  font-size: clamp(14px, 3.6vw, 16px);
+  color: var(--sep-accent, var(--ion-color-medium));
+  text-shadow: 0 1px 0 rgba(0,0,0,0.04);
+
+  &::after {
+    content: "";
+    display: block;
+    width: min(160px, 40%);
+    height: 2px;
+    margin: 6px auto 0;
+    border-radius: 999px;
+    background: color-mix(in oklab, var(--sep-accent, var(--ion-color-medium)), transparent 30%);
+  }
+}
+
+.section-sep--delivery ion-label h1 { color: var(--ion-color-primary); }
+.section-sep--local   ion-label h1 { color: var(--ion-color-success); }
+
+/* Responsive fino */
+@media (max-width: 420px) {
+  .section-sep ion-label h1 {
+    font-size: clamp(15px, 4.2vw, 18px);
+    letter-spacing: 0.14em;
+  }
+}
+
+/* Dark mode: leve ajuste del subrayado */
+@media (prefers-color-scheme: dark) {
+  .section-sep ion-label h1::after {
+    background: color-mix(in oklab, var(--sep-accent, var(--ion-color-medium)), white 10%);
+  }
+}
+
+/* ===================== NUEVO: DELIVERY (cliente) ===================== */
+.delivery-status {
+  .delivery-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    text-align: center;
+    ion-icon { font-size: 20px; }
+    img.delivery-title__icon {
+      width: 55px;
+      height: 55px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+  }
+
+  .delivery-sub {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+
+    .addr {
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  .status-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .eta {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: color-mix(in oklab, var(--ion-color-primary), transparent 88%);
+        ion-icon { font-size: 16px; color: var(--ion-color-primary); }
+      }
+
+      .estado-pill {
+        font-weight: 700;
+        font-size: clamp(14px, 3.4vw, 16px);
+      }
+    }
+  }
+
+  .timeline {
+    display: grid;
+    grid-template-columns: 1fr 12px 1fr 12px 1fr 12px 1fr 12px 1fr;
+    align-items: center;
+    gap: 6px;
+    margin: 8px 0 10px;
+
+    .bar {
+      height: 4px;
+      border-radius: 2px;
+      background: color-mix(in oklab, var(--ion-color-medium), transparent 70%);
+      &.active { background: var(--ion-color-primary); }
+    }
+
+    .step {
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+
+      .dot {
+        width: 14px; height: 14px; border-radius: 50%;
+        background: color-mix(in oklab, var(--ion-color-medium), transparent 60%);
+      }
+      .label {
+        font-size: 11px;
+        text-align: center;
+        color: var(--ion-color-medium);
+      }
+
+      &.active .dot { background: var(--ion-color-primary); }
+      &.active .label { color: var(--ion-color-primary); font-weight: 700; }
+    }
+  }
+
+  .status-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+  }
+
+  .delivery-detail {
+    margin-top: 12px;
+
+    ion-list {
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.06);
+      overflow: hidden;
+    }
+
+    ion-item {
+      --inner-padding-top: 6px;
+      --inner-padding-bottom: 6px;
+    }
+  }
+}
+
+/* ===================== NUEVO: Cocina/Bar: dirección en delivery ===================== */
+.addr-mini {
+  margin: 4px 0 2px;
+  color: var(--ion-color-medium);
+  font-size: 13px;
+}
+
+/* ===================== NUEVO: Boss delivery list ===================== */
+
+.delivery-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  @media (min-width: 480px) {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.delivery-route-card {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 18px;
+  border: 1px solid var(--card-glass-border);
+  background: var(--ion-card-background, rgba(255,255,255,0.9));
+
+  h3 {
+    margin: 0 0 6px;
+    text-align: center;
+    font-weight: 700;
+  }
+}
+
+.mapa-delivery {
+  width: 100%;
+  height: 240px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+/* =========================================================
+   🔧 HOTFIX MOBILE (NO REMUEVE NADA — SOLO AGREGA OVERRIDES)
+   ========================================================= */
+
+/* 1) Fallback global cuando NO hay soporte de color-mix (oklab) */
+@supports not (background: color-mix(in oklab, red, white 50%)) {
+  :host {
+    --hero-gradient-end: rgba(56,128,255,0.15);
+    --card-glass-bg: rgba(255, 255, 255, 0.85);
+    --card-glass-border: rgba(0, 0, 0, 0.06);
+  }
+}
+
+/* 2) Forzar fondo visible en cards clave cuando el blur no existe (móviles) */
+@media (max-width: 480px) {
+  .welcome-card,
+  .delivery-status {
+    background: var(--ion-card-background, #ffffff) !important;
+    border: 1px solid rgba(0,0,0,0.08) !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    color: var(--ion-text-color, inherit);
+  }
+
+  .welcome-card ion-card-header,
+  .delivery-status ion-card-header {
+    background: transparent;
+  }
+}
+
+/* 3) ETA y chips con colores seguros si falla color-mix */
+.delivery-status .eta {
+  background: rgba(56,128,255,0.12) !important;
+}
+ion-chip {
+  --background: rgba(142,142,147,0.12);
+}
+
+/* 4) Stepper: en pantallas muy angostas, partir en dos filas para que no se corte */
+@media (max-width: 380px) {
+  .delivery-status .timeline {
+    grid-template-columns: 1fr 8px 1fr 8px 1fr;
+    row-gap: 8px;
+  }
+  .delivery-status .timeline .step:nth-of-type(n+7),
+  .delivery-status .timeline .bar:nth-of-type(n+7) {
+    grid-row: 2;
+  }
+}
+
+/* 5) Pequeño refuerzo de contraste en dark por si el WebView ignora color-mix */
+@media (prefers-color-scheme: dark) {
+  @supports not (background: color-mix(in oklab, red, white 50%)) {
+    .welcome-card,
+    .delivery-status {
+      background: rgba(20,20,24,0.9) !important;
+      border-color: rgba(255,255,255,0.08) !important;
+    }
+  }
+}
+
+/* 6) Sincronizar paddings para que nada quede fuera del viewport en móviles */
+@media (max-width: 420px) {
+  .home .grid { padding-inline: max(18px, 6vw) !important; }
+  .home .hero  { padding-left: max(24px, 7vw) !important; padding-right: max(16px, 5vw) !important; }
+}
+
+/* 7) Evitar que algún overlay con z-index tape el contenido (defensivo) */
+.home .welcome-card,
+.home .delivery-status {
+  position: relative;
+  z-index: 0;
+  margin-inline: -10px;
+}
+
+
+/* =========================================================
+   🧭 RESPONSIVE REFINEMENTS — DELIVERY STATUS
+   ========================================================= */
+
+.delivery-status {
+  display: block;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(10px, 3vw, 16px);
+  outline: 2px solid rgb(200, 40, 0) !important;
+
+  ion-card-header,
+  ion-card-content {
+    padding-inline: clamp(10px, 4vw, 16px);
+  }
+
+  .delivery-sub .addr {
+    display: block;
+    white-space: normal;
+    word-break: break-word;
+    font-size: clamp(13px, 3.4vw, 15px);
+    line-height: 1.3;
+  }
+
+  .status-row {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
+
+    ion-button {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .estado-pill {
+      font-size: clamp(12px, 3.2vw, 14px);
+      white-space: normal;
+      text-align: center;
+      line-height: 1.3;
+    }
+  }
+
+  .status-chips {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .timeline {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 10px;
+
+    .step .label {
+      font-size: clamp(10px, 2.8vw, 12px);
+    }
+    .bar {
+      height: 3px;
+    }
+  }
+
+  @media (max-width: 400px) {
+    .timeline {
+      grid-template-columns: repeat(5, 1fr);
+      row-gap: 8px;
+    }
+    .timeline .step:nth-of-type(n+6),
+    .timeline .bar:nth-of-type(n+6) {
+      grid-row: 2;
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    background: rgba(18,18,18,0.85);
+    border-color: rgba(255,255,255,0.08);
+    .label { color: color-mix(in oklab, var(--ion-color-light), white 15%); }
+  }
+
+  // overflow-x: hidden;
+}
+
+.local-status {
+  .delivery-title ion-icon,
+  .delivery-sub ion-icon {
+    color: var(--ion-color-success);
+  }
+
+  .local-progress {
+    margin: 12px 0 6px;
+    height: 8px;
+    border-radius: 999px;
+    --background: color-mix(in oklab, var(--ion-color-success), transparent 85%);
+    --progress-background: color-mix(in oklab, var(--ion-color-success), white 6%);
+  }
+
+  .status-left .estado-pill {
+    letter-spacing: 0.02em;
+  }
+}
+
+.section-sep--delivery {
+  margin-top: 18px !important;
+}
+
+
+/* =========================================================
+   🧿 COMFORT + BLACK FRAME — DELIVERY STATUS
+   ========================================================= */
+
+.delivery-status {
+  background: #0f0f12 !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.65),
+    0 10px 26px rgba(0,0,0,0.25) !important;
+  border-radius: 16px !important;
+  padding: clamp(14px, 3.6vw, 22px) !important;
+  gap: 14px !important;
+}
+
+.delivery-status .delivery-title {
+  margin-bottom: 2px;
+}
+
+.delivery-status .delivery-sub {
+  margin-top: 4px;
+  row-gap: 6px;
+}
+
+.delivery-status .status-row {
+  gap: 12px !important;
+  margin-bottom: 10px !important;
+}
+
+.delivery-status .eta {
+  padding: 6px 12px !important;
+  border: 1px solid rgba(56,128,255,0.2);
+  border-radius: 999px;
+}
+
+.delivery-status .estado-pill {
+  padding: 6px 10px;
+  border-radius: 999px;
+}
+
+.delivery-status .timeline {
+  gap: 8px !important;
+  margin: 10px 0 12px !important;
+}
+.delivery-status .timeline .dot { width: 16px; height: 16px; }
+.delivery-status .timeline .bar { height: 4px; }
+
+.delivery-status .status-chips {
+  gap: 10px !important;
+}
+.delivery-status .status-chips ion-chip {
+  min-height: 30px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+}
+
+@media (min-width: 480px) {
+  .delivery-status {
+    padding: 18px 20px !important;
+    gap: 16px !important;
+  }
+  .delivery-status .timeline { gap: 10px !important; }
+}
+
+@supports not (background: color-mix(in oklab, red, white 50%)) {
+  .delivery-status {
+    background: #101113 !important;
+    border-color: rgba(255,255,255,0.08) !important;
+  }
+}
+
+/* =========================================================
+   🔠 AJUSTE FINO: ETIQUETAS DE ESTADO
+   ========================================================= */
+
+.delivery-status .timeline .step {
+  justify-items: center;
+}
+
+.delivery-status .timeline .step .label {
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.15;
+  padding: 0 3px;
+}
+
+/* 💡 OVERRIDE CLAVE PARA MÓVILES (S24, ETC.) */
+@media (max-width: 480px) {
+  .delivery-status .timeline {
+    display: flex !important;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 6px;
+  }
+
+  .delivery-status .timeline .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1 1 60px;
+    max-width: 100%;
+  }
+
+  .delivery-status .timeline .step .label {
+    font-size: 11px;
+    white-space: normal !important;
+    line-height: 1.2;
+  }
+
+  .delivery-status .timeline .bar {
+    display: none !important; /* sacamos las barras para que nada se monte */
+  }
+}
+
+/* En pantallas >= 480px también evitamos superposición sacrificando barras */
+@media (min-width: 480px) {
+  .delivery-status .timeline {
+    display: flex !important;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .delivery-status .timeline .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    flex: 1 1 0;
+  }
+
+  .delivery-status .timeline .step .label {
+    white-space: normal !important;
+  }
+
+  .delivery-status .timeline .bar {
+    display: none !important;
+  }
+}
+/* ================== CARD DELIVERY – REPARTIDOR ================== */
+/* ================== CARD DELIVERY – REPARTIDOR ================== */
+/* Contenedor de la lista de pedidos asignados (SIN recuadro negro) */
+
+.delivery-assign-card {
+  max-width: 100%;        /* que pueda usar todo el ancho del panel */
+  margin: 8px 0 0;        /* un poquito de separación del título */
+  padding: 0;
+  background: transparent;/* mata el fondo negro */
+  border: none;           /* sin borde extra */
+  box-shadow: none;       /* sin sombra extra */
+  border-radius: 0;       /* que no se note como card aparte */
+}
+
+/* Por si tenés ion-card-header/content adentro, que no pinten nada raro */
+.delivery-assign-card ion-card-header,
+.delivery-assign-card ion-card-content {
+  background: transparent;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+/* Gradiente específico para las cards de pedidos asignados */
+.delivery-assign-card .delivery-pay-card {
+  background:
+    radial-gradient(circle at 0 0, rgba(255, 107, 107, 0.16), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(255, 212, 71, 0.16), transparent 55%),
+    #050506;
+  border-color: rgba(255, 120, 80, 0.85);
+}
+
+
+.delivery-assign-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.delivery-assign-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  .eyebrow {
+    margin: 0;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0.75;
+  }
+
+  ion-card-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+  }
+}
+
+.delivery-assign-icon-wrap {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle at 30% 0, #ff6b6b, transparent 55%),
+    radial-gradient(circle at 80% 100%, #feca57, transparent 55%);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.45);
+}
+
+.delivery-assign-icon {
+  font-size: 22px;
+  color: #111;
+}
+
+/* lista de pedidos del repartidor */
+.delivery-list {
+  margin-top: 4px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.delivery-item {
+  --background: transparent;
+  --inner-padding-start: 12px;
+  --inner-padding-end: 12px;
+  --inner-padding-top: 10px;
+  --inner-padding-bottom: 10px;
+  align-items: flex-start;
+}
+
+.delivery-main {
+  display: grid;
+  gap: 6px;
+  margin-right: 10px;
+}
+
+.delivery-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+
+  h2 {
+    margin: 0;
+    padding: 6px 18px;
+    min-width: 110px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+
+    border-radius: 100px;
+    /* fondo suave, texto bien oscuro */
+    background: radial-gradient(circle at 0 0, #393939, transparent 55%),
+                radial-gradient(circle at 100% 100%, #ffd447, transparent 55%);
+    color: #cbcbcb;
+
+    box-shadow:
+      0 0 0 1px rgba(0, 0, 0, 0.9),
+      0 6px 12px rgba(0, 0, 0, 0.6);
+    text-shadow: 0 1px 1px rgba(255, 0, 0, 0.25);
+  }
+}
+
+
+.delivery-badge {
+  border-radius: 999px;
+  font-size: 11px;
+  padding-inline: 10px;
+}
+
+
+
+/* acciones (botones) */
+.delivery-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 120px;
+
+  ion-button {
+    --border-radius: 999px;
+    font-size: 12px;
+    min-height: 34px;
+  }
+}
+
+@media (min-width: 520px) {
+  .delivery-actions {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+
+    ion-button {
+      flex: 0 0 auto;
+    }
+  }
+}
+
+/* tarjeta de ruta + mapa */
+.delivery-route-card {
+  margin-top: 12px;
+  padding: 10px 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: radial-gradient(circle at 0 0, rgba(56, 128, 255, 0.16), transparent 55%),
+    #050506;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.5);
+}
+
+.delivery-route-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+
+  h3 {
+    margin: 0 0 3px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  ion-icon {
+    font-size: 22px;
+    opacity: 0.9;
+  }
+}
+
+.delivery-route-address {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+  opacity: 0.85;
+  text-align: left;
+}
+
+.mapa-delivery {
+  width: 100%;
+  height: 220px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+}
+/* ===== Pines Leaflet – versión mini + borde oscuro ===== */
+:host ::ng-deep .map-pin {
+  position: relative;
+  width: 18px;   /* más chico */
+  height: 24px;  /* más chico */
+  pointer-events: none;
+}
+
+/* Cabeza del pin (círculo) */
+:host ::ng-deep .map-pin .pin-body {
+  position: absolute;
+  left: 50%;
+  bottom: 6px;                  /* ajustado al tamaño reducido */
+  width: 12px;
+  height: 12px;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  background: currentColor;
+  border: 2px solid color-mix(in srgb, currentColor 70%, black 40%); /* borde oscuro */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+/* Punta del pin */
+:host ::ng-deep .map-pin .pin-body::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -6px;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid currentColor;
+  filter: brightness(0.85);  /* oscurece suavemente la punta */
+}
+
+/* Punto blanco interno (más chico) */
+:host ::ng-deep .map-pin .pin-dot {
+  position: absolute;
+  left: 50%;
+  top: 74%;
+  transform: translate(-50%, -50%);
+  width: 5px;     /* más pequeño */
+  height: 5px;    /* más pequeño */
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+
+/* Colores de cada entidad */
+:host ::ng-deep .map-pin--resto {
+  color: #2dd36f;   /* verde */
+}
+
+:host ::ng-deep .map-pin--cliente {
+  color: #ff3b30;   /* rojo */
+}
+
+
+/* un poquito de respiro en pantallas muy chicas */
+@media (max-width: 420px) {
+  .delivery-assign-card {
+    margin-inline: -4px;
+  }
+
+  .delivery-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .delivery-actions {
+    margin-top: 4px;
+  }
+}
+
+
+/* ===== Dirección mini en pedidos asignados (solo el texto de la dirección) ===== */
+.home .mozo-panel__item ion-label p.delivery-mini-address {
+  margin: 4px 0 0;
+  padding: 4px 14px;    // ⬅️ más padding vertical = pill más alto
+  border-radius: 10px;
+
+  font-size: 0.8rem;      // más chico que "PEDIDO #"
+  line-height: 1.25;
+  font-weight: 600;
+
+  background: #ffd447;     // amarillo bien visible
+  color: #121212;          // texto oscuro y legible
+
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.8),
+    0 4px 8px rgba(0, 0, 0, 0.45);
+
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ==== Pagos pendientes delivery – estilo dueño ==== */
+.home ion-item.delivery-pay-item {
+  --background: transparent;
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --inner-padding-top: 0;
+  --inner-padding-bottom: 0;
+  align-items: stretch;
+    margin-right: 14px;
+}
+
+.home ion-item.delivery-pay-item:not(:last-of-type) {
+  margin-bottom: 14px;
+
+}
+
+.home .delivery-pay-card {
+  width: 100%;
+  display: grid;
+  gap: 14px;
+  padding: clamp(14px, 2vw, 24px);
+  border-radius: 20px;
+  border: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 55%);
+  background:
+    linear-gradient(120deg,
+      color-mix(in oklab, var(--ion-color-primary), transparent 90%),
+      color-mix(in oklab, var(--ion-background-color, #fff), transparent 15%));
+  color: color-mix(in oklab, var(--ion-text-color), transparent 5%);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.15);
+
+}
+/* Pedidos asignados + Pagos pendientes – misma card interna */
+.home .mozo-panel:first-of-type .delivery-pay-card,
+.home .mozo-panel:nth-of-type(2) .delivery-pay-card {
+  max-width: 480px;              /* mismo ancho para ambas */
+  margin-inline: auto;           /* centradas dentro del panel */
+
+  background:
+    radial-gradient(circle at 0 0, rgba(255, 107, 107, 0.24), transparent 55%),
+    radial-gradient(circle at 100% 100%, rgba(255, 212, 71, 0.22), transparent 55%),
+    linear-gradient(135deg, #2a1816, #120d10);  /* más oscuro, con brillos rojo/amarillo */
+
+  border-color: rgba(255, 120, 80, 0.9);
+
+}
+
+
+
+.home .delivery-pay-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.home .delivery-pay-top h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 5%);
+}
+
+.home .delivery-pay-top ion-chip {
+  --background: color-mix(in oklab, var(--ion-color-primary), transparent 85%);
+  --color: var(--ion-text-color);
+  font-weight: 600;
+}
+
+.home .delivery-pay-meta {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.home .delivery-pay-meta span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 15%);
+}
+
+.home .delivery-pay-meta span small {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.home .delivery-pay-meta .delivery-pay-total {
+  border-radius: 18px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in oklab, var(--ion-color-success), transparent 30%);
+  background:
+    linear-gradient(135deg,
+      color-mix(in oklab, var(--ion-color-success), transparent 88%),
+      color-mix(in oklab, var(--ion-color-success), transparent 65%));
+  color: color-mix(in oklab, var(--ion-color-success), white 15%);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.3),
+    0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.home .delivery-pay-meta .delivery-pay-total small {
+  color: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.home .delivery-pay-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.home .delivery-pay-actions ion-button {
+  --padding-start: 22px;
+  --padding-end: 22px;
+  --border-radius: 20px;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  min-height: 48px;
+  box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
+  flex: 1 1 170px;   // cada botón ocupa “tarjetita” y no se corta
+}
+
+.home .delivery-pay-actions ion-button[color="success"] {
+  --background: linear-gradient(135deg,
+    color-mix(in oklab, var(--ion-color-success), black 6%),
+    var(--ion-color-success));
+  --box-shadow: 0 8px 16px color-mix(in oklab, var(--ion-color-success), transparent 70%);
+}
+
+/* 🔶 Botón naranja "RECOGER PEDIDO" (forzado) */
+.home .delivery-pay-actions ion-button.btn-recoger-pedido {
+  --padding-start: 22px;
+  --padding-end: 22px;
+  --border-radius: 20px;
+  --color: #1e1a1a;
+  --box-shadow: 0 1px 2px rgba(255, 122, 47, 0.55);
+
+  /* variables internas de Ionic */
+  --background: linear-gradient(135deg, #ff7a2f, #ff9a4d);
+  --background-hover: #ff8f4f;
+  --background-activated: #e96a28;
+  --background-focused: #ff8f4f;
+}
+
+/* Por si el WebView ignora las vars: pintamos el nativo también */
+.home .delivery-pay-actions ion-button.btn-recoger-pedido::part(native) {
+  background: linear-gradient(135deg, #ff7a2f, #ff9a4d);
+  color: #ffffff;
+  border-radius: 20px;
+}
+
+@media (max-width: 520px) {
+  .home .delivery-pay-meta {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .home .delivery-pay-meta span {
+    align-items: center;
+  }
+
+  .home .delivery-pay-actions {
+    width: 100%;
+  }
+
+  .home .delivery-pay-actions ion-button {
+    width: 100%;   // en mobile: botones uno debajo del otro, full width
+  }
+}
+
+.home .delivery-list-separator {
+  height: 16px!important; /* o 20px si querés más respiro */
+}
+
+/* 🔥 FIX: elimina el recuadro negro detrás de cada pedido asignado */
+.home ion-list {
+  background: transparent !important;
+}
+
+.home ion-item.delivery-pay-item {
+  --background: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  margin-right: 10px !important;     /* saca el corrimiento hacia la izquierda */
+}
+
+
+.home ion-item.delivery-pay-item .item-native {
+  background: transparent !important;
+}
+
+/* Mensaje vacío dentro de cards */
+.empty-hint {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 2px;
+  margin-top: 8px;
+
+  color: var(--ion-color-light); /* más contraste */
+  opacity: 0.85;
+  font-size: 2rem;               /* ⬅️ más grande */
+  font-weight: 500;
+
+  ion-icon {
+    font-size: 2rem;           /* ícono más visible */
+    opacity: 0.7;
+  }
+}
+
+/* Oscuro: más nitidez */
+@media (prefers-color-scheme: dark) {
+  .empty-hint {
+    color: whitesmoke;
+
+    ion-icon {
+      opacity: 0.75;
+    }
+  }
+}
+
+.delivery-tabs {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 12px;
+  margin: 0 0 16px;
+  padding: 0 8px;
+}
+
+.delivery-tabs__btn {
+  flex: 1 1 0;
+  min-width: 150px;
+  border: none;
+  outline: none;
+  padding: 12px 18px;
+  font-size: 0.95rem;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ion-color-medium);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background 160ms ease, color 160ms ease, transform 120ms ease, box-shadow 120ms ease;
+}
+
+.delivery-tabs__btn--active {
+  background: color-mix(in oklab, var(--ion-color-primary) 90%, #000 10%);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+@media (max-width: 480px) {
+  .delivery-tabs__btn {
+    font-size: 0.85rem;
+    padding: 10px 14px;
+  }
+}
+
+.delivery-thanks-card {
+  border-radius: 20px;                /* bordes redondos */
+  background: #1c1c1e;               /* negro elegante */
+  padding-bottom: 8px;
+
+  ion-card-header {
+    border-radius: 20px 20px 0 0;
+  }
+
+  ion-card-content {
+    border-radius: 0 0 20px 20px;
+  }
+
+  /* Alinear bien los botones */
+  ion-button {
+    margin-top: 10px;
+    border-radius: 999px;             /* estilo pastilla */
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+
+  /* Mejor legibilidad del texto final */
+  ion-text p {
+    margin-top: 16px;
+    font-size: 0.85rem;
+    opacity: 0.8;
+  }
+}

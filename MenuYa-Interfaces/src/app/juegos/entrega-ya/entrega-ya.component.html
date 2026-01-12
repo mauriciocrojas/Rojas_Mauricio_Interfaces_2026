@@ -1,0 +1,15 @@
+<div class="game-container">
+  <canvas #gameCanvas></canvas>
+
+  <div class="overlay" *ngIf="statusMessage">
+    <h2>{{ statusMessage }}</h2>
+    <ion-button (click)="startGame()" color="primary" expand="block">
+      {{ gameState === 'idle' ? 'Comenzar' : 'Reintentar' }}
+    </ion-button>
+  </div>
+</div>
+
+<p class="game-help">
+  Mueve el celular inclinándolo para llevar la bandeja hasta la mesa sin chocar
+  con los objetos ni los bordes.
+</p>

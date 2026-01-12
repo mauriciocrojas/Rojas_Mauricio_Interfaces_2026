@@ -1,0 +1,62 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goHome()" aria-label="Ir al inicio">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Chat</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="chat-content">
+  <div class="mensajes-container">
+    <div *ngFor="let m of mensajes" class="mensaje" [class.mensaje-propio]="m.remitente === remitente"
+      [class.mensaje-otro]="m.remitente !== remitente">
+
+      <div class="burbuja">
+        <span class="texto">{{ m.mensaje }}</span>
+
+        <div class="meta">
+          <span class="hora">{{ ajustarHoraAR(m.created_at) }}</span>
+
+          <!-- Cliente: salón -->
+          <span class="mesa" *ngIf="m.remitente === 'cliente' && (m.mesa_id ?? 0) <= 100">
+            Mesa {{ m.mesa_id }}
+          </span>
+
+          <!-- Cliente: delivery -->
+          <span class="mesa" *ngIf="m.remitente === 'cliente' && (m.mesa_id ?? 0) > 100 && direccionCliente">
+            {{ direccionCliente }}
+          </span>
+
+          <!-- Mozo -->
+          <span class="mesa" *ngIf="m.remitente === 'mozo'">
+             Mozo - Pablo
+          </span>
+
+          <!-- Delivery -->
+          <span class="mesa" *ngIf="m.remitente === 'delivery'">
+            Repartidor - Daniel
+          </span>
+
+          <!-- 👇 ELIMINADO: NO mostrar dirección cuando escribe el repartidor -->
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="input-footer">
+  <ion-toolbar class="input-toolbar">
+    <ion-item lines="none" class="input-container">
+      <ion-input [(ngModel)]="nuevoMensaje" placeholder="Escribí tu mensaje" inputmode="text">
+      </ion-input>
+
+      <ion-button (click)="enviarMensaje()" color="primary">
+        Enviar
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

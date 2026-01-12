@@ -1,0 +1,5 @@
+{
+  "name": "notify_new_client",
+  "main": "index.js",
+  "compatibility": "v2"
+}

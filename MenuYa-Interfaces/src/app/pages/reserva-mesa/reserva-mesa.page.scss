@@ -1,0 +1,136 @@
+:host {
+  ion-content {
+    --padding-top: 20px;
+    --padding-start: clamp(16px, 4vw, 32px);
+    --padding-end: clamp(16px, 4vw, 32px);
+    --padding-bottom: 32px;
+  }
+}
+
+.reserva-toolbar {
+  --background: transparent;
+  --border-width: 0;
+  --color: var(--ion-text-color);
+  padding-bottom: 18px;
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.reserva-toolbar ion-title {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ion-color-primary);
+  width: 100%;
+  margin-top: 18px;
+  text-align: center;
+}
+
+.reserva-toolbar ion-button {
+  --border-radius: 16px;
+  --color: var(--ion-text-color);
+  --background: color-mix(in oklab, var(--ion-color-primary), transparent 85%);
+  margin-top: 2px;
+}
+
+.reserva-toolbar-ghost ion-button {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.reserva-content {
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.12), transparent 45%),
+    linear-gradient(160deg, rgba(10, 12, 18, 0.95), rgba(2, 2, 4, 0.92));
+}
+
+.reserva-form {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 18px;
+  display: grid;
+  gap: 18px;
+  min-height: 80vh;
+  align-content: center;
+}
+
+.form-list {
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 85%);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.22);
+  padding: clamp(16px, 2.6vw, 22px);
+  display: grid;
+  gap: 14px;
+}
+
+.form-list ion-item {
+  --background: transparent;
+  --inner-padding-start: 0;
+  --inner-padding-end: 0;
+  --inner-padding-top: 6px;
+  --inner-padding-bottom: 6px;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --min-height: 64px;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.form-list ion-item ion-label {
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 6px;
+}
+
+.form-list ion-input,
+.form-list ion-select,
+.form-list ion-datetime {
+  font-size: 1.1rem;
+  color: #fff;
+  width: 100%;
+}
+
+.datetime-item ion-datetime {
+  width: 100%;
+  --background: rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+.actions {
+  margin-top: 4px;
+}
+
+.actions ion-button {
+  height: 50px;
+  font-size: 1.05rem;
+  --border-radius: 16px;
+  --background: linear-gradient(135deg, var(--ion-color-primary), color-mix(in oklab, var(--ion-color-primary), black 10%));
+  --box-shadow: 0 22px 38px color-mix(in oklab, var(--ion-color-primary), transparent 70%);
+}
+
+ion-note {
+  margin: -6px 4px 8px;
+  font-size: 0.92rem;
+}
+
+@media (max-width: 480px) {
+  .reserva-form {
+    padding: 12px;
+    min-height: 70vh;
+  }
+
+  .form-list {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .form-list ion-item {
+    --min-height: 68px;
+  }
+}

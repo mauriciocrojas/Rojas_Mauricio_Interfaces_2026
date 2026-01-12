@@ -1,0 +1,7 @@
+{
+  "name": "MenuYa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

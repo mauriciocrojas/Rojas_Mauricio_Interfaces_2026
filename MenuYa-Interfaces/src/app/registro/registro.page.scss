@@ -1,0 +1,236 @@
+:host {
+  --glass-bg: rgba(255, 255, 255, 0.9);
+  --glass-border: rgba(255, 255, 255, 0.35);
+  --soft-shadow: 0 20px 35px rgba(15, 23, 42, 0.18);
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --glass-bg: rgba(20, 22, 30, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.08);
+    --soft-shadow: 0 18px 32px rgba(0, 0, 0, 0.55);
+  }
+}
+
+.logo-anon {
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: center;
+
+  img {
+    width: min(280px, 100vw);
+    height: auto;
+  }
+}
+
+ion-content.registro {
+  --background: var(--ion-background-color, #f4f5f8);
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.registro__container {
+  width: min(420px, 100%);
+  margin: 0 auto;
+  padding: clamp(24px, 6vw, 40px) clamp(18px, 6vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  text-align: center;
+}
+
+.registro__top {
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  font-size: clamp(30px, 7vw, 38px);
+  color: var(--ion-color-primary);
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+  font-size: 14px;
+}
+
+.registro__form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.field {
+  --inner-padding-top: 10px;
+  --inner-padding-bottom: 10px;
+  --padding-start: 14px;
+  border-radius: 20px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--soft-shadow);
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.field:focus-within {
+  border-color: color-mix(in oklab, var(--ion-color-primary), transparent 40%);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ion-color-primary), transparent 65%);
+}
+
+.field.invalid {
+  border-color: color-mix(in oklab, var(--ion-color-danger), transparent 35%);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ion-color-danger), transparent 55%);
+}
+
+.field-inline {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.field-inline__label {
+  font-size: 15px;
+  font-weight: 600;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 10%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-inline__control {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-inline__control ion-select {
+  flex: 1;
+  --padding-start: 0;
+}
+
+.field-inline__icon {
+  font-size: 16px;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+}
+
+.field--select ion-select {
+  flex: 1;
+  --padding-start: 0;
+}
+
+.field--select ion-select::part(icon) {
+  display: none;
+}
+
+.field--inline ion-button {
+  margin-left: auto;
+}
+
+.field ion-button[slot="end"] {
+  margin: 0;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  --padding-start: 8px;
+  --padding-end: 8px;
+}
+
+.registro__form ion-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 10%);
+}
+
+.registro__form ion-input::part(native)::placeholder,
+.registro__form ion-textarea::part(native)::placeholder {
+  font-size: 8px;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 35%);
+}
+
+ion-note {
+  font-size: 12px;
+  text-align: left;
+}
+
+.foto-preview {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  margin-top: 4px;
+
+  img {
+    width: min(180px, 60vw);
+    aspect-ratio: 1 / 1;
+    border-radius: 26px;
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    box-shadow: var(--soft-shadow);
+    object-fit: cover;
+  }
+}
+
+.error {
+  text-align: center;
+  font-size: 13px;
+}
+
+.actions {
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.guardar {
+  --border-radius: 999px;
+  --background: linear-gradient(135deg, var(--ion-color-primary), color-mix(in oklab, var(--ion-color-primary), black 8%));
+  --box-shadow: 0 18px 32px color-mix(in oklab, var(--ion-color-primary), transparent 78%);
+  min-height: 48px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.alt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  ion-text {
+    color: color-mix(in oklab, var(--ion-text-color), transparent 35%);
+  }
+
+  ion-button {
+    --color: var(--ion-color-primary);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    font-weight: 600;
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 420px) {
+  .registro__container {
+    padding: 20px 16px 30px;
+  }
+}
+
+@media (max-height: 640px) {
+  .registro__container {
+    gap: 16px;
+  }
+
+  .field {
+    --inner-padding-top: 8px;
+    --inner-padding-bottom: 8px;
+  }
+
+  .guardar {
+    min-height: 44px;
+  }
+}

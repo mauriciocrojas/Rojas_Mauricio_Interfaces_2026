@@ -1,0 +1,67 @@
+<ion-content [fullscreen]="true" class="boss-delivery">
+  <header class="boss-header">
+    <ion-button fill="clear" class="home-btn" (click)="goHome()" aria-label="Volver al inicio">
+      <ion-icon name="home-outline"></ion-icon>
+    </ion-button>
+    <h1>Pedidos a domicilio</h1>
+    <p>Confirma cada pedido con un tiempo estimado o recházalo.</p>
+  </header>
+
+  <ion-refresher slot="fixed" (ionRefresh)="cargarPedidos($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <section *ngIf="isLoading" class="skel">
+    <ion-skeleton-text animated style="height:20px;width:90%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="height:20px;width:80%"></ion-skeleton-text>
+    <ion-skeleton-text animated style="height:20px;width:86%"></ion-skeleton-text>
+  </section>
+
+  <ion-card class="boss-delivery-card">
+    <ion-card-content>
+      <div class="boss-delivery-card-inner">
+        <ng-container *ngIf="!isLoading">
+          <ion-list class="boss-delivery-list" *ngIf="pedidos.length; else sinPedidos">
+            <ion-item *ngFor="let p of pedidos">
+              <ion-label class="boss-col">
+                <div class="boss-top">
+                  <h2>Pedido a domicilio #{{ p.id }}</h2>
+                  <ion-chip size="small" color="primary" outline>
+                    <ion-icon name="location-outline"></ion-icon>
+                    <ion-label>{{ p.domicilio_direccion || '---' }}</ion-label>
+                  </ion-chip>
+                </div>
+                <div class="boss-meta">
+                  <span>
+                    Fecha
+                    <small>{{ p.created_at | date:'short' }}</small>
+                  </span>
+                  <span>
+                    Importe
+                    <small>{{ p.monto_total | currency }}</small>
+                  </span>
+                </div>
+
+                <div class="boss-actions">
+                  <div class="boss-presets">
+                    <ion-button size="small" color="success" (click)="confirmarPedidoDelivery(p, 20)">20 min</ion-button>
+                    <ion-button size="small" color="success" (click)="confirmarPedidoDelivery(p, 30)">30 min</ion-button>
+                    <ion-button size="small" color="success" (click)="confirmarPedidoDelivery(p, 45)">45 min</ion-button>
+                  </div>
+                  <div class="boss-custom">
+                    <ion-button size="small" color="danger" fill="outline" (click)="rechazarPedidoDelivery(p)">
+                      Rechazar
+                    </ion-button>
+                  </div>
+                </div>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+          <ng-template #sinPedidos>
+            <ion-text color="medium">No hay pedidos a domicilio pendientes.</ion-text>
+          </ng-template>
+        </ng-container>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

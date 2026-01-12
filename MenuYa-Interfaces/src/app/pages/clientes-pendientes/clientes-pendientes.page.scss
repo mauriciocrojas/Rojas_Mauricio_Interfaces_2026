@@ -1,0 +1,254 @@
+:host {
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --soft-shadow: 0 16px 26px rgba(15, 23, 42, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --glass-bg: rgba(20, 22, 30, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --soft-shadow: 0 14px 24px rgba(0, 0, 0, 0.55);
+  }
+}
+
+ion-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: transparent;
+  --background: transparent;
+  z-index: 30;
+  pointer-events: none;
+}
+
+.home-btn {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 8px) + 8px);
+  left: 14px;
+  z-index: 40;
+  --background: transparent;
+  --box-shadow: none;
+  --padding-start: 0;
+  --padding-end: 0;
+  --border-radius: 999px;
+  min-height: 32px;
+  color: white;
+  pointer-events: auto;
+}
+
+ion-content.clientes-pendientes-content {
+  --background: var(--ion-background-color);
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.clientes-wrapper {
+  width: min(960px, 100%);
+  padding: 38px clamp(14px, 5vw, 32px) 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: center;
+}
+
+.section-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  .eyebrow {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.24em;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 35%);
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--ion-color-primary);
+  }
+
+  .support-copy {
+    margin: 0;
+    font-size: 14px;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+  }
+}
+
+.clientes-grid {
+  row-gap: 16px;
+}
+
+.cliente-card {
+  height: 100%;
+  border-radius: 18px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--soft-shadow);
+  backdrop-filter: blur(18px);
+  transition: transform 200ms ease, box-shadow 200ms ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 32px rgba(15, 23, 42, 0.18);
+  }
+
+  ion-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  ion-card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--ion-text-color);
+  }
+
+  ion-card-subtitle {
+    font-size: 0.9rem;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+  }
+}
+
+.avatar-badge {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid color-mix(in oklab, var(--ion-color-primary), transparent 40%);
+  box-shadow: 0 6px 14px rgba(15, 23, 42, 0.16);
+  flex-shrink: 0;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.identity {
+  text-align: left;
+}
+
+.cliente-actions {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cliente-btn {
+  --border-radius: 999px;
+  min-height: 38px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --box-shadow: 0 12px 18px rgba(15, 23, 42, 0.18);
+  transition: transform 160ms ease, box-shadow 160ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 22px rgba(15, 23, 42, 0.2);
+  }
+
+  ion-icon {
+    font-size: 1.1rem;
+  }
+}
+
+.cliente-btn--aprobar {
+  --background: linear-gradient(
+    135deg,
+    var(--ion-color-success),
+    color-mix(in oklab, var(--ion-color-success), black 10%)
+  );
+  --background-activated: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--ion-color-success), black 4%),
+    color-mix(in oklab, var(--ion-color-success), black 14%)
+  );
+  color: var(--ion-color-success-contrast);
+}
+
+.cliente-btn--rechazar {
+  --background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--ion-color-danger), white 6%),
+    color-mix(in oklab, var(--ion-color-danger), black 6%)
+  );
+  --background-activated: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--ion-color-danger), black 4%),
+    color-mix(in oklab, var(--ion-color-danger), black 12%)
+  );
+  color: var(--ion-color-danger-contrast);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 32px 16px;
+  border-radius: 18px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--soft-shadow);
+  backdrop-filter: blur(18px);
+  color: var(--ion-text-color);
+
+  ion-icon {
+    font-size: 2.5rem;
+    color: var(--ion-color-primary);
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    margin: 0;
+    color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+  }
+}
+
+.skeleton-card {
+  pointer-events: none;
+  border-radius: 18px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--soft-shadow);
+}
+
+.skel-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+}
+
+@media (min-width: 768px) {
+  .clientes-wrapper {
+    padding-top: 48px;
+  }
+
+  .cliente-actions {
+    flex-direction: row;
+
+    ion-button {
+      flex: 1;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .cliente-card {
+    padding-inline: 2px;
+  }
+
+  .clientes-wrapper {
+    padding-top: 32px;
+  }
+}

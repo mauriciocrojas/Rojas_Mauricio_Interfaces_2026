@@ -1,0 +1,8 @@
+:root {
+  --ion-safe-area-top: env(safe-area-inset-top);
+}
+
+/* Si usás fullscreen=true en esa pantalla */
+ion-content.fullscreen-fix {
+  padding-top: var(--ion-safe-area-top);
+}
