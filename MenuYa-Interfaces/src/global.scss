@@ -252,3 +252,57 @@
 }
 
 
+
+/* =========================================================
+   THEME ENGINE (Final TFI) - tokens globales
+   Se aplica SOLO cuando el body tiene una clase theme-*
+   ========================================================= */
+
+:root{
+  /* Defaults neutros (no cambian tu app actual) */
+  --app-primary: var(--ion-color-primary);
+  --app-secondary: var(--ion-color-secondary);
+  --app-bg: var(--ion-background-color);
+  --app-surface: var(--ion-item-background, var(--ion-background-color));
+  --app-text: var(--ion-text-color);
+  --app-font-family: inherit;
+  --app-font-size-base: 16px;
+  --app-btn-radius: 12px;
+  --app-action-justify: flex-end;
+}
+
+/* SOLO cuando haya un tema activo */
+body[class*="theme-"]{
+  font-family: var(--app-font-family) !important;
+  font-size: var(--app-font-size-base) !important;
+  background: var(--app-bg) !important;
+  color: var(--app-text) !important;
+}
+
+body[class*="theme-"] ion-content{
+  --background: var(--app-bg);
+  color: var(--app-text);
+}
+
+body[class*="theme-"] ion-card,
+body[class*="theme-"] ion-item,
+body[class*="theme-"] ion-toolbar,
+body[class*="theme-"] ion-modal{
+  --background: var(--app-surface);
+}
+
+body[class*="theme-"] ion-button{
+  --border-radius: var(--app-btn-radius);
+}
+
+/* Acción principal: demostrable por tema */
+body[class*="theme-"] .theme-action-bar{
+  display:flex;
+  gap:10px;
+  padding:10px;
+  justify-content: var(--app-action-justify);
+}
+
+body.primary-fullwidth .theme-action-bar ion-button.primary{
+  flex: 1 1 auto;
+}
