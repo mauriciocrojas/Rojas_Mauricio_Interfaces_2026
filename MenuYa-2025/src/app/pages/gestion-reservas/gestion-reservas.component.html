@@ -1,0 +1,113 @@
+<ion-content [fullscreen]="true" class="gestion-reservas">
+  <header class="gestion-header">
+    <button class="home-btn" (click)="goHome()" aria-label="Ir a inicio">
+      <ion-icon name="home-outline"></ion-icon>
+    </button>
+    <div class="gestion-header__text">
+      <h1>Gestión de reservas</h1>
+      <p>Visualiza, confirma o rechaza reservas.</p>
+    </div>
+  </header>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content pullingText="Desliza para actualizar"></ion-refresher-content>
+  </ion-refresher>
+
+  <!-- Panel de asignación de mesa tras confirmar -->
+  <ion-card *ngIf="asignacionActiva" class="asignacion-panel" color="light">
+    <ion-card-header>
+      <ion-card-title>Asignar mesa</ion-card-title>
+      <ion-card-subtitle>Para: {{ asignacionActiva?.nombre }}</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-spinner *ngIf="cargandoMesas" name="crescent"></ion-spinner>
+      <ion-text color="danger" *ngIf="!cargandoMesas && mesasError" class="center-msg">{{ mesasError }}</ion-text>
+
+      <ion-list *ngIf="!cargandoMesas && !mesasError">
+        <ion-item *ngFor="let m of mesasDisponibles">
+          <ion-label>
+            <h3>Mesa #{{ m.numero_mesa }}</h3>
+            <p>{{ m.tipo }}</p>
+          </ion-label>
+          <ion-button slot="end" size="small" color="primary" (click)="asignarMesa(m.numero_mesa)">Asignar mesa</ion-button>
+        </ion-item>
+        <ion-item *ngIf="mesasDisponibles.length === 0">
+          <ion-label>No hay mesas disponibles.</ion-label>
+        </ion-item>
+      </ion-list>
+
+      <div class="asignacion-actions">
+        <ion-button fill="clear" color="medium" (click)="cancelarAsignacion()">Cerrar</ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ng-container *ngIf="(reservas$ | async) as reservas">
+    <ion-list *ngIf="reservas.length; else vacio" inset="true" class="reservas-list">
+      <ion-item *ngFor="let r of reservas; trackBy: trackById">
+        <ion-label class="ion-text-wrap">
+          <h2 class="reserva-nombre">{{ r.nombreCompleto }}</h2>
+          <div class="estado-row">
+            <ion-badge [color]="r.estado === 'confirmada' ? 'success' : (r.estado === 'cancelada' || r.estado === 'rechazada' ? 'danger' : 'medium')" class="estado-badge">
+              {{ r.estado === 'cancelada' ? 'rechazada' : (r.estado || 'pendiente') }}
+            </ion-badge>
+          </div>
+          <p>
+            <ion-icon name="people-outline"></ion-icon>
+            <span class="pill">Comensales: {{ r.personas }} personas</span>
+          </p>
+          <p>
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span class="pill">Fecha de reserva: {{ r.fecha_hora | date:'dd/MM/yyyy HH:mm' }}</span>
+          </p>
+
+          <!-- Editor de motivo de rechazo -->
+          <div class="rechazo-editor" *ngIf="rechazoEditId === r.id">
+            <ion-textarea
+              autoGrow="true"
+              rows="3"
+              label="Motivo del rechazo"
+              labelPlacement="stacked"
+              placeholder="Escribe el motivo..."
+              [(ngModel)]="rechazoNotas">
+            </ion-textarea>
+            <div class="rechazo-actions">
+              <ion-button color="danger" size="small" (click)="enviarRechazo(r.id)" [disabled]="!(rechazoNotas && rechazoNotas.trim())">Enviar</ion-button>
+              <ion-button color="medium" size="small" fill="clear" (click)="cancelarRechazo()">Cancelar</ion-button>
+            </div>
+          </div>
+          <div class="acciones-reserva" *ngIf="rechazoEditId !== r.id">
+            <ion-button
+              fill="clear"
+              class="accion-icon-btn accion-icon-btn--confirmar"
+              (click)="confirmar(r)"
+              [disabled]="r.estado === 'confirmada'"
+              aria-label="Confirmar reserva"
+            >
+              <img src="assets/aprobar.svg" alt="" role="presentation" />
+            </ion-button>
+            <ion-button
+              fill="clear"
+              class="accion-icon-btn accion-icon-btn--rechazar"
+              (click)="rechazar(r.id)"
+              [disabled]="r.estado === 'cancelada' || r.estado === 'rechazada'"
+              aria-label="Rechazar reserva"
+            >
+              <img src="assets/rechazar.svg" alt="" role="presentation" />
+            </ion-button>
+          </div>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+
+  <ion-spinner *ngIf="cargando" class="center-spinner" name="crescent"></ion-spinner>
+  <ion-text color="danger" *ngIf="!cargando && errorMsg" class="center-msg">{{ errorMsg }}</ion-text>
+
+  <ng-template #vacio>
+    <div class="empty">
+      <ion-icon name="calendar-clear-outline"></ion-icon>
+      <p>No hay reservas.</p>
+    </div>
+  </ng-template>
+</ion-content>

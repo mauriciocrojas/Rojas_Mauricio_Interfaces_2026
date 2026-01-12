@@ -1,0 +1,111 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goHome()" aria-label="Ir al inicio">
+        <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Carta {{ role }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content
+  class="carta-page safe-top"
+  fullscreen
+  [scrollY]="false"
+>
+  <!-- Hero -->
+  <section class="carta-hero">
+    <div>
+      <h1>Explora la carta</h1>
+    </div>
+  </section>
+
+  <!-- Estado vacío -->
+  <div *ngIf="!isLoading && (productosFiltrados?.length ?? 0) === 0" class="empty-wrap">
+    <ion-card class="empty-state">
+      <ion-card-header>
+        <ion-card-title>No hay productos cargados</ion-card-title>
+        <ion-card-subtitle>
+          Agregá un nuevo ítem para esta categoría.
+        </ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Cuando haya productos disponibles aparecerán en esta vista.</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <!-- Carrusel vertical de productos (1 producto por pantalla) -->
+  <div class="carta-wrap" *ngIf="(productosFiltrados?.length ?? 0) > 0">
+    <swiper-container
+      class="productos-swiper"
+      slides-per-view="2"
+      slides-per-group="2"
+      space-between="16"
+      direction="vertical"
+      pagination="true"
+      navigation="false"
+      loop="false"
+    >
+      <swiper-slide
+        *ngFor="let producto of productosFiltrados; trackBy: trackByProducto"
+        class="producto-slide"
+      >
+        <ion-card class="producto-card">
+          <!-- Carrusel de imágenes del producto (horizontal) -->
+          <div class="media-wrapper">
+            <ng-container *ngIf="(producto.urls_imagenes?.length ?? 0) > 0; else placeholderImagen">
+              <swiper-container
+                class="producto-swiper"
+                slides-per-view="1"
+                pagination="true"
+                navigation="false"
+                loop="false"
+                nested="true"
+              >
+                <swiper-slide
+                  *ngFor="let imagen of (producto.urls_imagenes | slice:0:3); let idx = index"
+                >
+                  <img
+                    [src]="imagen"
+                    [alt]="prettyNombre(producto.nombre ?? '') + ' imagen ' + (idx + 1)"
+                    class="producto-image"
+                    loading="lazy"
+                  />
+                </swiper-slide>
+              </swiper-container>
+            </ng-container>
+          </div>
+
+          <!-- Info del producto -->
+          <ion-card-header>
+            <ion-card-subtitle>{{ producto.categoria ?? '' }}</ion-card-subtitle>
+            <ion-card-title>{{ prettyNombre(producto.nombre ?? '') }}</ion-card-title>
+          </ion-card-header>
+
+          <ion-card-content>
+            <p class="descripcion">
+              {{ producto.descripcion ?? '' }}
+            </p>
+
+            <div class="precio-row">
+              <span class="precio-label">Precio</span>
+              <span class="precio-valor">
+                {{ (producto.precio ?? 0) | currency:'ARS':'symbol':'1.0-0' }}
+              </span>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </swiper-slide>
+    </swiper-container>
+  </div>
+
+  <!-- Placeholder cuando no hay imágenes -->
+  <ng-template #placeholderImagen>
+    <div class="placeholder-media" role="img" aria-label="Producto sin imágenes">
+      <ion-icon name="image-outline" aria-hidden="true"></ion-icon>
+      <p>Sin imágenes disponibles</p>
+    </div>
+  </ng-template>
+</ion-content>

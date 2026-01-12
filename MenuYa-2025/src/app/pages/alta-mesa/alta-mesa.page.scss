@@ -1,0 +1,250 @@
+:host {
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --soft-shadow: 0 16px 26px rgba(15, 23, 42, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --glass-bg: rgba(20, 22, 30, 0.9);
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --soft-shadow: 0 14px 24px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* ====== SUBTÍTULO GENERAL ====== */
+
+.subtitle {
+  margin: 4px 0 0;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+  font-size: 14px;
+}
+
+/* ====== CONTENT TIPO REGISTRO ====== */
+
+ion-content.registro {
+  --background: var(--ion-background-color);
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+/* ====== CASITA FLOTANTE (BLANCA, SIN BARRA) ====== */
+
+.home-btn {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 8px) + 8px);
+  left: 14px;
+  z-index: 20;
+  --background: transparent;
+  --box-shadow: none;
+  --padding-start: 0;
+  --padding-end: 0;
+  --border-radius: 999px;
+  min-height: 32px;
+  color: white
+}
+
+/* ====== CONTENEDOR CENTRAL ====== */
+
+.registro__container {
+  width: min(420px, 100%);
+  padding: 44px 16px 24px; /* espacio bajo la casita */
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* ====== TÍTULO ====== */
+
+.title {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(22px, 5.4vw, 28px);
+  letter-spacing: -0.01em;
+  color: var(--ion-color-primary);
+}
+
+/* ====== FORM ====== */
+
+.registro__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ====== CAMPOS GLASS ====== */
+
+.field {
+  --inner-padding-top: 6px;
+  --inner-padding-bottom: 6px;
+  --padding-start: 10px;
+  border-radius: 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--soft-shadow);
+  transition: 0.18s ease;
+}
+
+.field.invalid {
+  border-color: color-mix(in oklab, var(--ion-color-danger), transparent 35%);
+  box-shadow: 0 0 0 1.5px
+    color-mix(in oklab, var(--ion-color-danger), transparent 55%);
+}
+
+.registro__form ion-label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* ====== PLACEHOLDERS ====== */
+
+.registro__form ion-input::part(native)::placeholder,
+.registro__form ion-textarea::part(native)::placeholder {
+  font-size: 10px;
+}
+
+/* ====== NOTAS DE ERROR ====== */
+
+.error {
+  margin-top: 2px;
+  margin-left: 4px;
+  font-size: 10px;
+  text-align: left;
+  color: var(--ion-color-danger);
+}
+
+/* ====== BLOQUE FOTO / PREVIEW ====== */
+
+.fotos-field {
+  padding: 10px 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: radial-gradient(circle at top left,
+      color-mix(in oklab, var(--ion-color-primary), transparent 80%),
+      var(--glass-bg));
+  border-radius: 18px;
+  border: 1px solid color-mix(in oklab, var(--ion-color-primary), transparent 70%);
+}
+
+.fotos-field__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.fotos-field__header {
+  text-align: left;
+}
+
+.fotos-field__title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fotos-field__subtitle {
+  font-size: 10px;
+  margin: 2px 0 0;
+  opacity: 0.9;
+}
+
+.fotos-field__chip {
+  align-self: flex-start;
+  font-size: 11px;
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Contenedor para la foto circular / placeholder */
+.foto-container {
+  margin-top: 4px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Foto circular de la mesa */
+.foto-container img {
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  object-fit: cover;
+  border: 2px solid var(--ion-color-primary);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+}
+
+/* Placeholder cuando no hay foto */
+.preview-placeholder {
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  border: 2px dashed color-mix(in oklab, var(--ion-color-medium), transparent 20%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.9;
+  background: color-mix(in oklab, var(--ion-background-color), transparent 25%);
+}
+
+.preview-placeholder__icon {
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.preview-placeholder__text {
+  font-size: 11px;
+}
+
+/* ====== BOTÓN GUARDAR ====== */
+
+.actions {
+  margin-top: 6px;
+}
+
+.guardar {
+  --border-radius: 999px;
+  --background: linear-gradient(
+    135deg,
+    var(--ion-color-primary),
+    color-mix(in oklab, var(--ion-color-primary), black 10%)
+  );
+  --box-shadow: 0 12px 18px
+    color-mix(in oklab, var(--ion-color-primary), transparent 78%);
+  min-height: 40px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+/* ====== RESPONSIVE ====== */
+
+@media (max-width: 420px) {
+  .registro__container {
+    padding: 40px 12px 20px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+}
+
+@media (max-height: 640px) {
+  .registro__container {
+    gap: 10px;
+  }
+
+  .field {
+    --inner-padding-top: 4px;
+    --inner-padding-bottom: 4px;
+  }
+
+  .guardar {
+    min-height: 36px;
+  }
+}

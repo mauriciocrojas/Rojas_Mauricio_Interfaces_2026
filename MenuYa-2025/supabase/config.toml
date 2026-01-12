@@ -1,0 +1,44 @@
+
+[functions.notify_new_client]
+enabled = true
+verify_jwt = true
+import_map = "./functions/notify_new_client/package.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/notify_new_client/index.js"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/notify_new_client/*.html" ]
+
+[functions.actualizar-mesas]
+enabled = true
+verify_jwt = true
+import_map = "./functions/actualizar-mesas/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/actualizar-mesas/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/actualizar-mesas/*.html" ]
+
+[functions.registrar-token]
+enabled = true
+verify_jwt = true
+import_map = "./functions/registrar-token/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/registrar-token/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/registrar-token/*.html" ]
+
+[functions.enviar-notificacion-rol]
+enabled = true
+verify_jwt = true
+import_map = "./functions/enviar-notificacion-rol/deno.json"
+# Uncomment to specify a custom file path to the entrypoint.
+# Supported file extensions are: .ts, .js, .mjs, .jsx, .tsx
+entrypoint = "./functions/enviar-notificacion-rol/index.ts"
+# Specifies static files to be bundled with the function. Supports glob patterns.
+# For example, if you want to serve static HTML pages in your function:
+# static_files = [ "./functions/enviar-notificacion-rol/*.html" ]

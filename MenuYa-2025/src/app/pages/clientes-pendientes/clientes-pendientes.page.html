@@ -1,0 +1,100 @@
+<ion-header [translucent]="true">
+  <!-- Botón Home flotante -->
+  <ion-button
+    fill="clear"
+    class="home-btn"
+    (click)="goHome()"
+    aria-label="Ir al inicio"
+  >
+    <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+  </ion-button>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="clientes-pendientes-content safe-top">
+  <section class="clientes-wrapper" *ngIf="!isLoadingPend; else skelPend">
+    <div class="section-heading">
+      <p class="eyebrow">Revision de altas</p>
+      <h1>Gestiona clientes pendientes</h1>
+      <p class="support-copy">Aprueba o rechaza las solicitudes.</p>
+    </div>
+
+    <ng-container *ngIf="!isLoadingPend; else skelPend">
+      <ion-grid *ngIf="pendientes.length; else sinPend">
+        <ion-row class="clientes-grid">
+          <ion-col size="12" size-md="6" *ngFor="let c of pendientes">
+            <ion-card class="cliente-card">
+              <ion-card-header>
+                <div class="avatar-badge">
+                  <img
+                    [src]="c.foto_url || 'assets/brand/avatar-placeholder.png'"
+                    alt="Foto de {{ c.nombres }} {{ c.apellidos }}"
+                  />
+                </div>
+                <div class="identity">
+                  <ion-card-title>{{ c.nombres }} {{ c.apellidos }}</ion-card-title>
+                  <ion-card-subtitle>DNI {{ c.dni }}</ion-card-subtitle>
+                </div>
+              </ion-card-header>
+
+              <ion-card-content>
+                <div class="cliente-actions">
+                  <ion-button
+                    color="success"
+                    class="cliente-btn cliente-btn--aprobar"
+                    expand="block"
+                    [attr.aria-label]="'Aprobar a ' + c.nombres + ' ' + c.apellidos"
+                    (click)="aprobarCliente(c)"
+                  >
+                    <ion-icon slot="start" name="checkmark-circle-outline"></ion-icon>
+                    Aprobar
+                  </ion-button>
+
+                  <ion-button
+                    color="danger"
+                    class="cliente-btn cliente-btn--rechazar"
+                    expand="block"
+                    [attr.aria-label]="'Rechazar a ' + c.nombres + ' ' + c.apellidos"
+                    (click)="rechazarCliente(c)"
+                  >
+                    <ion-icon slot="start" name="close-circle-outline"></ion-icon>
+                    Rechazar
+                  </ion-button>
+                </div>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ng-template #sinPend>
+        <div class="empty-state">
+          <ion-icon name="shield-checkmark-outline" aria-hidden="true"></ion-icon>
+          <h2>Todo esta al dia</h2>
+          <p>No hay clientes pendientes en este momento.</p>
+        </div>
+      </ng-template>
+    </ng-container>
+  </section>
+
+  <ng-template #skelPend>
+    <ion-grid>
+      <ion-row class="clientes-grid">
+        <ion-col size="12" size-md="6" *ngFor="let card of [0,1,2,3]">
+          <ion-card class="cliente-card skeleton-card">
+            <ion-card-header>
+              <ion-skeleton-text animated class="skel-avatar"></ion-skeleton-text>
+              <div class="identity">
+                <ion-skeleton-text animated style="width: 70%; height: 16px;"></ion-skeleton-text>
+                <ion-skeleton-text animated style="width: 40%; height: 12px;"></ion-skeleton-text>
+              </div>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-skeleton-text animated style="width: 100%; height: 36px; margin-bottom: 12px;"></ion-skeleton-text>
+              <ion-skeleton-text animated style="width: 100%; height: 36px;"></ion-skeleton-text>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-template>
+</ion-content>

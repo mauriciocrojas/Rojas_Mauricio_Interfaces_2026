@@ -1,0 +1,50 @@
+<div class="juego-container">
+  <h2 class="arcade-title">Mayor o Menor</h2>
+
+  <div class="carta">
+    <p>Carta actual:</p>
+    <div class="carta-display">
+      {{ cartaActual?.valor }} {{ cartaActual?.palo }}
+    </div>
+  </div>
+
+  <div class="carta" *ngIf="mostrarSiguienteCarta">
+    <p>Carta recogida:</p>
+    <div class="carta-display" *ngIf="!cartaRecogidaTapada">
+      {{ siguienteCarta?.valor }} {{ siguienteCarta?.palo }}
+    </div>
+    <div class="carta-display" *ngIf="cartaRecogidaTapada">
+      Tapada
+    </div>
+  </div>
+
+  <div *ngIf="!juegoTerminado" class="pregunta">
+    <p>¿La próxima carta será...?</p>
+    <div class="botones-apuesta">
+      <ion-button class="mm-btn" size="default" (click)="adivinar('mayor')" [disabled]="!!respuestaJugador">
+        Mayor
+      </ion-button>
+      <ion-button class="mm-btn" size="default" (click)="adivinar('igual')" [disabled]="!!respuestaJugador">
+        Igual
+      </ion-button>
+      <ion-button class="mm-btn" size="default" (click)="adivinar('menor')" [disabled]="!!respuestaJugador">
+        Menor
+      </ion-button>
+    </div>
+  </div>
+
+  <p class="mensaje" *ngIf="mensaje">
+    <strong [ngClass]="{ 'mensaje-rojo': juegoTerminado }">{{ mensaje }}</strong>
+  </p>
+
+  <p *ngIf="!juegoTerminado" class="puntaje"><strong>Puntaje: {{ puntaje }}</strong></p>
+
+  <div class="buttons">
+    <ion-button fill="solid" color="warning" (click)="reiniciar()">
+      Reiniciar
+    </ion-button>
+    <ion-button fill="outline" (click)="volverHome()">
+      Volver al inicio
+    </ion-button>
+  </div>
+</div>

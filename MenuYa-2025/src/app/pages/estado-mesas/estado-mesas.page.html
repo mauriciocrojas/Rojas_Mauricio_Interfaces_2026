@@ -1,0 +1,83 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="goHome()" aria-label="Volver al inicio">
+        <ion-icon name="home-outline" slot="icon-only" aria-hidden="true"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>Estado de Mesas</ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid class="mesas-grid" fixed>
+    <ion-row>
+      <ion-col size="12" size-sm="6" size-md="4" size-lg="3" size-xl="2" *ngFor="let mesa of mesas">
+        <ion-card class="mesa-card" [ngClass]="{
+            'estado-confirmar': estaEnConfirmarPago(mesa),
+            'estado-disponible': !estaEnConfirmarPago(mesa) && mesa?.disponible,
+            'estado-ocupada': !estaEnConfirmarPago(mesa) && !mesa?.disponible,
+            'estado-pendiente': !estaEnConfirmarPago(mesa) && esMesaPendiente(mesa)
+          }" [attr.aria-label]="'Mesa ' + mesa?.numero_mesa">
+          <ion-card-header class="mesa-card-header">
+            <div class="header-row">
+              <ion-card-title>Mesa: {{ mesa?.numero_mesa }}</ion-card-title>
+              <ion-button fill="clear" size="small" (click)="toggleQr(mesa)"
+                [attr.aria-label]="'Ver QR de mesa ' + mesa?.numero_mesa">
+                <ion-icon name="eye-outline" slot="start" aria-hidden="true"></ion-icon>
+                QR
+              </ion-button>
+
+            </div>
+          </ion-card-header>
+          <ion-card-content>
+            <!-- Otros estados: badge -->
+            <ng-template #estadoBadge>
+              <ion-badge *ngIf="!esMesaPendiente(mesa) || estaEnConfirmarPago(mesa)"
+                [color]="mesa?.disponible ? 'success' : 'danger'" class="estado-badge">
+                {{ mesa?.disponible ? 'Disponible' : 'Ocupada' }}
+              </ion-badge>
+            </ng-template>
+
+            <!-- Confirmar pago: botón de acción -->
+            <ng-container *ngIf="estaEnConfirmarPago(mesa); else estadoBadge">
+              <ion-button color="warning" expand="block" size="small" (click)="onDetalleConfirmarPago(mesa)"
+                [attr.aria-label]="'Confirmar pago de mesa ' + mesa?.numero_mesa">
+                Confirmar pago
+              </ion-button>
+            </ng-container>
+            <!-- Pendiente: botón Tomar pedido -->
+            <ng-container *ngIf="!estaEnConfirmarPago(mesa) && esMesaPendiente(mesa)">
+              <ion-button color="warning" expand="block" size="small" class="tomar-pedido-btn"
+                (click)="tomarPedido(mesa)" [attr.aria-label]="'Tomar pedido de mesa ' + mesa?.numero_mesa">
+                Tomar pedido
+              </ion-button>
+            </ng-container>
+          </ion-card-content>
+
+          <!-- Sección QR expandible -->
+          <ion-card-content *ngIf="qrShownMesaNumero === mesa?.numero_mesa">
+            <div class="qr-section">
+              <ion-spinner *ngIf="qrLoadingByMesa[mesa?.numero_mesa]"></ion-spinner>
+              <ion-text color="danger"
+                *ngIf="!qrLoadingByMesa[mesa?.numero_mesa] && qrErrorByMesa[mesa?.numero_mesa]">{{
+                qrErrorByMesa[mesa?.numero_mesa] }}</ion-text>
+              <img *ngIf="!qrLoadingByMesa[mesa?.numero_mesa] && !qrErrorByMesa[mesa?.numero_mesa]"
+                [src]="qrDataUrlByMesa[mesa?.numero_mesa] || mesa?.codigo_qr" alt="QR mesa {{ mesa?.numero_mesa }}"
+                class="qr-image" />
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row *ngIf="mesas?.length === 0">
+      <ion-col size="12" class="empty-state">
+        <ion-icon name="cube-outline" aria-hidden="true"></ion-icon>
+        <p>No hay mesas para mostrar</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

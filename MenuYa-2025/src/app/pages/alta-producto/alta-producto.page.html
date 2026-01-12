@@ -1,0 +1,241 @@
+<ion-content class="registro safe-top">
+  <!-- Botón Home flotante arriba a la izquierda -->
+  <ion-button
+    fill="clear"
+    class="home-btn"
+    (click)="goHome()"
+    aria-label="Ir al inicio"
+  >
+    <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+  </ion-button>
+
+  <div class="registro__container">
+    <!-- TOP -->
+    <div class="registro__top">
+      <h1 class="title">Alta de producto</h1>
+            <p class="subtitle" >Completa los datos y cargá 3 fotos</p>
+
+    </div>
+
+    <!-- FORM -->
+    <form
+      class="registro__form"
+      [formGroup]="productoForm"
+      (ngSubmit)="onSubmit()"
+      novalidate
+    >
+      <!-- NOMBRE -->
+      <ng-container *ngIf="productoForm.get('nombre') as nombreCtrl">
+        <ion-item
+          lines="none"
+          class="field"
+          [class.invalid]="nombreCtrl.invalid && (nombreCtrl.dirty || nombreCtrl.touched)"
+        >
+          <ion-label position="floating" for="nombre">Nombre</ion-label>
+          <ion-input
+            id="nombre"
+            type="text"
+            formControlName="nombre"
+            aria-label="Nombre del producto"
+            aria-describedby="nombre-error"
+          ></ion-input>
+        </ion-item>
+        <ion-note
+          id="nombre-error"
+          color="danger"
+          class="error"
+          *ngIf="nombreCtrl.invalid && (nombreCtrl.dirty || nombreCtrl.touched)"
+        >
+          El nombre es obligatorio.
+        </ion-note>
+      </ng-container>
+
+      <!-- DESCRIPCIÓN -->
+      <ng-container *ngIf="productoForm.get('descripcion') as descripcionCtrl">
+        <ion-item
+          lines="none"
+          class="field field--textarea"
+          [class.invalid]="descripcionCtrl.invalid && (descripcionCtrl.dirty || descripcionCtrl.touched)"
+        >
+          <ion-label position="floating" for="descripcion">Descripción</ion-label>
+          <ion-textarea
+            id="descripcion"
+            formControlName="descripcion"
+            autoGrow="true"
+            aria-label="Descripción del producto"
+            aria-describedby="descripcion-error"
+          ></ion-textarea>
+        </ion-item>
+        <ion-note
+          id="descripcion-error"
+          color="danger"
+          class="error"
+          *ngIf="descripcionCtrl.invalid && (descripcionCtrl.dirty || descripcionCtrl.touched)"
+        >
+          La descripción es obligatoria.
+        </ion-note>
+      </ng-container>
+
+      <!-- PRECIO -->
+      <ng-container *ngIf="productoForm.get('precio') as precioCtrl">
+        <ion-item
+          lines="none"
+          class="field"
+          [class.invalid]="precioCtrl.invalid && (precioCtrl.dirty || precioCtrl.touched)"
+        >
+          <ion-label position="floating" for="precio">Precio</ion-label>
+          <ion-input
+            id="precio"
+            type="number"
+            min="0"
+            step="0.01"
+            formControlName="precio"
+            inputmode="decimal"
+            aria-label="Precio del producto"
+            aria-describedby="precio-error"
+          ></ion-input>
+        </ion-item>
+        <ion-note
+          id="precio-error"
+          color="danger"
+          class="error"
+          *ngIf="precioCtrl.invalid && (precioCtrl.dirty || precioCtrl.touched)"
+        >
+          Ingresá un precio mayor a 0.
+        </ion-note>
+      </ng-container>
+
+      <!-- TIEMPO -->
+      <ng-container *ngIf="productoForm.get('tiempo') as tiempoCtrl">
+        <ion-item
+          lines="none"
+          class="field"
+          [class.invalid]="tiempoCtrl.invalid && (tiempoCtrl.dirty || tiempoCtrl.touched)"
+        >
+          <ion-label position="floating" for="tiempo">
+            Tiempo de elaboración (min)
+          </ion-label>
+          <ion-input
+            id="tiempo"
+            type="number"
+            min="0"
+            step="1"
+            formControlName="tiempo"
+            inputmode="numeric"
+            aria-label="Tiempo de elaboración en minutos"
+            aria-describedby="tiempo-error"
+          ></ion-input>
+        </ion-item>
+        <ion-note
+          id="tiempo-error"
+          color="danger"
+          class="error"
+          *ngIf="tiempoCtrl.invalid && (tiempoCtrl.dirty || tiempoCtrl.touched)"
+        >
+          Ingresá un tiempo válido en minutos.
+        </ion-note>
+      </ng-container>
+
+      <!-- CATEGORÍA -->
+      <ng-container *ngIf="productoForm.get('categoria') as categoriaCtrl">
+        <ion-item
+          lines="none"
+          class="field field--select"
+          [class.invalid]="categoriaCtrl.invalid && (categoriaCtrl.dirty || categoriaCtrl.touched)"
+        >
+          <div class="field-inline">
+            <span class="field-inline__label">
+              <ion-icon name="pricetag-outline" class="field-inline__icon"></ion-icon>
+              Categoría
+            </span>
+            <div class="field-inline__control">
+              <ion-select
+                id="categoria"
+                interface="popover"
+                formControlName="categoria"
+                [value]="categoriaCtrl.value || defaultCategoria"
+                placeholder="Seleccioná una categoría"
+                aria-label="Categoría del producto"
+                aria-describedby="categoria-error"
+              >
+                <ion-select-option
+                  *ngFor="let categoria of categorias"
+                  [value]="categoria"
+                >
+                  {{ categoria }}
+                </ion-select-option>
+              </ion-select>
+            </div>
+          </div>
+        </ion-item>
+        <ion-note
+          id="categoria-error"
+          color="danger"
+          class="error"
+          *ngIf="categoriaCtrl.invalid && (categoriaCtrl.dirty || categoriaCtrl.touched)"
+        >
+          Seleccioná una categoría.
+        </ion-note>
+      </ng-container>
+
+      <!-- IMÁGENES -->
+      <section class="field fotos-field">
+        <div class="fotos-field__header">
+          <span class="fotos-field__title">
+            Imágenes del producto
+          </span>
+          <ion-chip color="medium" class="fotos-field__chip">
+            <ion-label>{{ selectedFiles.length || 0 }} / 3</ion-label>
+          </ion-chip>
+        </div>
+
+        <div class="fotos-field__input-wrapper">
+          <input
+            #fileInput
+            id="imagenes"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            (change)="onFilesSelected($event)"
+            aria-label="Seleccionar imágenes del producto"
+          />
+        </div>
+
+        <ion-note color="danger" class="error" *ngIf="(selectedFiles?.length || 0) > 3">
+          Solo se permiten hasta 3 imágenes. Eliminá archivos adicionales antes de continuar.
+        </ion-note>
+
+        <ion-grid *ngIf="previewUrls.length" class="fotos-field__grid">
+          <ion-row>
+            <ion-col
+              size="4"
+              sizeSm="3"
+              *ngFor="let file of selectedFiles; let i = index"
+              class="ion-text-center preview-thumb"
+            >
+              <ion-img
+                class="preview-thumb__img"
+                [src]="previewUrls[i]"
+                [alt]="'Imagen seleccionada ' + (i + 1)"
+              ></ion-img>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </section>
+
+      <!-- ACCIONES -->
+      <div class="actions">
+        <ion-button
+          type="submit"
+          expand="block"
+          color="primary"
+          class="guardar"
+          [disabled]="productoForm.invalid || isSubmitting || (selectedFiles.length > 3)"
+        >
+          <ion-spinner slot="start" *ngIf="isSubmitting"></ion-spinner>
+          Guardar producto
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

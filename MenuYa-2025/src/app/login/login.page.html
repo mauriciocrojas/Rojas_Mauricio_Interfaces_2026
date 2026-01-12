@@ -1,0 +1,127 @@
+<ion-content [fullscreen]="true" class="login safe-top">
+  <div class="login__container">
+    <h1 class="login__title">Iniciar sesión</h1>
+
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="login__form" novalidate>
+      <!-- Correo -->
+      <div class="field-group">
+        <label class="field-group__label" for="login-email">Correo</label>
+        <ion-item class="field" [class.invalid]="emailCtrl.invalid && emailCtrl.touched">
+          <ion-icon name="mail-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            id="login-email"
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            required
+            [(ngModel)]="email"
+            name="email"
+            #emailCtrl="ngModel"
+            placeholder="tucorreo@dominio.com">
+          </ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="emailCtrl.invalid && emailCtrl.touched">
+          Ingresá un correo válido.
+        </ion-note>
+      </div>
+
+      <!-- Clave -->
+      <div class="field-group">
+        <label class="field-group__label" for="login-password">Clave</label>
+        <ion-item class="field" [class.invalid]="passCtrl.invalid && passCtrl.touched">
+          <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-input
+            id="login-password"
+            [type]="showPwd ? 'text' : 'password'"
+            autocomplete="current-password"
+            required
+            minlength="6"
+            [(ngModel)]="password"
+            name="password"
+            #passCtrl="ngModel"
+            placeholder="Tu clave"
+            (keydown.enter)="onSubmit(f)"
+            (ionInput)="onPasswordInput()">
+          </ion-input>
+          <ion-button
+            fill="clear"
+            slot="end"
+            type="button"
+            (click)="togglePwd()"
+            aria-label="{{ showPwd ? 'Ocultar clave' : 'Mostrar clave' }}">
+            <ion-icon [name]="showPwd ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </div>
+
+      <div class="password-hints">
+        <ion-note *ngIf="passCtrl.invalid && passCtrl.touched" color="danger" class="note">
+          La clave debe tener al menos 6 caracteres.
+        </ion-note>
+
+        <ion-note *ngIf="capsLockOn" color="warning" class="note caps" role="alert">
+          <ion-icon name="alert-circle-outline"></ion-icon> Bloq Mayús activado.
+        </ion-note>
+
+        <div class="strength" *ngIf="password">
+          <div class="row">
+            <span>Seguridad:</span>
+            <strong [ngClass]="strengthLabelClass">{{ strengthLabel }}</strong>
+          </div>
+          <ion-progress-bar [value]="strengthValue" [color]="strengthColor"></ion-progress-bar>
+        </div>
+      </div>
+
+      <!-- Accesos rápidos -->
+      <section class="quick-users" aria-label="Accesos rápidos por rol">
+        <div class="quick-users__title">
+          <ion-icon name="flash-outline"></ion-icon>
+          <span>Accesos rápidos</span>
+        </div>
+
+        <div class="quick-users__grid" role="list">
+          <ng-container *ngFor="let u of presets">
+            <button
+              type="button"
+              class="preset-card"
+              [ngClass]="u.shape"
+              (click)="quickFill(u.key, f)"
+              role="listitem"
+              [attr.aria-label]="'Completar como ' + u.label">
+              <div class="avatar" [class.with-img]="!!u.avatar">
+                <img *ngIf="u.avatar" [src]="u.avatar" [alt]="u.label" />
+                <span *ngIf="!u.avatar" class="avatar-initials">{{ u.initials }}</span>
+              </div>
+              <div class="preset-card__text">
+                <span class="label">{{ u.key === 'Delivery' ? 'Repartidor' : u.label }}</span>
+              </div>
+              <ion-ripple-effect></ion-ripple-effect>
+            </button>
+          </ng-container>
+        </div>
+      </section>
+
+      <ion-text color="danger" *ngIf="errorMsg" class="error" role="alert">
+        {{ errorMsg }}
+      </ion-text>
+
+      <ion-button class="submit" type="submit" expand="block" [disabled]="loading || !f.valid">
+        <ion-spinner *ngIf="loading" name="lines-small" class="ion-margin-end"></ion-spinner>
+        Ingresar
+      </ion-button>
+
+      <ion-button class="google" expand="block" color="medium" (click)="signInWithGoogle()" [disabled]="loading">
+        <ion-icon name="logo-google" slot="start"></ion-icon>
+        Continuar con Google
+      </ion-button>
+
+      <div class="signup">
+        <span>¿No tenés cuenta?</span>
+        <ion-button fill="clear" size="small" routerLink="/registro">Crear cuenta</ion-button>
+        <ion-button fill="clear" size="small" [routerLink]="['/registro']" [queryParams]="{ anonimo: '1' }">
+          Entrar como invitado
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

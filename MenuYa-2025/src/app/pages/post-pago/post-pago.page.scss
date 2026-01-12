@@ -1,0 +1,45 @@
+:host {
+  ion-content {
+    --background: var(--ion-background-color);
+    color: var(--ion-text-color);
+  }
+}
+
+.post-pago-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-pago-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.post-pago-logo {
+  width: 160px;
+  max-width: 60vw;
+  height: auto;
+}
+
+.post-pago-wrapper ion-button {
+  width: 100%;
+  max-width: 320px;
+}
+
+ion-button {
+  --border-radius: 16px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  font-weight: 600;
+}
+
+.post-pago-text {
+  max-width: 420px;
+  line-height: 1.5;
+}

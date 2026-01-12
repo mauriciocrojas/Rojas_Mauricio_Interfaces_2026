@@ -1,0 +1,260 @@
+<ion-content [fullscreen]="true" class="registro safe-top">
+  <div class="registro__container">
+    <div class="registro__top">
+      <h2 class="title" *ngIf="!anonMode">Registro</h2>
+      <h2 class="title" *ngIf="anonMode">Ingreso anónimo</h2>
+
+      <p class="subtitle" *ngIf="!anonMode">Completá tus datos</p>
+      <div *ngIf="anonMode" class="logo-anon">
+        <img src="assets/brand/app-icon.png" alt="Logo MenuYa" />
+      </div>
+      <p class="subtitle" *ngIf="anonMode">Solo nombre y foto.</p>
+    </div>
+
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)" novalidate class="registro__form">
+      <!-- MODO COMPLETO -->
+      <ng-container *ngIf="!anonMode; else anonFields">
+        <!-- Perfil -->
+        <ion-item class="field field--select" [class.invalid]="perfilCtrl.invalid && perfilCtrl.touched">
+          <div class="field-inline">
+            <span class="field-inline__label">Perfil</span>
+            <div class="field-inline__control">
+              <ion-select
+                required
+                interface="popover"
+                [(ngModel)]="perfil"
+                name="perfil"
+                #perfilCtrl="ngModel"
+              >
+                <ion-select-option value="cliente">Cliente</ion-select-option>
+                <ion-select-option value="maitre">Maître</ion-select-option>
+              </ion-select>
+              <ion-icon name="chevron-down-outline" class="field-inline__icon"></ion-icon>
+            </div>
+          </div>
+        </ion-item>
+        <ion-note color="danger" *ngIf="perfilCtrl.touched && perfilCtrl.invalid">
+          Elegí un perfil.
+        </ion-note>
+
+        <!-- Nombres -->
+        <ion-item class="field ion-margin-top" [class.invalid]="nombresCtrl.invalid && nombresCtrl.touched">
+          <ion-label position="stacked">Nombres</ion-label>
+          <ion-input
+            required
+            [(ngModel)]="nombres"
+            name="nombres"
+            #nombresCtrl="ngModel"
+            maxlength="60"
+            placeholder="Ej.: Juan José"
+            (ionInput)="trimSpaces('nombres')"
+          ></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="nombresCtrl.touched && nombresCtrl.invalid">
+          Ingresá tus nombres.
+        </ion-note>
+
+        <!-- Apellidos -->
+        <ion-item class="field ion-margin-top" [class.invalid]="apellidosCtrl.invalid && apellidosCtrl.touched">
+          <ion-label position="stacked">Apellidos</ion-label>
+          <ion-input
+            required
+            [(ngModel)]="apellidos"
+            name="apellidos"
+            #apellidosCtrl="ngModel"
+            maxlength="60"
+            placeholder="Ej.: Pérez Gómez"
+            (ionInput)="trimSpaces('apellidos')"
+          ></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="apellidosCtrl.touched && apellidosCtrl.invalid">
+          Ingresá tus apellidos.
+        </ion-note>
+
+        <!-- DNI con QR -->
+        <ion-item class="field ion-margin-top" [class.invalid]="dniCtrl.invalid && dniCtrl.touched">
+          <ion-label position="stacked">DNI</ion-label>
+          <ion-input
+            type="text"
+            inputmode="numeric"
+            required
+            pattern="^[0-9]{7,8}$"
+            maxlength="8"
+            [(ngModel)]="dni"
+            name="dni"
+            #dniCtrl="ngModel"
+            placeholder="Sin puntos, solo números"
+          ></ion-input>
+          <ion-button
+            fill="clear"
+            slot="end"
+            type="button"
+            (click)="leerQR()"
+            aria-label="Leer DNI con QR"
+          >
+            <ion-icon name="qr-code-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-note color="danger" *ngIf="dniCtrl.touched && dniCtrl.invalid">
+          El DNI debe tener 7 u 8 dígitos.
+        </ion-note>
+
+        <!-- Correo -->
+        <ion-item class="field ion-margin-top" [class.invalid]="(emailCtrl.invalid && emailCtrl.touched) || emailTaken">
+          <ion-label position="stacked">Correo</ion-label>
+          <ion-input
+            type="email"
+            inputmode="email"
+            autocomplete="email"
+            required
+            email
+            [(ngModel)]="email"
+            name="email"
+            #emailCtrl="ngModel"
+            (ionInput)="emailTaken = false"
+            placeholder="tucorreo@dominio.com"
+          ></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="emailCtrl.touched && emailCtrl.invalid">
+          Ingresá un correo válido.
+        </ion-note>
+        <ion-note color="danger" *ngIf="emailTaken">
+          Ese correo ya está registrado.
+        </ion-note>
+
+        <!-- Clave -->
+        <ion-item class="field ion-margin-top" [class.invalid]="passCtrl.invalid && passCtrl.touched">
+          <ion-label position="stacked">Clave</ion-label>
+          <ion-input
+            [type]="showPwd ? 'text' : 'password'"
+            required
+            minlength="6"
+            [(ngModel)]="password"
+            name="password"
+            #passCtrl="ngModel"
+            placeholder="Mínimo 6 caracteres"
+            (ionInput)="checkMatch()"
+          ></ion-input>
+          <ion-button
+            fill="clear"
+            slot="end"
+            type="button"
+            (click)="togglePwd()"
+            aria-label="Mostrar/Ocultar clave"
+          >
+            <ion-icon [name]="showPwd ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-note color="danger" *ngIf="passCtrl.touched && passCtrl.invalid">
+          La clave debe tener al menos 6 caracteres.
+        </ion-note>
+
+        <!-- Repetí tu clave -->
+        <ion-item class="field ion-margin-top" [class.invalid]="confirmTouched && !passwordsMatch">
+          <ion-input
+            [type]="showPwd2 ? 'text' : 'password'"
+            required
+            minlength="6"
+            [(ngModel)]="password2"
+            name="password2"
+            #pass2Ctrl="ngModel"
+            placeholder="Repetí tu clave"
+            (ionBlur)="confirmTouched = true"
+            (ionInput)="checkMatch()"
+          ></ion-input>
+          <ion-button
+            fill="clear"
+            slot="end"
+            type="button"
+            (click)="copyPwdToConfirm()"
+            aria-label="Copiar clave"
+          >
+            <ion-icon name="clipboard-outline"></ion-icon>
+          </ion-button>
+          <ion-button
+            fill="clear"
+            slot="end"
+            type="button"
+            (click)="togglePwd2()"
+            aria-label="Mostrar/Ocultar repetida"
+          >
+            <ion-icon [name]="showPwd2 ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+          </ion-button>
+        </ion-item>
+        <ion-note color="danger" *ngIf="confirmTouched && !passwordsMatch">
+          Las claves no coinciden.
+        </ion-note>
+      </ng-container>
+
+      <!-- MODO ANÓNIMO -->
+      <ng-template #anonFields>
+        <!-- <div class="logo-anon">
+          <img src="assets/brand/app-icon.png" alt="Logo MenuYa" />
+        </div> -->
+        <ion-item class="field" [class.invalid]="nombreAnonCtrl.invalid && nombreAnonCtrl.touched">
+          <ion-label position="stacked">Nombre</ion-label>
+          <ion-input
+            required
+            [(ngModel)]="nombreAnon"
+            name="nombreAnon"
+            #nombreAnonCtrl="ngModel"
+            maxlength="60"
+            placeholder="Ej.: Juan"
+            (ionInput)="nombreAnon = nombreAnon.trimStart()"
+          ></ion-input>
+        </ion-item>
+        <ion-note color="danger" *ngIf="nombreAnonCtrl.touched && nombreAnonCtrl.invalid">
+          Ingresá tu nombre.
+        </ion-note>
+      </ng-template>
+
+      <!-- Foto -->
+      <ion-item class="field field--inline ion-margin-top" [class.invalid]="!fotoPreview && fotoTouched">
+        <div class="field-inline">
+          <span class="field-inline__label">Foto</span>
+          <ion-button size="small" (click)="tomarFoto()" type="button">
+            <ion-icon name="camera-outline" slot="start"></ion-icon>
+            Tomar foto
+          </ion-button>
+        </div>
+      </ion-item>
+
+      <div class="foto-preview" *ngIf="fotoPreview">
+        <img [src]="fotoPreview" alt="Vista previa foto" />
+        <ion-button fill="clear" color="medium" size="small" (click)="borrarFoto()">
+          <ion-icon name="trash-outline" slot="start"></ion-icon>
+          Quitar
+        </ion-button>
+      </div>
+      <ion-note color="danger" *ngIf="!fotoPreview && fotoTouched">
+        La foto es obligatoria (tomada desde la cámara).
+      </ion-note>
+
+      <ion-text color="danger" *ngIf="errorMsg" class="error" role="alert">
+        {{ errorMsg }}
+      </ion-text>
+
+      <div class="actions">
+        <ion-button
+          class="guardar"
+          type="submit"
+          expand="block"
+          [disabled]="
+            loading ||
+            !f.valid ||
+            !fotoPreview ||
+            (!anonMode && (!passwordsMatch || emailTaken))
+          "
+        >
+          <ion-spinner *ngIf="loading" name="lines-small" class="ion-margin-end"></ion-spinner>
+          {{ anonMode ? 'Entrar como anónimo' : 'Crear cuenta' }}
+        </ion-button>
+
+        <div class="alt" *ngIf="!anonMode">
+          <ion-text>¿Ya tenés cuenta?</ion-text>
+          <ion-button fill="clear" size="small" routerLink="/login">Iniciar sesión</ion-button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ion-content>

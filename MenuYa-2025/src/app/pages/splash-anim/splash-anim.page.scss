@@ -1,0 +1,171 @@
+@use "sass:math";
+
+/* =========================================================
+   Splash MenuYa — SCSS optimizado y compatible
+   ========================================================= */
+
+:host {
+  display: block;
+}
+
+ion-content.splash-bg {
+  /* Fondo oscuro con fallback */
+  --background: color-mix(in oklab, var(--menudya-primary, #E73F2D), black 84%);
+  background: #0f172a;
+  color: var(--ion-text-color, #ECECEC);
+}
+
+.wrap {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto 1fr;
+  align-items: center;
+  justify-items: center;
+  overflow: hidden;
+  padding: 32px;
+}
+
+/* Título superior */
+.name {
+  font-size: clamp(20px, 3.2vw, 28px);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #e2e8f0;
+  opacity: 0;
+  transform: translateY(-12px);
+  animation: slideDown .8s ease-out .2s forwards;
+}
+
+/* Marco del logo */
+.logo-frame {
+  position: relative;
+  width: min(48vh, 280px);
+  aspect-ratio: 1/1;
+  display: grid;
+  place-items: center;
+  clip-path: polygon(12% 0, 88% 0, 100% 18%, 100% 82%, 88% 100%, 12% 100%, 0 82%, 0 18%);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--menudya-accent, #FFCB2B), transparent 78%),
+      color-mix(in oklab, var(--ion-color-primary, #E73F2D), transparent 78%)
+    );
+  border: 1px solid rgba(148,163,184,.25);
+  box-shadow: 0 8px 22px rgba(0,0,0,.38), inset 0 0 0 1px rgba(255,255,255,.04);
+  backdrop-filter: blur(1.5px);
+
+  .logo {
+    width: 66%;
+    object-fit: contain;
+    filter: drop-shadow(0 6px 16px rgba(0,0,0,.4));
+    transform: scale(.86);
+    opacity: 0;
+    animation: popIn .9s cubic-bezier(.2,.9,.26,1.4) .35s forwards;
+  }
+
+  .glow {
+    position: absolute;
+    inset: 6%;
+    filter: blur(14px);
+    background:
+      radial-gradient(60% 60% at 50% 40%,
+        color-mix(in oklab, var(--ion-color-primary, #E73F2D), transparent 68%), transparent 60%),
+      radial-gradient(50% 50% at 60% 60%,
+        color-mix(in oklab, var(--menudya-accent, #FFCB2B), transparent 72%), transparent 60%);
+    opacity: 0;
+    animation: glowIn 1s ease-in-out .5s forwards, pulse 2.6s ease-in-out 1.6s infinite;
+  }
+}
+
+/* Footer */
+.division {
+  text-align: center;
+  padding: 12px;
+  line-height: 1.4;
+  color: #e2e8f0;
+  position: relative;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: riseUp .75s ease-out .6s forwards;
+
+  .nombres {
+    font-weight: 700;
+    font-size: clamp(16px, 2.6vw, 20px);
+    letter-spacing: .02em;
+    margin-bottom: 4px;
+    text-shadow: 0 0 10px color-mix(in oklab, var(--ion-color-primary, #E73F2D), transparent 76%);
+  }
+
+  .grupo {
+    font-size: clamp(13px, 2.2vw, 15px);
+    opacity: .9;
+    color: color-mix(in oklab, var(--menudya-accent, #FFCB2B), white 12%);
+  }
+
+  /* subrayado suave centrado */
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 10px);
+    width: 160px;
+    height: 6px;
+    transform: translateX(-50%) skewX(-14deg);
+    background: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--ion-color-primary, #E73F2D), transparent 62%),
+      color-mix(in oklab, var(--menudya-accent, #FFCB2B), transparent 62%)
+    );
+    border-radius: 3px;
+    filter: blur(.4px);
+  }
+}
+
+/* Partículas (se reduce la cantidad para bajar el budget) */
+.particles {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+
+  span {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 2px;
+    background: rgba(226,232,240,.32);
+    opacity: 0;
+    animation: float 5s ease-in-out infinite;
+
+    /* 12 en lugar de 18 para reducir bytes */
+    @for $i from 1 through 12 {
+      &:nth-child(#{$i}) {
+        left: math.random(100) * 1%;
+        top: math.random(100) * 1%;
+        animation-delay: (math.random(24) - 12) * .1s;
+        animation-duration: (40 + math.random(36)) * .05s;
+      }
+    }
+  }
+}
+
+/* ================= Animations ================= */
+@keyframes slideDown { to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { 60% { opacity:1; transform: scale(1.04); } 100% { opacity:1; transform: scale(1); } }
+@keyframes glowIn { to { opacity: 1; } }
+@keyframes riseUp { to { opacity: 1; transform: translateY(0); } }
+@keyframes pulse { 0%,100% { opacity:.65; } 50% { opacity:.9; } }
+@keyframes float {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: .7; }
+  50% { transform: translateY(-16px) translateX(8px); opacity: .9; }
+  90% { opacity: .6; }
+  100% { transform: translateY(0) translateX(0); opacity: 0; }
+}
+
+/* ================= Dark mode tweaks ================= */
+@media (prefers-color-scheme: dark) {
+  ion-content.splash-bg {
+    --background: color-mix(in oklab, var(--menudya-primary, #E73F2D), black 88%);
+  }
+}

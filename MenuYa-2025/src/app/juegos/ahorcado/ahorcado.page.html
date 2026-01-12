@@ -1,0 +1,44 @@
+<!-- // src/app/juegos/ahorcado/ahorcado.html -->
+
+
+<div class="ahorcado-container ion-text-center">
+  <div class="top-info">
+    <div class="vidas">Vidas: {{ intentos }}</div>
+    <div class="pista">Pista: {{ pista }}</div>
+  </div>
+<br>
+<br>
+  <h1 class="arcade-title">Ahorcado</h1>
+
+  <p class="palabra-oculta">{{ palabraMostrada }}</p>
+
+  <div class="letras">
+    <ion-button
+      *ngFor="let letra of abecedario"
+      (click)="elegirLetra(letra)"
+      [disabled]="letrasErradas.includes(letra) || palabraMostrada.includes(letra) || juegoTerminado"
+      size="small"
+      class="letra-btn">
+      {{ letra }}
+    </ion-button>
+  </div>
+
+  <pre class="munieco">
+<span *ngIf="intentos <= 5">   ┌─┐</span>
+<span *ngIf="intentos <= 4"> │ (•‿•)</span>
+<span *ngIf="intentos <= 3">   ║</span>
+<span *ngIf="intentos <= 2">   ╔═╬═╗</span>
+<span *ngIf="intentos <= 1">   ║</span>
+<span *ngIf="intentos <= 0">   ╱ ╲</span>
+<span *ngIf="intentos <= 6">   ╚═════════╝</span>
+  </pre>
+
+  <div *ngIf="juegoTerminado" class="mensaje">
+    <h2>{{ mensaje }}</h2>
+  </div>
+
+  <div class="buttons">
+    <ion-button fill="solid" color="warning" (click)="reiniciar()">Reiniciar</ion-button>
+    <ion-button fill="outline" (click)="volverHome()">Volver al inicio</ion-button>
+  </div>
+</div>

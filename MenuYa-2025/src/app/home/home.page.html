@@ -1,0 +1,830 @@
+<ion-content [fullscreen]="false" class="home safe-top">
+
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)" aria-label="Actualizar">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <section class="home-header" *ngIf="!isLoading">
+    <div class="home-header__info">
+      <div class="home-header__icon" aria-hidden="true">
+        <ion-icon [name]="roleIconName"></ion-icon>
+      </div>
+      <p class="home-header__role">
+        {{ roleLabel }}
+      </p>
+    </div>
+    <ion-button fill="clear" class="home-header__logout" aria-label="Cerrar sesión" (click)="logout()"
+      *ngIf="email || isAnon">
+      <ion-icon name="log-out-outline"></ion-icon>
+    </ion-button>
+  </section>
+
+  <ion-grid fixed class="grid">
+    <ion-row>
+      <ion-col size="12" sizeMd="8" offsetMd="2">
+        <!-- Card principal -->
+        <ion-card *ngIf="!isRoleMaitre()" class="welcome-card" [class.fade-in]="!isLoading"
+          [class.role-hero-card]="!!email">
+          <ion-card-header>
+            <!-- Avatar según estado -->
+            <ng-container *ngIf="email; else anonOrLock">
+              <div class="avatar-wrap hero-avatar">
+                <img src="assets/brand/app-icon.png" alt="Logo MenuYa" />
+              </div>
+            </ng-container>
+            <ng-template #anonOrLock>
+              <div class="avatar-wrap">
+                <ion-icon [name]="isAnon ? 'eye-off-outline' : 'lock-closed-outline'" aria-hidden="true"></ion-icon>
+              </div>
+            </ng-template>
+
+            <ion-card-title *ngIf="email && role === 'dueno'">Bienvenido/a a MenuYa. <br> ¡Gestioná tu
+              restaurant!</ion-card-title>
+            <ion-card-title *ngIf="email && role === 'cocinero'">Bienvenido/a a MenuYa. <br> ¡Gestioná tu
+              cocina!</ion-card-title>
+            <ion-card-title *ngIf="email && role === 'bartender'">Bienvenido/a a MenuYa. <br> ¡Gestioná tu
+              bar!</ion-card-title>
+            <ion-card-title
+              *ngIf="email && !isRoleDueno() && !isRoleMaitre() && role !== 'cocinero' && role !== 'bartender'">Bienvenido/a
+              a MenuYa. <br> ¡Te estábamos
+              esperando!</ion-card-title>
+
+
+            <ion-card-title *ngIf="!email && isAnon">Bienvenido/a a MenuYa. <br> ¡Te estábamos
+              esperando!</ion-card-title>
+            <ion-card-title *ngIf="!email && !isAnon">Empezá iniciando sesión</ion-card-title>
+
+            <!-- <ion-card-subtitle *ngIf="email">Accedé a tu área</ion-card-subtitle> -->
+            <ion-card-subtitle *ngIf="!email && isAnon">Registrate para acceder a más beneficios</ion-card-subtitle>
+            <ion-card-subtitle *ngIf="!email && !isAnon">Tu cuenta desbloquea funciones</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <!-- Bienvenida para cliente (registrado) -->
+            <div *ngIf="!isLoading && email && role === 'cliente'">
+              <ion-text color="medium">
+              </ion-text>
+            </div>
+
+            <!-- === MENSAJE + LINK FACTURA (SOLO ANÓNIMO, SOLO CUANDO ESTÁ LISTA) === -->
+            <ion-card *ngIf="!isLoading && isAnon && mostrarFacturaAnonima" class="ion-margin-bottom">
+              <ion-card-header>
+                <ion-card-title>📄 Tu factura está disponible</ion-card-title>
+                <ion-card-subtitle>Gracias por tu visita{{ anonName ? (', ' + anonName) : '' }}</ion-card-subtitle>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-item lines="none">
+                  <ion-icon name="document-text-outline" slot="start"></ion-icon>
+                  <ion-label>
+                    Podés <strong>descargar la factura en PDF</strong> desde el botón de abajo.
+                  </ion-label>
+                </ion-item>
+
+                <ion-button expand="block" color="primary" [href]="anonFacturaLink" target="_blank" rel="noopener"
+                  [attr.download]="anonFacturaNombre || true">
+                  <ion-icon slot="start" name="download-outline"></ion-icon>
+                  Descargar factura
+                </ion-button>
+
+                <ion-note color="medium" class="ion-margin-top" *ngIf="anonFacturaNombre">
+                  Archivo: {{ anonFacturaNombre }}
+                </ion-note>
+              </ion-card-content>
+            </ion-card>
+            <!-- === FIN MENSAJE + LINK FACTURA === -->
+
+            <!-- Tabs pedidos: local / domicilio -->
+            <ng-container
+              *ngIf="!isLoading && (role === 'cliente' || role === 'anonimo' || (!role && (email || isAnon)))">
+              <ion-segment [(ngModel)]="homePedidoTab" mode="md" class="home-pedidos-tabs">
+                <ion-segment-button value="local">
+                  <ion-label>En el local</ion-label>
+                </ion-segment-button>
+                <ion-segment-button value="domicilio" *ngIf="role === 'cliente'">
+                  <ion-label>A domicilio</ion-label>
+                </ion-segment-button>
+              </ion-segment>
+            </ng-container>
+
+            <ion-item lines="full" class="section-sep section-sep--delivery"
+              *ngIf="!isLoading && email && role === 'cliente' && homePedidoTab === 'domicilio'">
+              <ion-icon slot="start" name="home-outline" aria-hidden="true"></ion-icon>
+              <ion-label>
+                <h1>PEDIDOS A DOMICILIO</h1>
+              </ion-label>
+            </ion-item>
+
+            <!-- CTA Pedir comida a domicilio (solo cliente registrado) -->
+            <div class="actions" *ngIf="!isLoading && email && role === 'cliente' && homePedidoTab === 'domicilio' &&
+                      (!pedidoDelivery || pedidoDeliveryRecibido || pedidoDeliveryCancelado)">
+              <ion-button expand="block" color="primary" (click)="irAPedidoDomicilio()">
+                <ion-icon slot="start" name="navigate-outline"></ion-icon>
+                Pedir comida
+              </ion-button>
+
+            </div>
+                          <ion-card *ngIf="!pedidoDeliveryPagado">
+
+            <ion-button expand="block" fill="outline"
+              *ngIf="!isLoading && email && role === 'cliente' && homePedidoTab === 'domicilio' && pedidoDelivery && !pedidoDeliveryCancelado"
+              (click)="goToJuegos()">
+              <ion-icon slot="start" name="game-controller-outline"></ion-icon>
+              Juegos
+            </ion-button>
+            </ion-card>
+
+            <!-- Estado del pedido DELIVERY -->
+            <!-- Estado del pedido DELIVERY -->
+            <ion-card *ngIf="
+    !isLoading &&
+    email &&
+    role === 'cliente' &&
+    pedidoDelivery &&
+    !pedidoDeliveryCancelado &&
+    homePedidoTab === 'domicilio' &&
+    !pedidoDeliveryPagado
+  " class="delivery-status">
+
+
+              <ion-card-header>
+                <ion-card-title class="delivery-title">
+                  <ion-icon name="bicycle-outline"></ion-icon>
+                  <span>Estado de tu pedido</span>
+                </ion-card-title>
+                <ion-card-subtitle class="delivery-sub">
+                </ion-card-subtitle>
+              </ion-card-header>
+
+              <ion-card-content>
+                <div class="status-row">
+                  <div class="status-left">
+                    <div class="eta"
+                      *ngIf="(pedidoDelivery.tiempo_elaboracion || 0) > 0 && pedidoDelivery.estado !== 'cancelado'">
+                      <ion-icon name="time-outline"></ion-icon>
+                    </div>
+
+                    <ion-badge [color]="estadoBadgeColor(pedidoDelivery.estado || null)" class="estado-pill">
+                      {{ normalizarEstadoPedido(pedidoDelivery!) }}
+                    </ion-badge>
+                  </div>
+<!-- 
+                  <ion-button fill="clear" size="small" (click)="refrescarEstadoPedido()">
+                    <ion-icon slot="start" name="refresh-outline"></ion-icon>
+                    Actualizar
+                  </ion-button> -->
+                </div>
+
+                <!-- Chips de sectores -->
+
+                <div class="status-chips" *ngIf="!pedidoDeliveryPendiente && !pedidoDeliveryRecibido && !pedidoDeliveryEntregado && !pedidoDeliveryListo">
+                  <ion-chip [color]="pedidoDelivery.cocina_listo ? 'success' : 'medium'">
+                    <ion-icon name="restaurant-outline"></ion-icon>
+                    <ion-label>
+                      Cocina: {{ pedidoDelivery.cocina_listo ? 'Listo' : 'En preparación' }}
+                    </ion-label>
+                  </ion-chip>
+                  <ion-chip [color]="pedidoDelivery.cocteleria_listo ? 'success' : 'medium'">
+                    <ion-icon name="wine-outline"></ion-icon>
+                    <ion-label>
+                      Bar: {{ pedidoDelivery.cocteleria_listo ? 'Listo' : 'En preparación' }}
+                    </ion-label>
+                  </ion-chip>
+                </div>
+                <!-- Pedir encuesta -->
+                <!-- <ion-button
+  expand="block"
+  color="warning"
+  *ngIf="!isLoading && email && role === 'cliente' && esEstadoPostEntregaDelivery(pedidoDelivery?.estado)"
+  (click)="irAEncuestasDelivery()">
+  <ion-icon slot="start" name="clipboard-outline"></ion-icon>
+  Responder encuesta
+</ion-button> -->
+
+
+                <!-- Gracias por tu pedido (cliente delivery) -->
+                <ion-card class="delivery-thanks-card"
+                  *ngIf="!isLoading && role === 'cliente' && pedidoDelivery && esEstadoPostEntregaDelivery(pedidoDelivery.estado) && homePedidoTab === 'domicilio'">
+
+                  <ion-card-header>
+                    <ion-card-title>¡Gracias por tu pedido!</ion-card-title>
+                    <ion-card-subtitle>Completá estos pasos finales</ion-card-subtitle>
+                  </ion-card-header>
+
+                  <ion-card-content>
+                    <ion-button expand="block" color="primary" (click)="irAEncuestasDelivery()">
+                      <ion-icon slot="start" name="stats-chart-outline"></ion-icon>
+                      Completar encuesta
+                    </ion-button>
+
+                    <ion-button expand="block" color="warning" (click)="goToCuentaDelivery()">
+                      <ion-icon slot="start" name="receipt-outline"></ion-icon>
+                      Ver detalle / pedir cuenta
+                    </ion-button>
+
+                  </ion-card-content>
+                </ion-card>
+
+
+
+                <!-- Confirmar recepción -->
+                <ion-button *ngIf="pedidoDelivery.estado === 'entregado'" expand="block" color="primary"
+                  (click)="confirmarRecepcion(pedidoDelivery)">
+                  <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                  Confirmar recepción
+                </ion-button>
+
+                <ion-button expand="block" color="secondary" fill="outline"
+                  *ngIf="puedeChatearConDelivery(pedidoDelivery)" (click)="abrirChatDeliveryCliente()">
+                  <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
+                  Chatear con el repartidor
+                </ion-button>
+              </ion-card-content>
+            </ion-card>
+            <!-- FIN NUEVO DELIVERY -->
+
+            <!-- Acciones por rol cocina/bar -->
+            <section class="actions-card role-actions"
+              *ngIf="!isLoading && email && (role === 'cocinero' || role === 'bartender')">
+              <div class="actions actions-card__grid">
+                <ion-button expand="block" color="primary" *ngIf="role === 'cocinero'" (click)="goToAgregarComida()">
+                  <ion-icon slot="start" name="fast-food-outline"></ion-icon>
+                  Agregar plato
+                </ion-button>
+
+                <ion-button expand="block" color="primary" *ngIf="role === 'bartender'" (click)="goToAgregarBebida()">
+                  <ion-icon slot="start" name="beer-outline"></ion-icon>
+                  Agregar bebida
+                </ion-button>
+
+                <ion-button expand="block" color="primary" *ngIf="role === 'cocinero' || role === 'bartender'"
+                  (click)="goToCarta()">
+                  <ion-icon slot="start" name="restaurant-outline"></ion-icon>
+                  Carta
+                </ion-button>
+
+                <ion-button expand="block" color="primary" *ngIf="role === 'cocinero' || role === 'bartender'"
+                  (click)="goToPedidosPendientes()">
+                  <ion-icon slot="start" name="restaurant-outline"></ion-icon>
+                  Ver pedidos pendientes
+                </ion-button>
+              </div>
+            </section>
+
+            <!-- Accesos rápidos dueño/supervisor -->
+            <section class="actions-card boss-quick-actions"
+              *ngIf="!isLoading && email && (role === 'dueno' || role === 'supervisor')"
+              aria-label="Accesos rápidos del dueño">
+              <div class="actions-card__grid">
+                <ion-button color="primary" (click)="goToAgregarMesa()">
+                  <ion-icon slot="start" name="restaurant-outline" aria-hidden="true"></ion-icon>
+                  Agregar mesa
+                </ion-button>
+
+                <ion-button color="primary" (click)="goToAltaEmpleado()">
+                  <ion-icon slot="start" name="person-add-outline"></ion-icon>
+                  Agregar empleado
+                </ion-button>
+
+                <ion-button color="primary" (click)="goToGestionReservas()">
+                  <ion-icon slot="start" name="calendar-outline"></ion-icon>
+                  Gestionar reservas
+                </ion-button>
+
+                <ion-button color="primary" (click)="goToGestionClientes()">
+                  <ion-icon slot="start" name="people-circle-outline"></ion-icon>
+                  Gestionar clientes
+                </ion-button>
+
+                <ion-button color="primary" (click)="goToPedidosDeliveryBoss()">
+                  <ion-icon slot="start" name="bicycle-outline"></ion-icon>
+                  Pedidos a domicilio
+                </ion-button>
+              </div>
+            </section>
+
+            <!-- SEPARADOR: EN EL LOCAL -->
+            <ion-item lines="full" class="section-sep section-sep--local"
+              *ngIf="!isLoading && (role === 'cliente' || role === 'anonimo' || (!role && (email || isAnon))) && homePedidoTab === 'local'">
+              <ion-icon slot="start" name="restaurant-outline" aria-hidden="true"></ion-icon>
+              <ion-label>
+                <h1>SERVICIO DE MESA</h1>
+              </ion-label>
+            </ion-item>
+
+            <!-- Flujo CLIENTE (local) -->
+            <div class="actions"
+              *ngIf="!isLoading && (role === 'cliente' || role === 'anonimo' || (!role && (email || isAnon))) && homePedidoTab === 'local'">
+              <!-- A) SIN MESA -->
+              <ng-container *ngIf="!tieneMesaAsignada(); else conMesa">
+                <ion-item lines="none">
+                  <ion-icon slot="start"
+                    [name]="mesaService.enEsperaActual === true ? 'hourglass-outline' : 'time-outline'">
+                  </ion-icon>
+                  <ion-label>
+                    <p *ngIf="mesaService.enEsperaActual !== true">
+                      Escanea el QR de ingreso para ingresar a la lista de espera o reserva una mesa.
+                    </p>
+                    <p *ngIf="mesaService.enEsperaActual === true">
+                      Ya estás esperando a ser asignado a una mesa por el maître.
+                    </p>
+                  </ion-label>
+                </ion-item>
+
+                <ion-button expand="block" (click)="simularQrIngreso()"
+                  [disabled]="mesaService.enEsperaActual === true">
+                  <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+                  {{ mesaService.enEsperaActual === true ? 'Ya estás en espera' : 'Ingresar en la lista de espera' }}
+                </ion-button>
+
+                <ng-container *ngIf="email && role === 'cliente'">
+                  <ion-button expand="block" (click)="goToReserva()" [disabled]="mesaService.enEsperaActual === true">
+                    <ion-icon slot="start" name="calendar-outline"></ion-icon>
+                    Reservar mesa
+                  </ion-button>
+                </ng-container>
+
+                <ion-button expand="block" fill="outline" *ngIf="mesaService.enEsperaActual === true"
+                  (click)="goToEncuestas()">
+                  <ion-icon slot="start" name="stats-chart-outline"></ion-icon>
+                  Ver encuestas
+                </ion-button>
+              </ng-container>
+
+              <!-- B) CON MESA -->
+              <ng-template #conMesa>
+                <ion-item lines="none">
+                  <ion-icon slot="start" name="restaurant-outline"></ion-icon>
+                  <ion-label>
+                    <strong>Mesa asignada: {{ mesaService.selectedMesaNumero }}</strong>
+                    <p *ngIf="mesaService.enEsperaActual !== false">Escanee el código QR de su mesa para habilitar menú,
+                      chat y juegos.</p>
+                    <p *ngIf="mesaService.enEsperaActual === false">¡Ya podés acceder al menú, chat y juegos!</p>
+                    <p *ngIf="pedidoPendiente === true">Tienes un pedido pendiente. El mozo te lo traerá pronto.</p>
+                  </ion-label>
+                </ion-item>
+
+                <ion-item *ngIf="pedidoPendiente === true" lines="none">
+                  <ion-icon slot="start" name="restaurant-outline"></ion-icon>
+                  <ion-label>
+                    <strong>Pedido pendiente en progreso.</strong>
+                    <p *ngIf="pedidoPendiente === true">Espera la confirmación del mozo.</p>
+                  </ion-label>
+                </ion-item>
+
+                <ion-button expand="block" color="success" (click)="scanQrMesa()"
+                  *ngIf="mesaService.enEsperaActual !== false">
+                  <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+                  Escanear QR de mesa
+                </ion-button>
+
+                <ion-button expand="block" fill="outline" (click)="goToEncuestas()">
+                  <ion-icon slot="start" name="stats-chart-outline"></ion-icon>
+                  Ver encuestas
+                </ion-button>
+
+                <ion-button expand="block"
+                  *ngIf="mesaService.enEsperaActual === false && pedidoRecibido !== true && pedidoCancelado !== true && pedidoPendiente !== true && pedidoEnPreparacion !== true && pedidoListo !== true && pedidoEntregado !== true"
+                  (click)="goToMenu()">
+                  <ion-icon slot="start" name="fast-food-outline"></ion-icon>
+                  Ver menú
+                </ion-button>
+
+                <ion-button expand="block"
+                  *ngIf="qrMesaConPedidoEnCurso === true && mesaService.enEsperaActual === false && pedidoCancelado === true && pedidoPendiente !== true"
+                  (click)="goToMenu()">
+                  <ion-icon slot="start" name="fast-food-outline"></ion-icon>
+                  Modificar pedido
+                </ion-button>
+
+                <ion-button expand="block"
+                  *ngIf="qrMesaConPedidoEnCurso === true && mesaService.enEsperaActual === false"
+                  (click)="goToConsultaMozo()">
+                  <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
+                  Consulta al mozo
+                </ion-button>
+
+                <ion-button expand="block" color="warning"
+                  *ngIf="qrMesaConPedidoEnCurso === true && mesaService.enEsperaActual === false && puedePedirCuenta && pedidoRecibido === true"
+                  (click)="goToCuenta()">
+                  <ion-icon slot="start" name="receipt-outline"></ion-icon>
+                  Pedir cuenta
+                </ion-button>
+
+                <ion-button expand="block" fill="outline"
+                  *ngIf="qrMesaConPedidoEnCurso === true && mesaService.enEsperaActual === false && pedidoRecibido !== true"
+                  (click)="goToJuegos()">
+                  <ion-icon slot="start" name="game-controller-outline"></ion-icon>
+                  Juegos
+                </ion-button>
+
+                <ion-button expand="block" fill="outline"
+                  *ngIf="qrMesaConPedidoEnCurso === true && mesaService.enEsperaActual === false && pedidoRecibido === true"
+                  (click)="goToJuegos()">
+                  <ion-icon slot="start" name="game-controller-outline"></ion-icon>
+                  Juega por descuentos
+                </ion-button>
+
+                <!-- Wrapper para botón + texto -->
+                <div class="estado-pedido-wrapper"
+                  *ngIf="this.qrMesaConPedidoEnCurso === false && ((mesaService.enEsperaActual === false && pedidosRecibidos && pedidoRecibido === true) ||
+                        (pedidosRecibidos && (pedidoPendiente === true || pedidoEnPreparacion === true || pedidoListo === true || pedidoEntregado === true)))">
+
+                  <div class="estado-pedido-card">
+                    <ion-button expand="block" (click)="scanQrEstadoPedido()" class="btn-scan-qr_new">
+                      <img src="assets/qr.svg" alt="Ver estado de tu pedido" class="qr-icon" />
+                    </ion-button>
+
+                    <p class="estado-pedido-text">
+                      <strong>ESTADO DE TU PEDIDO</strong>
+                    </p>
+                  </div>
+                </div>
+
+                <ion-card *ngIf="pedidosEntregados.length > 0 && qrMesaConPedidoEnCurso === true">
+                  <ion-card-header>
+                    <ion-card-title>📦 Confirmá que recibiste tu pedido</ion-card-title>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <ion-list>
+                      <ion-item *ngFor="let p of pedidosEntregados">
+                        <ion-label>
+                          <h2>{{ displayDestino(p) }}</h2>
+                          <p>Total: {{ p.monto_total | currency }}</p>
+                        </ion-label>
+                        <ion-button color="primary" (click)="confirmarRecepcion(p)">Confirmar</ion-button>
+                      </ion-item>
+                    </ion-list>
+                  </ion-card-content>
+                </ion-card>
+
+                <!-- Estado del pedido actual (local) -->
+                <ion-card class="delivery-status local-status"
+                  *ngIf="qrMesaConPedidoEnCurso === true && ((mesaService.enEsperaActual === false && pedidosRecibidos && pedidoRecibido === true) ||
+                          (pedidosRecibidos && (pedidoPendiente === true || pedidoEnPreparacion === true || pedidoListo === true || pedidoEntregado === true)))">
+                  <ion-card-header>
+                    <ion-card-title class="delivery-title">
+                      <img src="assets/estado-pedido.svg" alt="Estado del pedido" class="delivery-title__icon" />
+                      <span>Estado de tu pedido</span>
+                    </ion-card-title>
+                    <ion-card-subtitle class="delivery-sub">
+                      <!-- <ion-icon name="pin-outline"></ion-icon>
+                      <span class="addr">Mesa {{ pedidosRecibidos.numero_mesa }}</span> -->
+                    </ion-card-subtitle>
+                  </ion-card-header>
+                  <ion-card-content>
+                    <div class="status-row">
+                      <div class="status-left">
+                        <ion-badge class="estado-pill" [color]="estadoBadgeColor(pedidosRecibidos.estado || null)">
+                          {{ normalizarEstadoPedido(pedidosRecibidos!) }}
+                        </ion-badge>
+                      </div>
+
+                      <!-- <ion-button fill="clear" size="small" (click)="refrescarEstadoPedido()">
+                        <ion-icon slot="start" name="refresh-outline"></ion-icon>
+                        Actualizar
+                      </ion-button> -->
+                    </div>
+
+                    <ion-progress-bar class="local-progress" [value]="estadoProgress(pedidosRecibidos.estado || null)"
+                      [color]="estadoBadgeColor(pedidosRecibidos.estado || null)">
+                    </ion-progress-bar>
+
+                    <!-- <div class="status-chips" *ngIf="pedidoPendiente === false">
+                      <ion-chip [color]="pedidosRecibidos.cocina_listo ? 'success' : 'medium'">
+                        <ion-icon name="restaurant-outline"></ion-icon>
+                        <ion-label>
+                          Cocina: {{ pedidosRecibidos.cocina_listo ? 'Listo' : 'En preparación' }}
+                        </ion-label>
+                      </ion-chip>
+                      <ion-chip [color]="pedidosRecibidos.cocteleria_listo ? 'success' : 'medium'">
+                        <ion-icon name="wine-outline"></ion-icon>
+                        <ion-label>
+                          Bar: {{ pedidosRecibidos.cocteleria_listo ? 'Listo' : 'En preparación' }}
+                        </ion-label>
+                      </ion-chip>
+                    </div> -->
+                  </ion-card-content>
+                </ion-card>
+              </ng-template>
+            </div>
+
+            <!-- 🔹 PANEL DELIVERY integrado al módulo de bienvenida -->
+            <div *ngIf="!isLoading && role === 'delivery'">
+
+              <!-- 🔸 Switch visual tipo “SALÓN / DOMICILIO” pero para el repartidor -->
+              <div class="delivery-tabs">
+                <button type="button" class="delivery-tabs__btn"
+                  [class.delivery-tabs__btn--active]="deliveryTab === 'asignados'" (click)="deliveryTab = 'asignados'">
+                  PEDIDOS ASIGNADOS
+                </button>
+
+                <button type="button" class="delivery-tabs__btn"
+                  [class.delivery-tabs__btn--active]="deliveryTab === 'pagos'" (click)="deliveryTab = 'pagos'">
+                  PAGOS PENDIENTES
+                </button>
+              </div>
+
+              <!-- 🟦 Pedidos asignados -->
+              <ion-card class="mozo-panel" *ngIf="deliveryTab === 'asignados'">
+                <ion-card-header>
+                  <div class="mozo-panel__list-header">
+                    <ion-icon name="bicycle-outline" aria-hidden="true"></ion-icon>
+                    <div>
+                      <ion-card-title>Pedidos asignados</ion-card-title>
+                      <ion-card-subtitle>Gestioná tus entregas</ion-card-subtitle>
+                    </div>
+                  </div>
+                </ion-card-header>
+
+                <ion-card-content>
+                  <ion-list *ngIf="pedidosDeliveryListos.length; else sinPedidosDelivery">
+                    <ion-item *ngFor="let pedido of pedidosDeliveryListos" lines="none"
+                      class="delivery-pay-item ion-text-wrap">
+                      <ion-label class="delivery-pay-card">
+
+                        <!-- Cabecera: P E D I D O #XXX -->
+                        <div class="delivery-pay-top">
+                          <h2>Pedido #{{ pedido.id }}</h2>
+                        </div>
+
+                        <!-- Dirección -->
+                        <div class="delivery-pay-meta">
+                          <span>
+                            Dirección:
+                            <small>
+                              {{ pedido.domicilio_direccion
+                              ? shortDireccion(pedido.domicilio_direccion, 90)
+                              : 'Sin datos' }}
+                            </small>
+                          </span>
+                        </div>
+
+                        <!-- Acciones -->
+                        <div class="delivery-pay-actions">
+                          <ion-button size="small" color="primary" fill="outline" (click)="mostrarRutaPedido(pedido)">
+                            <ion-icon slot="start" name="map-outline"></ion-icon>
+                            VER RUTA
+                          </ion-button>
+
+                          <ion-button size="small" color="secondary" *ngIf="puedeChatearConDelivery(pedido)"
+                            (click)="abrirChatDeliveryRepartidor(pedido)">
+                            <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
+                            CHATEAR
+                          </ion-button>
+
+                          <!-- 🔸 Paso 1: RECOGER PEDIDO (sólo visual) -->
+                          <ion-button class="btn-recoger-pedido" fill="solid" size="small"
+                            (click)="marcarPedidoRecogido(pedido)"
+                            *ngIf="pedido.estado === 'listo' && !pedidoRecogido(pedido.id)">
+                            <ion-icon slot="start" name="bicycle-outline"></ion-icon>
+                            RECOGER PEDIDO
+                          </ion-button>
+
+                          <!-- 🔸 Paso 2: ENTREGAR (misma lógica actual) -->
+                          <ion-button size="small" color="success"
+                            *ngIf="pedido.estado === 'listo' && pedidoRecogido(pedido.id)"
+                            (click)="entregarPedidoDelivery(pedido)">
+                            <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                            ENTREGAR
+                          </ion-button>
+                        </div>
+
+                      </ion-label>
+                    </ion-item>
+                  </ion-list>
+
+                  <!-- Mapa de ruta -->
+                  <div class="delivery-route-card" *ngIf="pedidoRutaSeleccionado">
+                    <div class="delivery-route-header">
+                      <div>
+                        <h3>Ruta hacia el cliente</h3>
+                      </div>
+                      <ion-icon name="navigate-outline"></ion-icon>
+                    </div>
+
+                    <div #mapaRutaEntrega class="mapa-delivery"></div>
+                  </div>
+
+                  <ng-template #sinPedidosDelivery>
+                    <div class="empty-hint">
+                      <ion-icon name="bicycle-outline"></ion-icon>
+                      <p>Por ahora no tenés pedidos a domicilio en curso.</p>
+                    </div>
+                  </ng-template>
+
+                </ion-card-content>
+              </ion-card>
+
+              <!-- 🟩 Pagos pendientes delivery -->
+              <ion-card class="mozo-panel" *ngIf="deliveryTab === 'pagos'">
+                <ion-card-header>
+                  <div class="mozo-panel__list-header">
+                    <ion-icon name="cash-outline" aria-hidden="true"></ion-icon>
+                    <div>
+                      <ion-card-title>Pagos pendientes</ion-card-title>
+                      <ion-card-subtitle>Confirmá tus cobros</ion-card-subtitle>
+                    </div>
+                  </div>
+                </ion-card-header>
+
+                <ion-card-content>
+                  <ng-container *ngIf="!isLoadingCuentasDelivery; else skelCuentasDelivery">
+                    <ion-list *ngIf="cuentasDeliveryPendientes.length; else sinCuentasDelivery">
+                      <ion-item *ngFor="let c of cuentasDeliveryPendientes" lines="none"
+                        class="delivery-pay-item ion-text-wrap">
+                        <ion-label class="delivery-pay-card">
+                          <div class="delivery-pay-top">
+                            <h2>Pedido #{{ c.pedidoId }}</h2>
+                          </div>
+
+                          <div class="delivery-pay-meta">
+                            <span>
+                              Dirección:
+                              <small>
+                                {{ c.domicilio_direccion
+                                ? shortDireccion(c.domicilio_direccion, 90)
+                                : 'Sin datos' }}
+                              </small>
+                            </span>
+                            <span *ngIf="c.total != null" class="delivery-pay-total">
+                              Total a cobrar
+                              <small>{{ c.total | currency }}</small>
+                            </span>
+                          </div>
+
+                          <div class="delivery-pay-actions">
+                            <ion-button color="success" (click)="confirmarPagoDelivery(c)">
+                              <ion-icon slot="start" name="cash-outline"></ion-icon>
+                              Confirmar pago
+                            </ion-button>
+                          </div>
+                        </ion-label>
+                      </ion-item>
+                    </ion-list>
+
+                    <ng-template #sinCuentasDelivery>
+                      <div class="empty-hint">
+                        <ion-icon name="cash-outline"></ion-icon>
+                        <p>No hay pagos pendientes por confirmar.</p>
+                      </div>
+                    </ng-template>
+                  </ng-container>
+
+                  <ng-template #skelCuentasDelivery>
+                    <ion-skeleton-text animated style="height:18px;width:92%"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="height:18px;width:88%"></ion-skeleton-text>
+                    <ion-skeleton-text animated style="height:18px;width:84%"></ion-skeleton-text>
+                  </ng-template>
+                </ion-card-content>
+              </ion-card>
+            </div>
+
+            <!-- PANEL MOZO (queda igual) -->
+            <div class="mozo-panel" *ngIf="role === 'mozo'">
+              <div class="mozo-panel__actions">
+                <ion-button expand="block" (click)="abrirChat()">
+                  <ion-icon slot="start" name="chatbubbles-outline"></ion-icon>
+                  Chat
+                </ion-button>
+                <ion-button expand="block" (click)="estadoMesas()">
+                  <ion-icon slot="start" name="list-outline"></ion-icon>
+                  Ver estados de las mesas
+                </ion-button>
+              </div>
+
+              <ion-card class="mozo-panel__list">
+                <ion-card-header>
+                  <div class="mozo-panel__list-header">
+                    <ion-icon name="briefcase-outline" aria-hidden="true"></ion-icon>
+                    <div>
+                      <ion-card-title>Pedidos listos para entregar</ion-card-title>
+                      <ion-card-subtitle>Confirma la entrega al cliente o mesa asignada</ion-card-subtitle>
+                    </div>
+                  </div>
+                </ion-card-header>
+                <ion-card-content>
+                  <ion-list *ngIf="pedidos.length > 0; else noPedidos">
+                    <ion-item *ngFor="let p of pedidos" class="mozo-panel__item">
+                      <ion-label>
+                        <h2>{{ displayDestino(p) }}</h2>
+                        <p>Fecha: {{ p.created_at | date:'short' }}</p>
+                        <p *ngIf="isDeliveryPedido(p)">Importe: {{ p.monto_total | currency }}</p>
+                      </ion-label>
+                      <ion-button color="success" fill="outline" (click)="entregarPedido(p)">
+                        <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+                        Entregar
+                      </ion-button>
+                    </ion-item>
+                  </ion-list>
+                  <ng-template #noPedidos>
+                    <ion-text color="medium">No hay pedidos listos aun.</ion-text>
+                  </ng-template>
+                </ion-card-content>
+              </ion-card>
+            </div>
+
+            <!-- CTA login (sin sesión y sin anónimo) -->
+            <ng-template [ngIf]="!isLoading && !email && !isAnon">
+              <ion-button expand="block" shape="round" color="primary" routerLink="/login"
+                aria-label="Ir a iniciar sesión">
+                <ion-icon slot="start" name="log-in-outline"></ion-icon>
+                Iniciar sesión
+              </ion-button>
+            </ng-template>
+          </ion-card-content>
+        </ion-card>
+
+        <!-- ================== BLOQUE MAÎTRE: LISTA DE ESPERA / MESAS ================== -->
+        <ion-card *ngIf="!isLoading && email && role === 'maitre'" class="maitre-panel">
+          <ion-card-header>
+            <div class="avatar-wrap">
+              <ion-icon name="people-circle-outline" aria-hidden="true"></ion-icon>
+            </div>
+            <ion-card-title>Gestión de clientes en espera</ion-card-title>
+            <ion-card-subtitle>Seleccioná un cliente y una mesa para asignar</ion-card-subtitle>
+          </ion-card-header>
+
+          <ion-card-content>
+            <ion-grid class="maitre-panel__grid">
+              <ion-row>
+
+                <!-- SELECT CLIENTE -->
+                <ion-col size="12" sizeMd="6" class="maitre-panel__col">
+                  <h2>Cliente en lista de espera</h2>
+
+                  <ng-container
+                    *ngIf="mesaService.clientesEnEspera && mesaService.clientesEnEspera.length > 0; else sinEsperaMaitre">
+                    <ion-item lines="full">
+                      <ion-label position="stacked">Cliente</ion-label>
+                      <ion-select placeholder="Seleccioná un cliente" interface="popover"
+                        [(ngModel)]="mesaService.selectedClienteId" name="cliente-espera">
+                        <ion-select-option *ngFor="let c of mesaService.clientesEnEspera" [value]="c.id">
+                          {{ c.apellidos }}, {{ c.nombres }}
+                          <span *ngIf="c.created_at">
+                            – {{ c.created_at | date:'shortTime' }}
+                          </span>
+                        </ion-select-option>
+                      </ion-select>
+                    </ion-item>
+                  </ng-container>
+
+                  <ng-template #sinEsperaMaitre>
+                    <ion-text color="medium">No hay clientes en la lista de espera.</ion-text>
+                  </ng-template>
+                </ion-col>
+
+                <!-- SELECT MESA -->
+                <ion-col size="12" sizeMd="6" class="maitre-panel__col">
+                  <h2>Mesas disponibles</h2>
+
+                  <ng-container
+                    *ngIf="mesaService.mesasDisponibles && mesaService.mesasDisponibles.length > 0; else sinMesasMaitre">
+                    <ion-item lines="full">
+                      <ion-select placeholder="Seleccioná una mesa" interface="popover"
+                        [(ngModel)]="mesaService.selectedMesaNumero" name="mesa-disponible">
+                        <ng-container *ngFor="let m of mesaService.mesasDisponibles">
+                          <ion-select-option *ngIf="m.numero_mesa !== 9999" [value]="m.numero_mesa">
+                            Mesa {{ m.numero_mesa }}
+                            <span *ngIf="m.capacidad || m.cantidad_comensales">
+                              – Cap: {{ m.capacidad || m.cantidad_comensales }}
+                            </span>
+                            <span *ngIf="m.tipo">
+                              – {{ m.tipo }}
+                            </span>
+                          </ion-select-option>
+                        </ng-container>
+                      </ion-select>
+                    </ion-item>
+                  </ng-container>
+
+                  <ng-template #sinMesasMaitre>
+                    <ion-text color="medium">No hay mesas disponibles para asignar.</ion-text>
+                  </ng-template>
+                </ion-col>
+
+              </ion-row>
+            </ion-grid>
+
+            <ion-button expand="block" color="primary" (click)="asignarMesaHome()">
+              <ion-icon slot="start" name="checkmark-done-outline"></ion-icon>
+              Asignar mesa seleccionada
+            </ion-button>
+
+            <!-- <ion-button expand="block" fill="outline" size="small" (click)="mesaService.loadClientesYMesaDisponibles()">
+              <ion-icon slot="start" name="refresh-outline"></ion-icon>
+              Actualizar listas
+            </ion-button> -->
+          </ion-card-content>
+        </ion-card>
+        <!-- ================== FIN BLOQUE MAÎTRE ================== -->
+
+
+
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="bottom-spacer" aria-hidden="true"></div>
+
+</ion-content>

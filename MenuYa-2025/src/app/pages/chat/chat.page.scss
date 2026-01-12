@@ -1,0 +1,123 @@
+.chat-content {
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+}
+
+.mensajes-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* espacio entre mensajes */
+  min-height: 100%;
+  padding-bottom: 72px; /* espacio para el footer */
+}
+
+.mensaje {
+  max-width: 85%;
+  display: flex;
+  position: relative;
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.mensaje-propio { align-self: flex-end; }
+.mensaje-otro { align-self: flex-start; }
+
+.burbuja {
+  padding: 10px 12px;
+  border-radius: 16px;
+  overflow-wrap: anywhere; /* fuerza corte de palabras muy largas */
+  word-break: break-word;
+  white-space: pre-wrap; /* respeta saltos y evita overflow */
+  display: inline-block;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.mensaje-propio .burbuja {
+  background-color: #E73F2D; /* primario MenuYa */
+  color: #fff;
+  border-bottom-right-radius: 6px;
+  box-shadow: 0 2px 8px rgba(231, 63, 45, 0.35);
+}
+
+.mensaje-otro .burbuja {
+  background-color: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border-bottom-left-radius: 6px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+}
+
+.texto { display: block; }
+
+.mesa {
+  display: block;
+  font-size: 10px;
+  opacity: 0.6;
+  margin-top: 2px;
+}
+
+.meta {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: 6px;
+  font-size: 11px;
+  opacity: 0.8;
+}
+.hora { opacity: 0.9; }
+
+/* Footer/Input de chat */
+.input-footer { 
+  --background: transparent;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.input-toolbar { 
+  --background: var(--ion-background-color); 
+  padding: 8px 10px; /* separa del borde de pantalla */
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+}
+.input-container { 
+  display: flex; 
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+  padding: 6px 8px; 
+  /* Usar solo el fondo interno del ion-item para evitar doble capa */
+  --background: rgba(255,255,255,0.12);
+  border-radius: 24px;
+  background: transparent;
+  overflow: hidden; /* recorta el fondo interno al radio */
+}
+
+/* Aplicar el borde al "fondo gris" real del ion-item */
+.input-container::part(native) {
+  border: 1px solid var(--ion-border-color);
+  border-radius: 24px;
+}
+
+.input-container ion-input {
+  flex: 1;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --background: transparent; /* usa el fondo del contenedor */
+  min-height: 40px;
+  color: var(--ion-text-color);
+}
+
+/* Evitar que el input agregado dibuje otro fondo cuadrado encima */
+.input-container ion-input::part(native) {
+  background: transparent !important;
+  border-radius: 0;
+}
+
+.input-container ion-button {
+  margin-left: 0.5rem;
+  border-radius: 12px;
+  height: 40px;
+  padding: 0 14px;
+}
+
+@media (min-width: 768px) {
+  .mensaje { max-width: 70%; }
+}

@@ -1,0 +1,132 @@
+
+<ion-content [fullscreen]="true" class="registro safe-top">
+  <!-- Casita flotante como en alta producto -->
+  <ion-button
+    class="home-btn"
+    (click)="goHome()"
+    aria-label="Ir al inicio"
+  >
+    <ion-icon slot="icon-only" name="home-outline"></ion-icon>
+  </ion-button>
+
+  <div class="registro__container">
+    <h1 class="title">Alta de mesa</h1>
+    <p class="subtitle">Completá los datos de la mesa</p>
+
+    <form
+      [formGroup]="mesaForm"
+      (ngSubmit)="onSubmit()"
+      class="registro__form"
+      novalidate
+    >
+      <!-- FOTO / PREVIEW -->
+      <ion-item lines="none" class="field fotos-field">
+        <div class="fotos-field__top">
+
+
+          <ion-button
+            size="small"
+            fill="clear"
+            class="fotos-field__chip"
+            type="button"
+            (click)="tomarFoto()"
+          >
+            <ion-icon name="camera-outline" slot="start"></ion-icon>
+            Tomar foto
+          </ion-button>
+        </div>
+
+        <div class="foto-container">
+          <img
+            *ngIf="foto; else noFoto"
+            [src]="foto"
+            alt="Foto de la mesa"
+          />
+          <ng-template #noFoto>
+            <div class="preview-placeholder">
+              <ion-icon
+                name="image-outline"
+                class="preview-placeholder__icon"
+              ></ion-icon>
+              <div class="preview-placeholder__text">Sin foto</div>
+            </div>
+          </ng-template>
+        </div>
+      </ion-item>
+
+      <!-- NÚMERO DE MESA -->
+      <ion-item
+        lines="none"
+        class="field"
+        [class.invalid]="isInvalid('numero_mesa')"
+      >
+        <ion-label position="floating">Número de mesa</ion-label>
+        <ion-input
+          type="number"
+          formControlName="numero_mesa"
+          inputmode="numeric"
+          min="1"
+          step="1"
+        ></ion-input>
+      </ion-item>
+      <p *ngIf="isInvalid('numero_mesa')" class="error">
+        Ingresá un número válido.
+      </p>
+
+      <!-- CAPACIDAD -->
+      <ion-item
+        lines="none"
+        class="field"
+        [class.invalid]="isInvalid('cantidad_comensales')"
+      >
+        <ion-label position="floating">Capacidad</ion-label>
+        <ion-input
+          type="number"
+          formControlName="cantidad_comensales"
+          inputmode="numeric"
+          min="1"
+          step="1"
+        ></ion-input>
+      </ion-item>
+      <p *ngIf="isInvalid('cantidad_comensales')" class="error">
+        Ingresá la capacidad de la mesa.
+      </p>
+
+      <!-- TIPO -->
+      <ion-item
+        lines="none"
+        class="field"
+        [class.invalid]="isInvalid('tipo')"
+      >
+        <ion-label>Tipo</ion-label>
+        <ion-select
+          interface="popover"
+          formControlName="tipo"
+          placeholder="Seleccione"
+        >
+          <ion-select-option
+            *ngFor="let t of tipo"
+            [value]="t"
+          >
+            {{ t }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+      <p *ngIf="isInvalid('tipo')" class="error">
+        Seleccioná un tipo de mesa.
+      </p>
+
+      <!-- BOTÓN GUARDAR -->
+      <div class="actions">
+        <ion-button
+          type="submit"
+          expand="block"
+          class="guardar"
+          [disabled]="mesaForm.invalid"
+        >
+          Guardar mesa
+        </ion-button>
+      </div>
+    </form>
+  </div>
+</ion-content>

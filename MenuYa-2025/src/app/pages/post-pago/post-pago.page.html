@@ -1,0 +1,26 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Post Pago</ion-title>
+    <ion-buttons slot="end">
+      <ion-button fill="clear" (click)="goHome()" aria-label="Ir al inicio">
+        <ion-icon slot="end" name="home-outline"></ion-icon>
+        Inicio
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="post-pago-content">
+  <div class="post-pago-wrapper">
+    <ion-img src="../../../assets/brand/app-icon.png" alt="Logo de la aplicación" class="post-pago-logo"></ion-img>
+
+    <ion-button expand="block" color="primary" (click)="scanear()" aria-label="Escanear código QR">
+      <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+      Escanear QR
+    </ion-button>
+
+    <ion-text color="medium" class="post-pago-text">
+      <p>Escanea el código QR para visualizar los gráficos de las encuestas previas.</p>
+    </ion-text>
+  </div>
+</ion-content>

@@ -1,0 +1,240 @@
+:host {
+  --glass-bg: rgba(255, 255, 255, 0.88);
+  --glass-border: rgba(255, 255, 255, 0.28);
+  --soft-shadow: 0 16px 26px rgba(15, 23, 42, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  :host {
+    --glass-bg: rgba(20, 22, 30, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --soft-shadow: 0 14px 24px rgba(0, 0, 0, 0.55);
+  }
+}
+
+ion-content.registro {
+  --background: var(--ion-background-color);
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.home-btn {
+  position: absolute;
+  top: calc(env(safe-area-inset-top, 8px) + 8px);
+  left: 14px;
+  z-index: 20;
+  --background: transparent;
+  --box-shadow: none;
+  --padding-start: 0;
+  --padding-end: 0;
+  --border-radius: 999px;
+  min-height: 32px;
+  color: white;
+}
+
+.registro__container {
+  width: min(400px, 100%);
+  padding: 40px 14px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.title {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(24px, 5.8vw, 32px);
+  letter-spacing: -0.01em;
+  color: var(--ion-color-primary);
+}
+
+.subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 30%);
+}
+
+.registro__form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field {
+  --inner-padding-top: 5px;
+  --inner-padding-bottom: 5px;
+  --padding-start: 10px;
+  border-radius: 12px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--soft-shadow);
+  transition: 0.2s ease;
+}
+
+.field.invalid {
+  border-color: color-mix(in oklab, var(--ion-color-danger), transparent 35%);
+  box-shadow: 0 0 0 1.5px color-mix(in oklab, var(--ion-color-danger), transparent 55%);
+}
+
+.registro__form ion-label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.registro__form ion-input::part(native)::placeholder {
+  font-size: 10px;
+}
+
+.field-inline {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.field-inline__label {
+  font-size: 12px;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.field-inline__control {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.field-inline__control ion-select {
+  width: auto;
+  min-width: 0;
+  --padding-start: 0;
+}
+
+.field-inline__icon {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.error {
+  margin-top: 2px;
+  margin-left: 2px;
+  font-size: 10px;
+  text-align: left;
+}
+
+.foto-field {
+  margin-top: 2px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: left;
+}
+
+.foto-field__header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.foto-field__title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.foto-field__subtitle {
+  margin: 0;
+  font-size: 10px;
+  color: color-mix(in oklab, var(--ion-text-color), transparent 35%);
+}
+
+.foto-field__preview {
+  display: flex;
+  justify-content: center;
+  margin-top: 4px;
+}
+
+.foto-field__preview img {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ion-color-primary);
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.35);
+}
+
+.btn-foto,
+.btn-qr {
+  --border-radius: 999px;
+  min-height: 34px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.btn-qr {
+  margin-top: 6px;
+  --background: linear-gradient(
+    135deg,
+    color-mix(in oklab, var(--ion-color-warning), white 6%),
+    color-mix(in oklab, var(--ion-color-warning), black 4%)
+  );
+  color: var(--ion-color-warning-contrast);
+}
+
+.actions {
+  margin-top: 6px;
+}
+
+.guardar {
+  --border-radius: 999px;
+  --background: linear-gradient(
+    135deg,
+    var(--ion-color-success),
+    color-mix(in oklab, var(--ion-color-success), black 8%)
+  );
+  --box-shadow: 0 14px 20px color-mix(in oklab, var(--ion-color-success), transparent 80%);
+  min-height: 40px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+@media (max-width: 420px) {
+  .registro__container {
+    padding: 38px 10px 20px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+}
+
+@media (max-height: 640px) {
+  .registro__container {
+    gap: 8px;
+  }
+
+  .field {
+    --inner-padding-top: 4px;
+    --inner-padding-bottom: 4px;
+  }
+
+  .foto-field {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+
+  .foto-field__preview img {
+    width: 82px;
+    height: 82px;
+  }
+
+  .guardar {
+    min-height: 34px;
+  }
+}

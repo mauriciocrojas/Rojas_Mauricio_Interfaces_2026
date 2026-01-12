@@ -1,0 +1,82 @@
+/* src/app/cuenta/cuenta.page.scss */
+.cuenta {
+  .cuenta-card {
+    --ion-card-background: var(--ion-color-step-100, rgba(255,255,255,0.06));
+    border-radius: 16px;
+  }
+
+  .badge-desc {
+    margin-inline-start: 8px;
+    vertical-align: middle;
+    font-weight: 700;
+  }
+
+  .titulo {
+    margin: 0 0 8px;
+    font-weight: 800;
+    font-size: clamp(18px, 4vw, 22px);
+  }
+
+  .fila {
+    display: flex; justify-content: space-between; gap: 12px;
+    .nombre { font-weight: 700; }
+    .cant { opacity: .8; }
+  }
+
+  .subfila {
+    display: flex; justify-content: space-between; font-size: 13px; opacity: .8;
+  }
+
+  .totales {
+    margin-top: 8px;
+    .row {
+      display: flex; justify-content: space-between; align-items: center; padding: 4px 0;
+      span { opacity: .9; }
+      strong { font-weight: 700; }
+    }
+
+    .valores-con-descuento {
+      display: grid;
+      justify-items: end;
+      line-height: 1.1;
+      .tachado {
+        text-decoration: line-through;
+        opacity: .6;
+        font-weight: 600;
+        font-size: 0.95em;
+      }
+      .nuevo {
+        margin-top: 2px;
+      }
+    }
+
+    .negativo {
+      color: var(--ion-color-danger);
+      font-weight: 800;
+    }
+  }
+
+  .total-grande {
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: color-mix(in oklab, var(--ion-color-primary), transparent 82%);
+    display: flex; justify-content: space-between; align-items: center;
+    font-weight: 900;
+    letter-spacing: .5px;
+    span { font-size: clamp(20px, 6vw, 28px); }
+  }
+
+  .acciones {
+    margin-top: 12px;
+    display: grid; gap: 10px;
+  }
+}
+.valores-con-descuento {
+  display: grid;
+  justify-items: end;
+  line-height: 1.1;
+  .tachado { text-decoration: line-through; opacity:.6; font-weight:600; }
+  .nuevo { margin-top:2px; font-weight:700; }
+}
+.negativo { color: var(--ion-color-danger); font-weight:800; }

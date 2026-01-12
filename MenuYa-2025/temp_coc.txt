@@ -1,0 +1,6 @@
+
+
+              <ion-item button detail="true" *ngIf="role === 'cocinero'" (click)="goToAgregarComida()">
+                <ion-icon slot="start" name="fast-food-outline" aria-hidden="true"></ion-icon>
+                ➡️ Agregar plato
+              </ion-item>

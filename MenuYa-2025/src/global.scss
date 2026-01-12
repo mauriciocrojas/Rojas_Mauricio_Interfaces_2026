@@ -1,0 +1,254 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+@import "~leaflet/dist/leaflet.css";
+
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+/* Overlay sin texto: solo imagen girando */
+.app-loading { --background: transparent; }
+.app-loading .loading-wrapper{
+  position: relative;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  width: 120px;   /* opcional: delimita el área del overlay */
+  height: 120px;
+}
+
+/* Dibuja la imagen y la hace girar */
+.app-loading .loading-wrapper::before{
+  content: "";
+  position: absolute;
+  inset: 0;                 /* ocupa todo el wrapper */
+  margin: auto;
+  width: 96px;
+  height: 96px;
+  background-image: url('assets/brand/app-icon.png'); /* <-- tu imagen */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  animation: app-spin 1s linear infinite;
+  filter: drop-shadow(0 0 12px rgba(255, 166, 0, 0.8));
+}
+
+/* Centrado en Ionic */
+.menuya-swal-container {
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Popup glassy estilo MenuYa */
+.menuya-swal-popup {
+  max-width: 92vw;
+  width: 340px;
+  border-radius: 20px;
+  padding: 1.5rem 1.4rem 1.2rem;
+  background: color-mix(
+    in oklab,
+    var(--ion-color-step-50, #1e1e22) 65%,
+    rgba(255, 255, 255, 0.1)
+  );
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(
+    in oklab,
+    var(--ion-color-primary),
+    transparent 60%
+  );
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  color: var(--ion-text-color, #fff);
+}
+
+/* Título */
+.menuya-swal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center !important;   /* 👈 CENTRADO */
+  width: 100%;
+  margin-bottom: 0.6rem !important;
+}
+
+/* Contenedor HTML */
+.menuya-swal-body {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Layout interno */
+.menuya-swal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Header con icono */
+.menuya-swal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.menuya-swal-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-size: 1.3rem;
+  background: color-mix(
+    in oklab,
+    var(--ion-color-primary) 20%,
+    transparent 70%
+  );
+}
+
+.menuya-swal-header-text p {
+  margin: 0;
+  font-size: 0.88rem;
+  opacity: 0.9;
+}
+
+/* Lista de ítems */
+.menuya-items-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.2rem 0 0.4rem 0;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.menuya-item-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.35rem 0.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.9rem;
+}
+
+.menuya-item-name {
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.menuya-item-qty {
+  min-width: 2.1rem;
+  text-align: center;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: color-mix(
+    in oklab,
+    var(--ion-color-primary),
+    transparent 50%
+  );
+}
+
+/* Resumen total */
+.menuya-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 0.2rem;
+}
+
+.menuya-summary-label {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.menuya-summary-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Chip de tiempo */
+.menuya-time-chip {
+  align-self: flex-start;
+  margin-top: 0.2rem;
+  padding: 0.18rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Nota al pie */
+.menuya-swal-footnote {
+  margin: 0.4rem 0 0;
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+/* Botones */
+.menuya-swal-actions {
+  margin-top: 1rem !important;
+  gap: 0.5rem;
+}
+
+.menuya-swal-confirm,
+.menuya-swal-cancel {
+  border-radius: 999px !important;
+  padding: 0.45rem 1.4rem !important;
+  font-weight: 600 !important;
+  font-size: 0.86rem !important;
+}
+
+/* Confirmar = color primario */
+.menuya-swal-confirm {
+  background: var(--ion-color-primary) !important;
+  color: var(--ion-color-primary-contrast, #fff) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+/* Cancelar = outline suave */
+.menuya-swal-cancel {
+  background: transparent !important;
+  color: var(--ion-text-color, #fff) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+}
+
+/* Animación */
+@keyframes app-spin { from { transform: rotate(0) } to { transform: rotate(1turn) } }
+
+/* Accesibilidad: si el usuario prefiere poca animación */
+@media (prefers-reduced-motion: reduce) {
+  .app-loading .loading-wrapper::before { animation: none; }
+}
+
+
