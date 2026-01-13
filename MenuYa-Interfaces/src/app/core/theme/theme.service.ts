@@ -45,26 +45,26 @@ export class ThemeService {
     }
 
     async setTheme(id: ThemeId): Promise<void> {
-  // ✅ DARK = volver a la app original (NO Theme Engine)
-  if (id === 'dark') {
-    await Preferences.set({ key: KEY_THEME_ID, value: 'dark' });
-    this.resetToAppDefault();
-    return;
-  }
+        // ✅ DARK = volver a la app original (NO Theme Engine)
+        if (id === 'dark') {
+            await Preferences.set({ key: KEY_THEME_ID, value: 'dark' });
+            this.resetToAppDefault();
+            return;
+        }
 
-  if (id === 'custom') {
-    // Si todavía no hay custom guardado, clonamos “profesional” como base
-    const base = this.getThemeById(DEFAULT_THEME_ID);
-    const customCfg: ThemeConfig = { ...base, id: 'custom', label: 'Custom' };
-    await Preferences.set({ key: KEY_THEME_CUSTOM, value: JSON.stringify(customCfg) });
-    await Preferences.set({ key: KEY_THEME_ID, value: 'custom' });
-    this.apply(customCfg);
-    return;
-  }
+        if (id === 'custom') {
+            // Si todavía no hay custom guardado, clonamos “profesional” como base
+            const base = this.getThemeById(DEFAULT_THEME_ID);
+            const customCfg: ThemeConfig = { ...base, id: 'custom', label: 'Custom' };
+            await Preferences.set({ key: KEY_THEME_CUSTOM, value: JSON.stringify(customCfg) });
+            await Preferences.set({ key: KEY_THEME_ID, value: 'custom' });
+            this.apply(customCfg);
+            return;
+        }
 
-  await Preferences.set({ key: KEY_THEME_ID, value: id });
-  this.apply(this.getThemeById(id));
-}
+        await Preferences.set({ key: KEY_THEME_ID, value: id });
+        this.apply(this.getThemeById(id));
+    }
 
     async saveCustom(config: ThemeConfig): Promise<void> {
         await Preferences.set({ key: KEY_THEME_CUSTOM, value: JSON.stringify(config) });
@@ -143,6 +143,55 @@ export class ThemeService {
         root.style.setProperty('--ion-color-primary-contrast-rgb', '255,255,255');
         root.style.setProperty('--ion-text-color', theme.tokens.text);
         root.style.setProperty('--ion-background-color', theme.tokens.background);
+
+        // 2.b.1) Superficies (cards / items / toolbars / modals)
+        root.style.setProperty('--ion-card-background', theme.tokens.surface);
+        root.style.setProperty('--ion-item-background', theme.tokens.surface);
+        root.style.setProperty('--ion-toolbar-background', theme.tokens.surface);
+        root.style.setProperty('--ion-tab-bar-background', theme.tokens.surface);
+
+        // 2.b.2) Texto secundario / placeholder (clave para modo claro)
+        root.style.setProperty('--ion-text-color-step-400', theme.tokens.text);
+        root.style.setProperty(
+            '--ion-placeholder-color',
+            'color-mix(in oklab, var(--ion-text-color), transparent 55%)'
+        );
+        root.style.setProperty(
+            '--ion-color-step-600',
+            'color-mix(in oklab, var(--ion-text-color), transparent 45%)'
+        );
+
+        // 2.b.3) Bordes y “steps” (Ionic usa steps para sombras/divisores)
+        const isLight = theme.id === 'light';
+
+        // Bordes + líneas
+        root.style.setProperty(
+            '--ion-border-color',
+            isLight ? 'rgba(15, 23, 42, 0.12)' : 'rgba(255,255,255,0.08)'
+        );
+
+        // Steps (fondos escalonados para listas, separators, etc.)
+        root.style.setProperty('--ion-color-step-50', isLight ? '#F3F4F6' : '#0B0F1A');
+        root.style.setProperty('--ion-color-step-100', isLight ? '#E5E7EB' : '#0F1626');
+        root.style.setProperty('--ion-color-step-150', isLight ? '#D1D5DB' : '#131C2F');
+        root.style.setProperty('--ion-color-step-200', isLight ? '#9CA3AF' : '#18233A');
+        root.style.setProperty('--ion-color-step-250', isLight ? '#6B7280' : '#1D2A46');
+
+        // 2.b.4) Secondary también (porque muchas pantallas lo usan)
+        root.style.setProperty('--ion-color-secondary', theme.tokens.secondary);
+        root.style.setProperty('--ion-color-secondary-rgb', this.hexToRgb(theme.tokens.secondary));
+        root.style.setProperty('--ion-color-secondary-contrast', isLight ? '#0F172A' : '#ffffff');
+        root.style.setProperty(
+            '--ion-color-secondary-contrast-rgb',
+            isLight ? '15,23,42' : '255,255,255'
+        );
+
+        // 2.b.5) “surface tint” para inputs/ion-item outlines suaves
+        root.style.setProperty(
+            '--ion-color-light',
+            isLight ? '#ffffff' : 'rgba(255,255,255,0.06)'
+        );
+
 
         // 2.c) Background image por tema
         root.style.setProperty('--app-bg-image', `url("${this.getAsset('background', theme.id)}")`);

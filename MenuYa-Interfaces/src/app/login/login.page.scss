@@ -21,11 +21,13 @@
 
 /* Tema LIGHT */
 :host-context(body.theme-light) {
-  --glass-bg: color-mix(in oklab, #ffffff, transparent 8%);
-  --glass-border: color-mix(in oklab, #000, transparent 88%);
-  --soft-shadow: 0 18px 32px rgba(0, 0, 0, 0.10);
-  --muted: color-mix(in oklab, #000, transparent 45%);
+  /* Glass más “material” y menos blanco puro */
+  --glass-bg: rgba(255, 255, 255, 0.78);
+  --glass-border: rgba(15, 23, 42, 0.14); /* borde suave pero visible */
+  --soft-shadow: 0 16px 30px rgba(2, 6, 23, 0.10);
+  --muted: rgba(15, 23, 42, 0.62);
 }
+
 
 /* Tema NAIF (más “alegre”) */
 :host-context(body.theme-naif) {
@@ -78,7 +80,7 @@
 .field-group__label {
   font-size: 13px;
   font-weight: 600;
-  color: var(--muted);
+color: color-mix(in oklab, var(--muted), #000 12%);
   letter-spacing: 0.01em;
 }
 
@@ -107,6 +109,11 @@
     border-color: color-mix(in oklab, var(--ion-color-danger), transparent 30%);
     box-shadow: 0 0 0 2px color-mix(in oklab, var(--ion-color-danger), transparent 55%);
   }
+
+  ion-input {
+  --color: var(--app-text);
+}
+
 }
 
 ion-note {
@@ -362,4 +369,53 @@ ion-button {
   margin-top: 10px;
   --border-radius: var(--app-btn-radius);
   min-height: 48px;
+}
+
+/* =========================================================
+   FIX CONTRASTE - SOLO TEMA LIGHT (no toca dark)
+   ========================================================= */
+:host-context(body.theme-light) {
+
+  /* Asegura color base legible dentro del bloque */
+  .quick-users {
+    color: var(--app-text);
+  }
+
+  /* Título "ACCESOS RÁPIDOS" + icono más legibles */
+  .quick-users__title {
+    color: color-mix(in oklab, var(--app-primary), #000 10%);
+  }
+  .quick-users__title ion-icon {
+    color: var(--app-primary);
+  }
+
+  /* Las cards heredaban un color “raro” (muy claro): lo fijamos */
+  .preset-card {
+    color: var(--app-text);
+  }
+
+  /* Texto del rol (Dueño, Cocinero, etc.) */
+  .preset-card .label {
+    color: var(--app-text);
+    text-shadow: none;
+  }
+
+  /* Opcional pero ayuda MUCHO: que el “mint” no lave todo */
+  .quick-users {
+    background:
+      linear-gradient(
+        135deg,
+        color-mix(in oklab, var(--app-secondary), transparent 90%),
+        transparent
+      ),
+      var(--glass-bg);
+  }
+
+  /* Placeholder del input (si lo ves muy apagado) */
+  ion-input::part(native) {
+    color: var(--app-text);
+  }
+  ion-input::part(native)::placeholder {
+    color: color-mix(in oklab, var(--app-text), transparent 45%);
+  }
 }

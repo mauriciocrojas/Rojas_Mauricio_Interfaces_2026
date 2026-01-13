@@ -311,12 +311,6 @@ body.primary-fullwidth .theme-action-bar ion-button.primary{
    THEME ENGINE - fondos por tema (background image)
    ========================================================= */
 
-/* Contenedor principal: aseguramos que use el background del tema */
-body[class*="theme-"] ion-app,
-body[class*="theme-"] ion-content {
-  background: var(--app-bg);
-}
-
 /* Imagen de fondo por tema: se setea por variable CSS */
 body[class*="theme-"] ion-content::part(background) {
   background-image: var(--app-bg-image);
@@ -335,3 +329,8 @@ body.theme-light ion-content::part(background) {
     ),
     var(--app-bg-image);
 }
+
+body[class*="theme-"] ion-content::part(background) {
+  background-color: var(--app-bg);
+}
+

@@ -69,9 +69,9 @@ export const THEMES: Record<BaseThemeId, ThemeConfig> = {
     tokens: {
       primary: '#2563EB',
       secondary: '#10B981',
-      background: '#F6F7FB',
-      surface: '#FFFFFF',
-      text: '#0F172A',
+    background: 'rgba(167, 100, 100, 1)',   // gris-azulado suave (no blanco puro)
+      surface: 'rgba(194, 207, 217, 1)',
+      text: '#313c56ff',
       fontFamily: 'system-ui, Segoe UI, Roboto, Arial',
       fontSizeBasePx: 16,
       btnRadiusPx: 12,
