@@ -21,9 +21,16 @@ export class ThemeService {
     }
 
     async loadAndApply(): Promise<void> {
+
+
         const saved = await Preferences.get({ key: KEY_THEME_ID });
         const raw = saved.value as ThemeId | null;
         const id: ThemeId = raw ?? DEFAULT_THEME_ID;
+
+        if (id === 'dark') {
+            this.resetToAppDefault();
+            return;
+        }
 
         if (id === 'custom') {
             const custom = await Preferences.get({ key: KEY_THEME_CUSTOM });
@@ -38,19 +45,26 @@ export class ThemeService {
     }
 
     async setTheme(id: ThemeId): Promise<void> {
-        if (id === 'custom') {
-            // Si todavía no hay custom guardado, clonamos “profesional” como base
-            const base = this.getThemeById(DEFAULT_THEME_ID);
-            const customCfg: ThemeConfig = { ...base, id: 'custom', label: 'Custom' };
-            await Preferences.set({ key: KEY_THEME_CUSTOM, value: JSON.stringify(customCfg) });
-            await Preferences.set({ key: KEY_THEME_ID, value: 'custom' });
-            this.apply(customCfg);
-            return;
-        }
+  // ✅ DARK = volver a la app original (NO Theme Engine)
+  if (id === 'dark') {
+    await Preferences.set({ key: KEY_THEME_ID, value: 'dark' });
+    this.resetToAppDefault();
+    return;
+  }
 
-        await Preferences.set({ key: KEY_THEME_ID, value: id });
-        this.apply(this.getThemeById(id));
-    }
+  if (id === 'custom') {
+    // Si todavía no hay custom guardado, clonamos “profesional” como base
+    const base = this.getThemeById(DEFAULT_THEME_ID);
+    const customCfg: ThemeConfig = { ...base, id: 'custom', label: 'Custom' };
+    await Preferences.set({ key: KEY_THEME_CUSTOM, value: JSON.stringify(customCfg) });
+    await Preferences.set({ key: KEY_THEME_ID, value: 'custom' });
+    this.apply(customCfg);
+    return;
+  }
+
+  await Preferences.set({ key: KEY_THEME_ID, value: id });
+  this.apply(this.getThemeById(id));
+}
 
     async saveCustom(config: ThemeConfig): Promise<void> {
         await Preferences.set({ key: KEY_THEME_CUSTOM, value: JSON.stringify(config) });
@@ -65,9 +79,9 @@ export class ThemeService {
 
 
     async loadSavedThemeId(): Promise<ThemeId | null> {
-  const saved = await Preferences.get({ key: KEY_THEME_ID });
-  return (saved.value as ThemeId | null) ?? null;
-}
+        const saved = await Preferences.get({ key: KEY_THEME_ID });
+        return (saved.value as ThemeId | null) ?? null;
+    }
     getIconVariant(themeId?: ThemeId) {
         const id = themeId ?? this.currentTheme.id;
         return THEME_ASSETS[id].iconVariant;
@@ -130,9 +144,54 @@ export class ThemeService {
         root.style.setProperty('--ion-text-color', theme.tokens.text);
         root.style.setProperty('--ion-background-color', theme.tokens.background);
 
+        // 2.c) Background image por tema
+        root.style.setProperty('--app-bg-image', `url("${this.getAsset('background', theme.id)}")`);
+
+        root.style.setProperty('--app-icon-variant', this.getIconVariant(theme.id)); // 'outline' | 'sharp'
 
         // 3) Layout
         root.style.setProperty('--app-action-justify', theme.layout.actionBarJustify);
         root.style.setProperty('--app-primary-fullwidth', theme.layout.primaryButtonFullWidth ? '1' : '0');
     }
+
+
+    private resetToAppDefault(): void {
+        const body = document.body;
+        body.classList.remove(
+            'theme-profesional',
+            'theme-argentina',
+            'theme-naif',
+            'theme-light',
+            'theme-dark',
+            'theme-custom'
+        );
+        body.classList.remove('primary-fullwidth');
+
+        const root = document.documentElement;
+
+        // Tokens app
+        root.style.removeProperty('--app-primary');
+        root.style.removeProperty('--app-secondary');
+        root.style.removeProperty('--app-bg');
+        root.style.removeProperty('--app-surface');
+        root.style.removeProperty('--app-text');
+        root.style.removeProperty('--app-font-family');
+        root.style.removeProperty('--app-font-size-base');
+        root.style.removeProperty('--app-btn-radius');
+        root.style.removeProperty('--app-action-justify');
+        root.style.removeProperty('--app-primary-fullwidth');
+        root.style.removeProperty('--app-bg-image');
+        root.style.removeProperty('--app-icon-variant');
+
+        // Ionic (volvé al :root original)
+        root.style.removeProperty('--ion-color-primary');
+        root.style.removeProperty('--ion-color-primary-rgb');
+        root.style.removeProperty('--ion-color-primary-contrast');
+        root.style.removeProperty('--ion-color-primary-contrast-rgb');
+        root.style.removeProperty('--ion-text-color');
+        root.style.removeProperty('--ion-background-color');
+
+        // (si después seteamos más vars de ionic, las removemos acá también)
+    }
+
 }

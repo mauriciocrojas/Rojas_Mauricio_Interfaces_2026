@@ -2,16 +2,17 @@
   <div class="login__container">
     
     <h1 class="login__title">Iniciar sesión</h1>
-  <ion-button class="themes" expand="block" fill="outline" (click)="openThemePicker()" [disabled]="loading">
-  <ion-icon name="color-palette-outline" slot="start"></ion-icon>
-  Cambiar tema
-</ion-button>
+    <ion-button class="themes" expand="block" fill="outline" (click)="openThemePicker()" [disabled]="loading">
+      <ion-icon [name]="'color-palette' | iconName" slot="start"></ion-icon>
+      Cambiar tema
+    </ion-button>
+
     <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="login__form" novalidate>
       <!-- Correo -->
       <div class="field-group">
         <label class="field-group__label" for="login-email">Correo</label>
         <ion-item class="field" [class.invalid]="emailCtrl.invalid && emailCtrl.touched">
-          <ion-icon name="mail-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-icon [name]="'mail' | iconName" slot="start" aria-hidden="true"></ion-icon>
           <ion-input
             id="login-email"
             type="email"
@@ -33,7 +34,7 @@
       <div class="field-group">
         <label class="field-group__label" for="login-password">Clave</label>
         <ion-item class="field" [class.invalid]="passCtrl.invalid && passCtrl.touched">
-          <ion-icon name="lock-closed-outline" slot="start" aria-hidden="true"></ion-icon>
+          <ion-icon [name]="'lock-closed' | iconName" slot="start" aria-hidden="true"></ion-icon>
           <ion-input
             id="login-password"
             [type]="showPwd ? 'text' : 'password'"
@@ -53,7 +54,7 @@
             type="button"
             (click)="togglePwd()"
             aria-label="{{ showPwd ? 'Ocultar clave' : 'Mostrar clave' }}">
-            <ion-icon [name]="showPwd ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            <ion-icon [name]="(showPwd ? 'eye-off' : 'eye') | iconName"></ion-icon>
           </ion-button>
         </ion-item>
       </div>
@@ -64,7 +65,7 @@
         </ion-note>
 
         <ion-note *ngIf="capsLockOn" color="warning" class="note caps" role="alert">
-          <ion-icon name="alert-circle-outline"></ion-icon> Bloq Mayús activado.
+          <ion-icon [name]="'alert-circle' | iconName"></ion-icon> Bloq Mayús activado.
         </ion-note>
 
         <div class="strength" *ngIf="password">
@@ -79,7 +80,7 @@
       <!-- Accesos rápidos -->
       <section class="quick-users" aria-label="Accesos rápidos por rol">
         <div class="quick-users__title">
-          <ion-icon name="flash-outline"></ion-icon>
+          <ion-icon [name]="'flash' | iconName"></ion-icon>
           <span>Accesos rápidos</span>
         </div>
 
@@ -128,7 +129,4 @@
       </div>
     </form>
   </div>
-
-
-
 </ion-content>

@@ -14,6 +14,7 @@ import { PushNotificationService } from '../services/push-notification.service';
 import { ActionSheetController } from '@ionic/angular';
 import { ThemeService } from '../core/theme/theme.service';
 import { ThemeId } from '../core/theme/theme.model';
+import { SharedModule } from '../shared/shared.module'; // ✅
 
 
 
