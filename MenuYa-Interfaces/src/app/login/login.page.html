@@ -1,7 +1,11 @@
 <ion-content [fullscreen]="true" class="login safe-top">
   <div class="login__container">
+    
     <h1 class="login__title">Iniciar sesión</h1>
-
+  <ion-button class="themes" expand="block" fill="outline" (click)="openThemePicker()" [disabled]="loading">
+  <ion-icon name="color-palette-outline" slot="start"></ion-icon>
+  Cambiar tema
+</ion-button>
     <form #f="ngForm" (ngSubmit)="onSubmit(f)" class="login__form" novalidate>
       <!-- Correo -->
       <div class="field-group">
@@ -124,4 +128,7 @@
       </div>
     </form>
   </div>
+
+
+
 </ion-content>

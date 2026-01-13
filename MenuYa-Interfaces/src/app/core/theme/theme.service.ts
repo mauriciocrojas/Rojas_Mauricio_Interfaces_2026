@@ -63,6 +63,11 @@ export class ThemeService {
         return THEME_ASSETS[id][which];
     }
 
+
+    async loadSavedThemeId(): Promise<ThemeId | null> {
+  const saved = await Preferences.get({ key: KEY_THEME_ID });
+  return (saved.value as ThemeId | null) ?? null;
+}
     getIconVariant(themeId?: ThemeId) {
         const id = themeId ?? this.currentTheme.id;
         return THEME_ASSETS[id].iconVariant;

@@ -11,6 +11,11 @@ import { Capacitor } from '@capacitor/core';
 import { environment } from '../../environments/environment';
 import { SpinnerService } from '../../app/services/spinner';
 import { PushNotificationService } from '../services/push-notification.service';
+import { ActionSheetController } from '@ionic/angular';
+import { ThemeService } from '../core/theme/theme.service';
+import { ThemeId } from '../core/theme/theme.model';
+
+
 
 type PresetKey = 'Cliente registrado' | 'Dueno' | 'Cocinero' | 'Bartender' | 'Mozo' | 'Maitre' | 'Delivery';
 
@@ -41,13 +46,14 @@ export class LoginPage implements OnInit, OnDestroy {
   errorMsg = '';
   showPwd = false;
 
+
   // UI helpers
   capsLockOn = false;
   strengthValue = 0; // 0..1
   strengthLabel: 'Débil' | 'Media' | 'Fuerte' | '' = '';
   strengthColor: 'danger' | 'warning' | 'success' | 'medium' = 'medium';
 
-   presets: Preset[] = [
+  presets: Preset[] = [
     {
       key: 'Dueno',
       label: 'Dueño',
@@ -127,7 +133,10 @@ export class LoginPage implements OnInit, OnDestroy {
     private toastCtrl: ToastController,
     private audio: AudioService,
     private spinner: SpinnerService,
-    private pushService: PushNotificationService
+    private pushService: PushNotificationService,
+    private actionSheetCtrl: ActionSheetController,
+    private themeService: ThemeService,
+
   ) {
     const saved = localStorage.getItem('login_email');
     if (saved) this.email = saved;
@@ -405,7 +414,7 @@ export class LoginPage implements OnInit, OnDestroy {
       // 3) Empleado por auth_id (FK a auth.users) o fallback por email
       //    Esquema de tu tabla:
       //    id, auth_id, nombre, apellido, dni, cuil, email, rol, foto, created_at
-            type EmpleadoRow = { auth_id: string | null, email: string, rol: string };
+      type EmpleadoRow = { auth_id: string | null, email: string, rol: string };
       let empleado = await singleOrNull<EmpleadoRow>(
         supabase.from('menuya_empleados')
           .select('auth_id, email, rol')
@@ -521,4 +530,62 @@ export class LoginPage implements OnInit, OnDestroy {
       strong: this.strengthColor === 'success',
     };
   }
+
+
+  async openThemePicker() {
+  const sheet = await this.actionSheetCtrl.create({
+    header: 'Elegí un tema',
+    buttons: [
+      {
+        text: 'Profesional',
+        icon: 'briefcase-outline',
+        handler: async () => this.applyTheme('profesional'),
+      },
+      {
+        text: 'Argentina',
+        icon: 'flag-outline',
+        handler: async () => this.applyTheme('argentina'),
+      },
+      {
+        text: 'Naif',
+        icon: 'color-palette-outline',
+        handler: async () => this.applyTheme('naif'),
+      },
+      {
+        text: 'Modo oscuro (por defecto)',
+        icon: 'moon-outline',
+        handler: async () => this.applyTheme('dark'),
+      },
+      {
+        text: 'Modo claro',
+        icon: 'sunny-outline',
+        handler: async () => this.applyTheme('light'),
+      },
+      {
+        text: 'Custom (configurable)',
+        icon: 'construct-outline',
+        handler: async () => this.applyTheme('custom'),
+      },
+      {
+        text: 'Cancelar',
+        role: 'cancel',
+        icon: 'close-outline',
+      },
+    ],
+  });
+
+  await sheet.present();
+}
+
+private async applyTheme(id: ThemeId) {
+  await this.themeService.setTheme(id);
+
+  const t = await this.toastCtrl.create({
+    message: `🎨 Tema aplicado: ${id}`,
+    duration: 1300,
+    position: 'top',
+  });
+  await t.present();
+}
+
 }
