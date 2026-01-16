@@ -15,7 +15,6 @@ import { ActionSheetController } from '@ionic/angular';
 import { ThemeService } from '../core/theme/theme.service';
 import { ThemeId } from '../core/theme/theme.model';
 import { SharedModule } from '../shared/shared.module'; // ✅
-import { Subscription } from 'rxjs';
 
 
 
@@ -145,33 +144,6 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   private authSub: any;
-  private themeSub?: Subscription;
-
-  private applyPresetShapes(themeId: ThemeId) {
-    // 🔒 DARK debe quedar igual: squircle en todos
-    if (themeId === 'dark') {
-      this.presets = this.presets.map(p => ({ ...p, shape: 'shape-squircle' }));
-      return;
-    }
-
-    const cycle: Preset['shape'][] = ['shape-squircle', 'shape-hex', 'shape-kite'];
-
-    // Cambios bien notorios entre temas
-    const themeMap: Record<Exclude<ThemeId, 'dark'>, Preset['shape'] | 'cycle'> = {
-      light: 'shape-squircle',
-      profesional: 'shape-squircle',
-      argentina: 'shape-hex',
-      naif: 'shape-kite',
-      custom: 'cycle',
-    };
-
-    const rule = themeMap[themeId as Exclude<ThemeId, 'dark'>];
-
-    this.presets = this.presets.map((p, idx) => ({
-      ...p,
-      shape: rule === 'cycle' ? cycle[idx % cycle.length] : rule,
-    }));
-  }
 
   private async oauthPostValidation() {
     // Si estamos en un flujo de registro que creó una sesión temporal, suprimir la redirección automática
@@ -282,11 +254,6 @@ export class LoginPage implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // Ajustes visuales por tema (sin tocar DARK)
-    this.themeSub = this.themeService.themeChanges$.subscribe(t => {
-      this.applyPresetShapes(t.id);
-    });
-
     // Si vuelve de OAuth (Google), al establecerse la sesión validamos acceso
     this.authSub = this.auth.onAuthStateChange(async (signedIn) => {
       // también comprobamos aquí la marca para evitar race conditions
@@ -312,7 +279,6 @@ export class LoginPage implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     try { this.authSub?.data?.subscription?.unsubscribe?.(); } catch { }
     try { this.authSub?.subscription?.unsubscribe?.(); } catch { }
-    try { this.themeSub?.unsubscribe(); } catch { }
   }
 
   async signInWithGoogle() {

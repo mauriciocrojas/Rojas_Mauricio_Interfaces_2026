@@ -9,8 +9,9 @@ export const THEME_ASSETS: Record<ThemeId, {
   sounds: Record<ThemeSound, string>;
 }> = {
   profesional: {
-    logo: 'url("/assets/app-icon.png")'
-,
+    // ⚠️ OJO: acá va SOLO la ruta (sin url(...)).
+    // ThemeService ya envuelve con url("...") al setear --app-logo-image.
+    logo: 'assets/app-icon.png',
     background: 'assets/theme/profesional/bg.png',
     iconVariant: 'outline',
     sounds: {
@@ -20,8 +21,7 @@ export const THEME_ASSETS: Record<ThemeId, {
     },
   },
   argentina: {
-    logo: 'url("/assets/app-icon.png")'
-,
+    logo: 'assets/app-icon.png',
     background: 'assets/theme/argentina/bg.png',
     iconVariant: 'outline',
     sounds: {
@@ -31,8 +31,7 @@ export const THEME_ASSETS: Record<ThemeId, {
     },
   },
   naif: {
-    logo: 'url("/assets/app-icon.png")'
-,
+    logo: 'assets/app-icon.png',
     background: 'assets/theme/naif/bg.png',
     iconVariant: 'sharp',
     sounds: {
@@ -42,8 +41,7 @@ export const THEME_ASSETS: Record<ThemeId, {
     },
   },
   light: {
-    logo: 'url("/assets/app-icon.png")'
-,
+    logo: 'assets/app-icon.png',
     background: 'assets/theme/light/bg.png',
     iconVariant: 'outline',
     sounds: {
@@ -63,8 +61,7 @@ export const THEME_ASSETS: Record<ThemeId, {
     },
   },
   custom: {
-    logo: 'url("/assets/app-icon.png")'
-,
+    logo: 'assets/app-icon.png',
     background: 'assets/theme/custom/bg.png',
     iconVariant: 'outline',
     sounds: {

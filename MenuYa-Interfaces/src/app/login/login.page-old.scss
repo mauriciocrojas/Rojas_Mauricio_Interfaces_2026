@@ -13,38 +13,15 @@
    Este bloque se deja igual que lo tenías.
    ========================================================= */
 
-/* Tema DARK (modo nativo) — SOLO DARK.
-   ✅ Este bloque NO se comparte con otros temas.
-*/
-:host-context(body.theme-dark) {
+/* Tema DARK (y otros oscuros) */
+:host-context(body.theme-dark),
+:host-context(body.theme-profesional),
+:host-context(body.theme-argentina),
+:host-context(body.theme-custom) {
   --glass-bg: color-mix(in oklab, var(--app-surface), transparent 22%);
   --glass-border: color-mix(in oklab, #fff, transparent 90%);
   --soft-shadow: 0 22px 46px rgba(0, 0, 0, 0.32);
   --muted: color-mix(in oklab, var(--app-text), transparent 35%);
-}
-
-/* Profesonal — “corporativo”: más líneas, menos glass */
-:host-context(body.theme-profesional) {
-  --glass-bg: color-mix(in oklab, var(--app-surface), transparent 10%);
-  --glass-border: color-mix(in oklab, var(--app-primary), transparent 78%);
-  --soft-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
-  --muted: color-mix(in oklab, var(--app-text), transparent 38%);
-}
-
-/* Argentina — más “festival”: bordes más marcados */
-:host-context(body.theme-argentina) {
-  --glass-bg: color-mix(in oklab, var(--app-surface), transparent 16%);
-  --glass-border: color-mix(in oklab, var(--app-secondary), transparent 74%);
-  --soft-shadow: 0 20px 44px rgba(0, 0, 0, 0.30);
-  --muted: color-mix(in oklab, var(--app-text), transparent 36%);
-}
-
-/* Custom — “tech”: contraste y brillo */
-:host-context(body.theme-custom) {
-  --glass-bg: color-mix(in oklab, var(--app-surface), transparent 6%);
-  --glass-border: color-mix(in oklab, var(--app-primary), var(--app-secondary) 25%);
-  --soft-shadow: 0 26px 54px rgba(0, 0, 0, 0.36);
-  --muted: color-mix(in oklab, var(--app-text), transparent 42%);
 }
 
 /* Tema LIGHT */
@@ -70,8 +47,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: var(--app-font-family);
-  font-size: var(--app-font-size-base);
 
   &__container {
     width: min(420px, 100%);
@@ -105,24 +80,6 @@
     align-items: stretch;
   }
 }
-
-/* Logo/cabecera (por tema)
-   - En DARK: oculto para que ese modo quede EXACTAMENTE igual.
-   - En el resto: usa --app-logo-image (ThemeService).
-*/
-.login__logo {
-  width: 118px;
-  height: 118px;
-  margin: 0 auto 6px;
-  border-radius: 22px;
-  background-image: var(--app-logo-image);
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: contain;
-  filter: drop-shadow(0 18px 28px rgba(0,0,0,0.28));
-  opacity: 0.98;
-}
-:host-context(body.theme-dark) .login__logo { display: none; }
 
 .field-group {
   display: flex;
@@ -350,20 +307,6 @@ ion-note {
   font-size: 13px;
 }
 
-/* Botonera principal (base) */
-.action-bar {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  justify-content: var(--app-action-justify, flex-end);
-  width: 100%;
-}
-
-/* Si el tema pide el primario full-width por token (naif), lo obedecemos */
-:host-context(body.primary-fullwidth) .action-bar .submit {
-  width: 100%;
-}
-
 .submit {
   margin-top: 6px;
   --border-radius: var(--app-btn-radius);
@@ -491,165 +434,30 @@ ion-button {
 :host-context(body.theme-profesional) {
   .submit, .google, .themes { --border-radius: 10px; }
   .field { border-radius: 12px; }
-
-  /* Botonera “corporativa” en fila, alineada a la derecha */
-  .action-bar {
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 12px;
-  }
-  .action-bar ion-button {
-    flex: 0 0 auto;
-    min-width: 180px;
-  }
-
-  /* Botón de tema como “chip” arriba a la derecha (bien notorio) */
-  .themes {
-    position: absolute;
-    top: calc(var(--padding-top) + 10px);
-    right: 10px;
-    width: auto;
-    min-height: 44px;
-    --padding-start: 12px;
-    --padding-end: 12px;
-  }
 }
 :host-context(body.theme-argentina) {
   .submit, .google, .themes { --border-radius: 20px; }
   .field { border-radius: 18px; }
-
-  /* Botonera como “dos columnas” */
-  .action-bar {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    align-items: stretch;
-  }
-  .submit { grid-column: 1 / -1; }
-
-  /* “Cambiar tema” grande y separado (bien visible) */
-  .themes {
-    margin-top: 18px;
-    min-height: 56px;
-    font-weight: 900;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-  }
 }
 :host-context(body.theme-naif) {
   .submit, .google, .themes { --border-radius: 999px; }
   .field { border-radius: 26px; }
-
-  /* Botonera invertida + centrada */
-  .action-bar {
-    flex-direction: column-reverse;
-    align-items: center;
-  }
-  .action-bar ion-button {
-    width: 100%;
-  }
 }
 :host-context(body.theme-custom) {
   .submit, .google, .themes { --border-radius: calc(var(--app-btn-radius) + 6px); }
   .field { border-radius: calc(var(--app-btn-radius) + 10px); }
-
-  /* Botonera estilo “terminal”: botones apilados pero con orden cambiado */
-  .action-bar {
-    flex-direction: column;
-  }
-  .google { order: 1; }
-  .submit { order: 2; }
 }
 
-/* =========================================================
-   🖼️ Imágenes en botones (NO-DARK)
-   - usamos --app-logo-image (viene del ThemeService)
-   - esto NO toca el modo dark, porque está explicitamente fuera.
-   ========================================================= */
-
-:host-context(body.theme-profesional) {
-  .submit::part(native) {
-    background-image:
-      linear-gradient(135deg, var(--app-primary), color-mix(in oklab, var(--app-primary), black 10%)),
-      var(--app-logo-image);
-    background-repeat: no-repeat;
-    background-position: center, 14px center;
-    background-size: cover, 22px 22px;
-    padding-left: 44px;
-  }
-
-  .google::part(native) {
-    background-image: linear-gradient(135deg, rgba(255,255,255,0.08), transparent);
-  }
-}
-
+/* Posición de botones (solo argentina) */
 :host-context(body.theme-argentina) {
-  .submit::part(native) {
-    background-image:
-      linear-gradient(90deg,
-        color-mix(in oklab, var(--app-primary), transparent 8%),
-        color-mix(in oklab, var(--app-secondary), transparent 18%)),
-      var(--app-logo-image);
-    background-repeat: no-repeat;
-    background-position: center, calc(100% - 14px) center;
-    background-size: cover, 24px 24px;
-    padding-right: 44px;
-  }
-}
-
-:host-context(body.theme-naif) {
-  .submit::part(native),
-  .google::part(native),
-  .themes::part(native) {
-    background-image:
-      radial-gradient(16px 16px at 18% 50%, rgba(255,255,255,0.16) 0 60%, transparent 61%),
-      var(--app-logo-image);
-    background-repeat: no-repeat;
-    background-position: center, 14px center;
-    background-size: cover, 20px 20px;
-    padding-left: 40px;
-  }
-}
-
-:host-context(body.theme-custom) {
-  .submit::part(native) {
-    background-image:
-      linear-gradient(135deg, rgba(0,0,0,0.18), rgba(255,255,255,0.06)),
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.06) 0 2px, transparent 2px 6px);
-  }
-}
-
-/* (La reubicación fuerte ya se hace arriba, por tema) */
-
-/* Posición de botones (profesional): lateral “corporativo” */
-:host-context(body.theme-profesional) {
   .action-bar {
+    display: flex;
     flex-direction: row;
-    justify-content: flex-end;
-    gap: 12px;
+    gap: 10px;
   }
-  .action-bar .submit {
-    flex: 0 0 58%;
+  .action-bar ion-button {
+    flex: 1 1 0;
   }
-  .action-bar .google {
-    flex: 0 0 42%;
-  }
-}
-
-/* Posición de botones (naif): cambia el orden y centra */
-:host-context(body.theme-naif) {
-  .action-bar {
-    align-items: center;
-  }
-  .action-bar .google { order: 1; }
-  .action-bar .submit { order: 2; }
-}
-
-/* Posición de botones (custom): “split” vertical + submit arriba */
-:host-context(body.theme-custom) {
-  .action-bar { gap: 14px; }
-  .action-bar .submit { order: 0; }
-  .action-bar .google { order: 1; }
 }
 
 /* =========================================================
@@ -683,62 +491,6 @@ ion-button {
 }
 
 /* =========================================================
-   ✅ Imágenes dentro de botones (NO-DARK)
-   - usa --app-logo-image (setea ThemeService)
-   - se nota MUCHO entre temas
-   ========================================================= */
-:host-context(body.theme-profesional) {
-  ion-button.submit::part(native),
-  ion-button.google::part(native) {
-    background-image:
-      linear-gradient(90deg, rgba(255,255,255,0.10), transparent 55%),
-      var(--app-logo-image);
-    background-repeat: no-repeat;
-    background-size: 100% 100%, 22px 22px;
-    background-position: center, 14px center;
-    padding-left: 44px;
-  }
-}
-
-:host-context(body.theme-argentina) {
-  ion-button.submit::part(native) {
-    background-image:
-      radial-gradient(120px 80px at 20% 50%, color-mix(in oklab, var(--app-secondary), transparent 45%), transparent),
-      var(--app-logo-image);
-    background-repeat: no-repeat;
-    background-size: 100% 100%, 26px 26px;
-    background-position: center, 16px center;
-    padding-left: 48px;
-  }
-}
-
-:host-context(body.theme-naif) {
-  ion-button.submit::part(native),
-  ion-button.google::part(native),
-  ion-button.themes::part(native) {
-    background-image:
-      radial-gradient(18px 18px at 12% 50%, rgba(255,255,255,0.32), transparent 70%),
-      var(--app-logo-image);
-    background-repeat: no-repeat;
-    background-size: 100% 100%, 24px 24px;
-    background-position: center, 16px center;
-    padding-left: 48px;
-  }
-}
-
-:host-context(body.theme-custom) {
-  ion-button.submit::part(native) {
-    background-image:
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.14) 0 6px, transparent 6px 12px),
-      var(--app-logo-image);
-    background-repeat: no-repeat;
-    background-size: 100% 100%, 22px 22px;
-    background-position: center, 14px center;
-    padding-left: 44px;
-  }
-}
-
-/* =========================================================
    Imágenes de fondo + cabecera (solo no-dark)
    ✅ Logo con background-image (robusto) + fallback a /assets
    ========================================================= */
@@ -755,22 +507,6 @@ ion-button {
       var(--app-bg);
   }
 
-	  /* Logo/cabecera por tema */
-	  .login__logo {
-		    display: block;
-	    width: 120px;
-	    height: 120px;
-	    margin: 0 auto 6px;
-	    border-radius: 24px;
-	    background-image: var(--app-logo-image);
-	    background-repeat: no-repeat;
-	    background-position: center;
-	    background-size: contain;
-	    box-shadow: 0 24px 46px rgba(0, 0, 0, 0.22);
-	    border: 2px solid color-mix(in oklab, var(--app-text), transparent 88%);
-	  }
-
-
   
 
 }
@@ -783,13 +519,12 @@ ion-button {
    ========================================================= */
 :host-context(body.theme-light) {
 
-  /* ✅ Prohibido fondo blanco/clarito: usamos --app-bg y textura del tema */
   ion-content.login::part(background) {
     background:
-      radial-gradient(900px 520px at 20% -10%, rgba(37, 99, 235, 0.14) 0 55%, transparent 56%),
-      radial-gradient(900px 520px at 120% 10%, rgba(34, 197, 94, 0.12) 0 55%, transparent 56%),
+      radial-gradient(900px 520px at 20% -10%, rgba(37, 99, 235, 0.12) 0 55%, transparent 56%),
+      radial-gradient(900px 520px at 120% 10%, rgba(34, 197, 94, 0.10) 0 55%, transparent 56%),
       var(--app-bg-image) center / cover no-repeat,
-      var(--app-bg);
+      #f7f8fb;
   }
 
   .login__container {
@@ -832,8 +567,7 @@ ion-button {
   /* Inputs */
   .field {
     border-radius: 18px;
-    /* no blanco puro */
-    background: color-mix(in oklab, var(--app-surface), #000 6%);
+    background: rgba(255, 255, 255, 0.94);
     border: 2px solid rgba(15, 23, 42, 0.10);
     box-shadow: 0 14px 26px rgba(2, 6, 23, 0.08);
     min-height: 56px;
@@ -845,7 +579,7 @@ ion-button {
     padding: 14px 14px 18px;
     background:
       linear-gradient(135deg, rgba(37, 99, 235, 0.08), transparent),
-      color-mix(in oklab, var(--app-surface), #000 4%);
+      rgba(255, 255, 255, 0.90);
     border: 1px solid rgba(15, 23, 42, 0.10);
     box-shadow: 0 18px 34px rgba(2, 6, 23, 0.08);
   }
@@ -866,25 +600,18 @@ ion-button {
   }
 }
 
-/* Base: oculto para no alterar DARK.
-   Los temas no-dark lo muestran y lo estilizan arriba.
-*/
-.login__logo { display: none; }
+.login__logo {
+  width: 132px;
+  height: 132px;
+  margin: 0 auto 10px;
+  border-radius: 26px;
 
-:host-context(body.theme-profesional) .login__logo {
-  border-radius: 12px;
-}
-:host-context(body.theme-argentina) .login__logo {
-  border-radius: 999px;
-  outline: 3px solid color-mix(in oklab, var(--app-secondary), transparent 35%);
-  outline-offset: 4px;
-}
-:host-context(body.theme-naif) .login__logo {
-  border-radius: 34px;
-  transform: rotate(-3deg);
-}
-:host-context(body.theme-custom) .login__logo {
-  border-radius: 8px;
-  filter: saturate(1.1) contrast(1.05);
+  background-image: url("/assets/app-icon.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  box-shadow: 0 24px 46px rgba(0, 0, 0, 0.18);
+  border: 2px solid rgba(15, 23, 42, 0.10);
 }
 
