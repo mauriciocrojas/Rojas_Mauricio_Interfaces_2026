@@ -9,7 +9,8 @@ export const THEME_ASSETS: Record<ThemeId, {
   sounds: Record<ThemeSound, string>;
 }> = {
   profesional: {
-    logo: 'assets/theme/profesional/logo.png',
+    logo: 'url("/assets/app-icon.png")'
+,
     background: 'assets/theme/profesional/bg.png',
     iconVariant: 'outline',
     sounds: {
@@ -19,7 +20,8 @@ export const THEME_ASSETS: Record<ThemeId, {
     },
   },
   argentina: {
-    logo: 'assets/theme/argentina/logo.png',
+    logo: 'url("/assets/app-icon.png")'
+,
     background: 'assets/theme/argentina/bg.png',
     iconVariant: 'outline',
     sounds: {
@@ -29,7 +31,8 @@ export const THEME_ASSETS: Record<ThemeId, {
     },
   },
   naif: {
-    logo: 'assets/theme/naif/logo.png',
+    logo: 'url("/assets/app-icon.png")'
+,
     background: 'assets/theme/naif/bg.png',
     iconVariant: 'sharp',
     sounds: {
@@ -39,7 +42,8 @@ export const THEME_ASSETS: Record<ThemeId, {
     },
   },
   light: {
-    logo: 'assets/theme/light/logo.png',
+    logo: 'url("/assets/app-icon.png")'
+,
     background: 'assets/theme/light/bg.png',
     iconVariant: 'outline',
     sounds: {
@@ -59,7 +63,8 @@ export const THEME_ASSETS: Record<ThemeId, {
     },
   },
   custom: {
-    logo: 'assets/theme/custom/logo.png',
+    logo: 'url("/assets/app-icon.png")'
+,
     background: 'assets/theme/custom/bg.png',
     iconVariant: 'outline',
     sounds: {

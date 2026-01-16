@@ -8,6 +8,11 @@
   --muted: color-mix(in oklab, var(--app-text), transparent 28%);
 }
 
+/* =========================================================
+   ⚠️ OJO: NO TOCAR DARK (modo nativo)
+   Este bloque se deja igual que lo tenías.
+   ========================================================= */
+
 /* Tema DARK (y otros oscuros) */
 :host-context(body.theme-dark),
 :host-context(body.theme-profesional),
@@ -23,17 +28,20 @@
 :host-context(body.theme-light) {
   /* Glass más “material” y menos blanco puro */
   --glass-bg: rgba(255, 255, 255, 0.78);
-  --glass-border: rgba(15, 23, 42, 0.14); /* borde suave pero visible */
+  --glass-border: rgba(15, 23, 42, 0.14);
   --soft-shadow: 0 16px 30px rgba(2, 6, 23, 0.10);
   --muted: rgba(15, 23, 42, 0.62);
 }
-
 
 /* Tema NAIF (más “alegre”) */
 :host-context(body.theme-naif) {
   --glass-bg: color-mix(in oklab, var(--app-secondary), transparent 88%);
   --glass-border: color-mix(in oklab, var(--app-secondary), transparent 70%);
 }
+
+/* =========================================================
+   BASE
+   ========================================================= */
 
 .login {
   display: flex;
@@ -51,6 +59,9 @@
     align-items: center;
     gap: 24px;
     text-align: center;
+
+    /* ✅ asegura que el pseudo-elemento sea visible y consistente */
+    position: relative;
   }
 
   &__title {
@@ -80,8 +91,9 @@
 .field-group__label {
   font-size: 13px;
   font-weight: 600;
-color: color-mix(in oklab, var(--muted), #000 12%);
+  color: color-mix(in oklab, var(--muted), #000 12%);
   letter-spacing: 0.01em;
+  text-align: left;
 }
 
 .field {
@@ -111,9 +123,8 @@ color: color-mix(in oklab, var(--muted), #000 12%);
   }
 
   ion-input {
-  --color: var(--app-text);
-}
-
+    --color: var(--app-text);
+  }
 }
 
 ion-note {
@@ -375,13 +386,10 @@ ion-button {
    FIX CONTRASTE - SOLO TEMA LIGHT (no toca dark)
    ========================================================= */
 :host-context(body.theme-light) {
-
-  /* Asegura color base legible dentro del bloque */
   .quick-users {
     color: var(--app-text);
   }
 
-  /* Título "ACCESOS RÁPIDOS" + icono más legibles */
   .quick-users__title {
     color: color-mix(in oklab, var(--app-primary), #000 10%);
   }
@@ -389,18 +397,15 @@ ion-button {
     color: var(--app-primary);
   }
 
-  /* Las cards heredaban un color “raro” (muy claro): lo fijamos */
   .preset-card {
     color: var(--app-text);
   }
 
-  /* Texto del rol (Dueño, Cocinero, etc.) */
   .preset-card .label {
     color: var(--app-text);
     text-shadow: none;
   }
 
-  /* Opcional pero ayuda MUCHO: que el “mint” no lave todo */
   .quick-users {
     background:
       linear-gradient(
@@ -411,7 +416,6 @@ ion-button {
       var(--glass-bg);
   }
 
-  /* Placeholder del input (si lo ves muy apagado) */
   ion-input::part(native) {
     color: var(--app-text);
   }
@@ -419,3 +423,195 @@ ion-button {
     color: color-mix(in oklab, var(--app-text), transparent 45%);
   }
 }
+
+/* =========================================================
+   ✅ CAMBIOS POR TEMA (SOLO NO-DARK)
+   - Formas y posiciones
+   - Tipografías MUY distintas por tema
+   ========================================================= */
+
+/* Formas de botones */
+:host-context(body.theme-profesional) {
+  .submit, .google, .themes { --border-radius: 10px; }
+  .field { border-radius: 12px; }
+}
+:host-context(body.theme-argentina) {
+  .submit, .google, .themes { --border-radius: 20px; }
+  .field { border-radius: 18px; }
+}
+:host-context(body.theme-naif) {
+  .submit, .google, .themes { --border-radius: 999px; }
+  .field { border-radius: 26px; }
+}
+:host-context(body.theme-custom) {
+  .submit, .google, .themes { --border-radius: calc(var(--app-btn-radius) + 6px); }
+  .field { border-radius: calc(var(--app-btn-radius) + 10px); }
+}
+
+/* Posición de botones (solo argentina) */
+:host-context(body.theme-argentina) {
+  .action-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+  .action-bar ion-button {
+    flex: 1 1 0;
+  }
+}
+
+/* =========================================================
+   ✅ Tipografía por tema (NO dark)
+   MUY distintas:
+   - light: redondeada
+   - profesional: sans “corporativa”
+   - argentina: serif editorial
+   - naif: manuscrita/cómica (bien notoria)
+   - custom: monoespaciada
+   ========================================================= */
+:host-context(body.theme-light) {
+  .login { font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, Arial; }
+}
+:host-context(body.theme-profesional) {
+  .login { font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, system-ui; }
+}
+:host-context(body.theme-argentina) {
+  .login { font-family: ui-serif, Georgia, "Times New Roman", Times, serif; }
+}
+:host-context(body.theme-naif) {
+  .login { font-family: "Comic Sans MS", "Bradley Hand", "Segoe Print", cursive; }
+}
+:host-context(body.theme-custom) {
+  .login { font-family: ui-monospace, "Cascadia Mono", "Consolas", "Courier New", monospace; }
+}
+
+/* Tamaño (naif levemente más grande) */
+:host-context(body.theme-naif) {
+  .login { font-size: 17px; }
+}
+
+/* =========================================================
+   Imágenes de fondo + cabecera (solo no-dark)
+   ✅ Logo con background-image (robusto) + fallback a /assets
+   ========================================================= */
+:host-context(body.theme-profesional),
+:host-context(body.theme-argentina),
+:host-context(body.theme-naif),
+:host-context(body.theme-light),
+:host-context(body.theme-custom) {
+  ion-content.login::part(background) {
+    background:
+      radial-gradient(900px 520px at 20% -10%, color-mix(in oklab, var(--app-primary), transparent 78%) 0 55%, transparent 56%),
+      radial-gradient(900px 520px at 120% 10%, color-mix(in oklab, var(--app-secondary), transparent 80%) 0 55%, transparent 56%),
+      var(--app-bg-image) center / cover no-repeat,
+      var(--app-bg);
+  }
+
+  
+
+}
+
+/* =========================================================
+   🔥 MODO CLARO (theme-light) — AJUSTES FINOS DE BORDES
+   NO toca theme-dark.
+   - saca bordes “feos” (dashed/duros)
+   - suaviza contornos en quick-users y botones
+   ========================================================= */
+:host-context(body.theme-light) {
+
+  ion-content.login::part(background) {
+    background:
+      radial-gradient(900px 520px at 20% -10%, rgba(37, 99, 235, 0.12) 0 55%, transparent 56%),
+      radial-gradient(900px 520px at 120% 10%, rgba(34, 197, 94, 0.10) 0 55%, transparent 56%),
+      var(--app-bg-image) center / cover no-repeat,
+      #f7f8fb;
+  }
+
+  .login__container {
+    width: min(500px, 100%);
+    padding: 18px 18px 26px;
+    gap: 16px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .login__title {
+    color: #0f172a;
+    font-weight: 950;
+    font-size: clamp(34px, 7vw, 48px);
+    letter-spacing: -0.04em;
+    text-align: center;
+    margin-bottom: 4px;
+  }
+
+  /* ✅ Cambiar tema: borde sólido suave + sin “dashed feo” */
+  .themes {
+    --border-radius: 999px;
+    min-height: 52px;
+    letter-spacing: 0.12em;
+    font-weight: 950;
+    text-transform: uppercase;
+
+    /* outline (ionic) */
+    --border-width: 2px;
+    --border-style: solid;
+    --border-color: rgba(37, 99, 235, 0.28);
+
+    /* fondo */
+    --background: rgba(37, 99, 235, 0.06);
+
+    /* ayuda a que no se vea “cortado” */
+    box-shadow: 0 10px 22px rgba(2, 6, 23, 0.06);
+  }
+
+  /* Inputs */
+  .field {
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.94);
+    border: 2px solid rgba(15, 23, 42, 0.10);
+    box-shadow: 0 14px 26px rgba(2, 6, 23, 0.08);
+    min-height: 56px;
+  }
+
+  /* ✅ Accesos rápidos: borde más fino y redondeo más “premium” */
+  .quick-users {
+    border-radius: 28px;
+    padding: 14px 14px 18px;
+    background:
+      linear-gradient(135deg, rgba(37, 99, 235, 0.08), transparent),
+      rgba(255, 255, 255, 0.90);
+    border: 1px solid rgba(15, 23, 42, 0.10);
+    box-shadow: 0 18px 34px rgba(2, 6, 23, 0.08);
+  }
+
+  /* ✅ Botón Google: borde y radios más coherentes */
+  .google {
+    --border-radius: 16px;
+    --background: rgba(15, 23, 42, 0.06);
+    --color: #0f172a;
+    --border-width: 2px;
+    --border-style: solid;
+    --border-color: rgba(15, 23, 42, 0.12);
+    box-shadow: 0 12px 22px rgba(2, 6, 23, 0.06);
+  }
+
+  .submit {
+    --border-radius: 16px;
+  }
+}
+
+.login__logo {
+  width: 132px;
+  height: 132px;
+  margin: 0 auto 10px;
+  border-radius: 26px;
+
+  background-image: url("/assets/app-icon.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+
+  box-shadow: 0 24px 46px rgba(0, 0, 0, 0.18);
+  border: 2px solid rgba(15, 23, 42, 0.10);
+}
+

@@ -581,11 +581,21 @@ export class LoginPage implements OnInit, OnDestroy {
 private async applyTheme(id: ThemeId) {
   await this.themeService.setTheme(id);
 
+  const THEME_LABEL: Record<ThemeId, string> = {
+    light: 'Claro',
+    dark: 'Oscuro',
+    naif: 'Naif',
+    profesional: 'Profesional',
+    argentina: 'Argentina',
+    custom: 'Personalizado',
+  };
+
   const t = await this.toastCtrl.create({
-    message: `🎨 Tema aplicado: ${id}`,
+    message: `🎨 Tema aplicado: ${THEME_LABEL[id]}`,
     duration: 1300,
     position: 'top',
   });
+
   await t.present();
 }
 

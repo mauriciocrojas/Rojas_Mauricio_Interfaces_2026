@@ -1,6 +1,7 @@
 <ion-content [fullscreen]="true" class="login safe-top">
   <div class="login__container">
-    
+<!-- <div class="login__logo" aria-hidden="true"></div> -->
+
     <h1 class="login__title">Iniciar sesión</h1>
     <ion-button class="themes" expand="block" fill="outline" (click)="openThemePicker()" [disabled]="loading">
       <ion-icon [name]="'color-palette' | iconName" slot="start"></ion-icon>
@@ -110,15 +111,18 @@
         {{ errorMsg }}
       </ion-text>
 
-      <ion-button class="submit" type="submit" expand="block" [disabled]="loading || !f.valid">
-        <ion-spinner *ngIf="loading" name="lines-small" class="ion-margin-end"></ion-spinner>
-        Ingresar
-      </ion-button>
+      <!-- Botonera principal (se reordena / posiciona por tema SOLO en modo claro) -->
+      <div class="action-bar" role="group" aria-label="Acciones de ingreso">
+        <ion-button class="submit" type="submit" expand="block" [disabled]="loading || !f.valid">
+          <ion-spinner *ngIf="loading" name="lines-small" class="ion-margin-end"></ion-spinner>
+          Ingresar
+        </ion-button>
 
-      <ion-button class="google" expand="block" color="medium" (click)="signInWithGoogle()" [disabled]="loading">
-        <ion-icon name="logo-google" slot="start"></ion-icon>
-        Continuar con Google
-      </ion-button>
+        <ion-button class="google" expand="block" color="medium" (click)="signInWithGoogle()" [disabled]="loading">
+          <ion-icon name="logo-google" slot="start"></ion-icon>
+          Continuar con Google
+        </ion-button>
+      </div>
 
       <div class="signup">
         <span>¿No tenés cuenta?</span>
