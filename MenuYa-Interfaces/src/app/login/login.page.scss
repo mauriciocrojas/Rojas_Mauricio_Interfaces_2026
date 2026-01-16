@@ -27,7 +27,7 @@
 :host-context(body.theme-profesional) {
   --glass-bg: color-mix(in oklab, var(--app-surface), transparent 10%);
   --glass-border: color-mix(in oklab, var(--app-primary), transparent 78%);
-  --soft-shadow: 0 18px 42px rgba(0, 0, 0, 0.28);
+  --soft-shadow: 0 18px 42px rgba(88, 88, 88, 0.28);
   --muted: color-mix(in oklab, var(--app-text), transparent 38%);
 }
 
@@ -489,51 +489,84 @@ ion-button {
 
 /* Formas de botones */
 :host-context(body.theme-profesional) {
-  .submit, .google, .themes { --border-radius: 10px; }
-  .field { border-radius: 12px; }
+  /* Profesional: sobrio y prolijo */
+  .submit, .google, .themes { --border-radius: 0px; }
+  .field { border-radius: 0px; }
 
-  /* Botonera “corporativa” en fila, alineada a la derecha */
-  .action-bar {
-    flex-direction: row;
-    justify-content: flex-end;
-    gap: 12px;
-  }
-  .action-bar ion-button {
-    flex: 0 0 auto;
-    min-width: 180px;
-  }
-
-  /* Botón de tema como “chip” arriba a la derecha (bien notorio) */
+  /* ✅ NO tapa el logo: va en flujo y se alinea a la derecha */
   .themes {
-    position: absolute;
-    top: calc(var(--padding-top) + 10px);
-    right: 10px;
+    align-self: center;
     width: auto;
     min-height: 44px;
+    margin-top: 0;
+    margin-bottom: 2px;
     --padding-start: 12px;
     --padding-end: 12px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ✅ Botonera: en móviles apilada (centrada), en pantallas un poco más grandes en fila */
+  .action-bar {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: stretch;
+  }
+
+  @media (min-width: 420px) {
+    .action-bar {
+      flex-direction: row;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .action-bar ion-button {
+      flex: 1 1 0;
+      min-width: 0;
+      margin: 0;
+    }
+  }
+
+  /* Tipografía/colores más “corporativos” */
+  .login__title {
+    color: color-mix(in oklab, var(--app-primary), #ededed 18%);
+    letter-spacing: -0.02em;
+    text-shadow: #000;
   }
 }
 :host-context(body.theme-argentina) {
-  .submit, .google, .themes { --border-radius: 20px; }
-  .field { border-radius: 18px; }
+  .submit, .google, .themes { --border-radius: 30px; align-items: center; }
+  .field { border-radius: 30px; }
 
   /* Botonera como “dos columnas” */
   .action-bar {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    align-items: stretch;
+    align-items: center;
+    border-radius: 20px;
   }
-  .submit { grid-column: 1 / -1; }
 
-  /* “Cambiar tema” grande y separado (bien visible) */
-  .themes {
-    margin-top: 18px;
-    min-height: 56px;
-    font-weight: 900;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+  // .submit { grid-column: 1 / -1; 
+  // align-items: center;
+  // }
+  // /* “Cambiar tema” grande y separado (bien visible) */
+  // .themes {
+  //   margin-top: 18px;
+  //   min-height: 56px;
+  //   font-weight: 900;
+  //   letter-spacing: 0.06em;
+  //   text-transform: uppercase;
+  //   align-items: center;
+  // }
+
+    .google {
+        align-items: center;
+
   }
 }
 :host-context(body.theme-naif) {
@@ -550,12 +583,13 @@ ion-button {
   }
 }
 :host-context(body.theme-custom) {
-  .submit, .google, .themes { --border-radius: calc(var(--app-btn-radius) + 6px); }
-  .field { border-radius: calc(var(--app-btn-radius) + 10px); }
+  .submit, .google, .themes { --border-radius: 0px; }
+  .field { border-radius: 0px; }
 
   /* Botonera estilo “terminal”: botones apilados pero con orden cambiado */
   .action-bar {
     flex-direction: column;
+    align-items: center;
   }
   .google { order: 1; }
   .submit { order: 2; }
@@ -563,7 +597,7 @@ ion-button {
 
 /* =========================================================
    🖼️ Imágenes en botones (NO-DARK)
-   - usamos --app-logo-image (viene del ThemeService)
+   - usamos --app-logo-image (ThemeService)
    - esto NO toca el modo dark, porque está explicitamente fuera.
    ========================================================= */
 
@@ -626,13 +660,16 @@ ion-button {
   .action-bar {
     flex-direction: row;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 10px;
+    align-items: center;
   }
   .action-bar .submit {
-    flex: 0 0 58%;
+        align-items: center;
+
   }
   .action-bar .google {
-    flex: 0 0 42%;
+        align-items: center;
+
   }
 }
 
@@ -769,10 +806,6 @@ ion-button {
 	    box-shadow: 0 24px 46px rgba(0, 0, 0, 0.22);
 	    border: 2px solid color-mix(in oklab, var(--app-text), transparent 88%);
 	  }
-
-
-  
-
 }
 
 /* =========================================================
@@ -786,8 +819,8 @@ ion-button {
   /* ✅ Prohibido fondo blanco/clarito: usamos --app-bg y textura del tema */
   ion-content.login::part(background) {
     background:
-      radial-gradient(900px 520px at 20% -10%, rgba(37, 99, 235, 0.14) 0 55%, transparent 56%),
-      radial-gradient(900px 520px at 120% 10%, rgba(34, 197, 94, 0.12) 0 55%, transparent 56%),
+      radial-gradient(900px 520px at 20% -10%, rgba(213, 214, 216, 0.18) 0 55%, transparent 56%),
+      radial-gradient(900px 520px at 120% 10%, rgba(90, 108, 97, 0.16) 0 55%, transparent 56%),
       var(--app-bg-image) center / cover no-repeat,
       var(--app-bg);
   }
@@ -801,7 +834,7 @@ ion-button {
   }
 
   .login__title {
-    color: #0f172a;
+    color: color-mix(in oklab, #0f172a, #ffffff 18%);
     font-weight: 950;
     font-size: clamp(34px, 7vw, 48px);
     letter-spacing: -0.04em;
@@ -823,7 +856,7 @@ ion-button {
     --border-color: rgba(37, 99, 235, 0.28);
 
     /* fondo */
-    --background: rgba(37, 99, 235, 0.06);
+    --background: rgba(152, 155, 163, 0.06);
 
     /* ayuda a que no se vea “cortado” */
     box-shadow: 0 10px 22px rgba(2, 6, 23, 0.06);
@@ -872,7 +905,7 @@ ion-button {
 .login__logo { display: none; }
 
 :host-context(body.theme-profesional) .login__logo {
-  border-radius: 12px;
+  border-radius: 0px;
 }
 :host-context(body.theme-argentina) .login__logo {
   border-radius: 999px;
@@ -888,3 +921,89 @@ ion-button {
   filter: saturate(1.1) contrast(1.05);
 }
 
+
+
+/* =========================================================
+   ✅ FIX: Alineación consistente del botón Google (logo centrado)
+   ========================================================= */
+:host-context(body.theme-profesional) .google::part(native),
+:host-context(body.theme-argentina) .google::part(native) {
+  justify-content: center;
+}
+
+:host-context(body.theme-profesional) .google ion-icon[slot="start"],
+:host-context(body.theme-argentina) .google ion-icon[slot="start"] {
+  margin-right: 10px;
+}
+
+/* =========================================================
+   🇦🇷 MODO ARGENTINA: fondo celeste/blanco + sol sutil (sin blanco puro)
+   ========================================================= */
+:host-context(body.theme-argentina) ion-content.login::part(background) {
+  background:
+    radial-gradient(220px 220px at 80% 18%,
+      rgba(255, 212, 59, 0.22) 0 40%,
+      transparent 41%),
+    linear-gradient(180deg,
+      rgba(116, 172, 223, 0.55) 0 28%,
+      rgba(247, 251, 255, 0.70) 28% 52%,
+      rgba(116, 172, 223, 0.55) 52% 100%),
+    radial-gradient(900px 520px at 20% -10%,
+      rgba(116, 172, 223, 0.26) 0 55%,
+      transparent 56%),
+    radial-gradient(900px 520px at 120% 10%,
+      rgba(255, 212, 59, 0.14) 0 55%,
+      transparent 56%),
+    var(--app-bg-image) center / cover no-repeat,
+    var(--app-bg);
+}
+
+:host-context(body.theme-argentina) {
+  .quick-users {
+    border-width: 2px;
+    border-color: color-mix(in oklab, var(--app-secondary), transparent 58%);
+  }
+
+  .preset-card {
+    border-color: color-mix(in oklab, var(--app-secondary), transparent 48%);
+  }
+
+  .quick-users__title {
+    letter-spacing: 0.10em;
+  }
+}
+
+/* =========================================================
+   🪵 MODO CUSTOM: estilo madera (textura por CSS)
+   ========================================================= */
+:host-context(body.theme-custom) ion-content.login::part(background) {
+  background:
+    repeating-linear-gradient(90deg,
+      rgba(120, 73, 33, 0.20) 0 10px,
+      rgba(145, 88, 38, 0.16) 10px 22px,
+      rgba(110, 66, 30, 0.20) 22px 34px),
+    radial-gradient(900px 520px at 15% -10%,
+      rgba(255, 203, 153, 0.18) 0 55%,
+      transparent 56%),
+    radial-gradient(900px 520px at 110% 10%,
+      rgba(87, 52, 26, 0.22) 0 55%,
+      transparent 56%),
+    var(--app-bg-image) center / cover no-repeat,
+    var(--app-bg);
+}
+
+:host-context(body.theme-custom) {
+  .field, .quick-users, .preset-card {
+    border-color: rgba(120, 73, 33, 0.28);
+  }
+
+  .submit {
+    --background: linear-gradient(135deg, rgba(120, 73, 33, 0.95), rgba(87, 52, 26, 0.95));
+    --box-shadow: 0 18px 32px rgba(87, 52, 26, 0.32);
+  }
+
+  .themes {
+    --background: rgba(120, 73, 33, 0.10);
+    --border-color: rgba(120, 73, 33, 0.34);
+  }
+}
